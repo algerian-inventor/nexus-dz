@@ -99,38 +99,55 @@ export function AppShell() {
   const roles: UserRole[] = ['super_admin', 'organization_admin', 'volunteer', 'verifier'];
 
   return (
-    <div className="flex min-h-screen flex-col text-nexus-navy lg:flex-row">
-      {/* Sidebar (Desktop) - Frosted Dark Glass */}
-      <aside className="hidden w-64 xl:w-72 shrink-0 flex-col border-e border-white/10 bg-[#0F172A]/90 backdrop-blur-xl text-white shadow-xl lg:flex z-20">
-        <div className="flex h-16 items-center justify-between border-b border-white/10 px-5">
+    <div className="flex min-h-screen flex-col text-nexus-navy lg:flex-row bg-zellij-subtle">
+      {/* Sidebar (Desktop) - Algerian Forest Green Glass with subtle Zellij motif */}
+      <aside className="hidden w-64 xl:w-72 shrink-0 flex-col border-e border-white/10 bg-gradient-to-b from-[#06452D]/95 via-[#075B35]/90 to-[#0F172A]/95 backdrop-blur-2xl text-white shadow-2xl lg:flex z-20 relative overflow-hidden">
+        {/* Subtle decorative zellij overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-zellij-forest opacity-40" />
+
+        <div className="relative flex h-16 items-center justify-between border-b border-white/10 px-5">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nexus-emerald/90 text-white shadow-xs backdrop-blur-xs transition-transform group-hover:scale-105">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-nexus-emerald text-white shadow-xs backdrop-blur-xs transition-transform group-hover:scale-105 border border-white/20">
               <Shield className="h-4 w-4" />
             </div>
             <div>
-              <span className="text-sm font-semibold tracking-tight text-white">
-                {t('brand.name')}
-              </span>
-              <span className="block text-[10px] font-normal text-emerald-300/80">
-                Constantine (25) — Demo
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-semibold tracking-tight text-white">
+                  {t('brand.name')}
+                </span>
+                <span
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-nexus-red ring-2 ring-nexus-red/30"
+                  title="DZ"
+                />
+              </div>
+              <span className="block text-[10px] font-normal text-emerald-200/80">
+                Constantine (25) — National Civic-Tech
               </span>
             </div>
           </Link>
         </div>
 
-        <div className="border-b border-white/5 bg-white/[0.03] px-5 py-3.5 backdrop-blur-md">
-          <p className="text-[10px] uppercase tracking-wider font-medium text-slate-400">
-            {t('common.demoTag')}
-          </p>
-          <p className="mt-0.5 truncate text-xs font-medium text-white/95">
+        <div className="relative border-b border-white/10 bg-white/[0.04] px-5 py-3.5 backdrop-blur-md">
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] uppercase tracking-wider font-semibold text-emerald-300/80">
+              {t('common.demoTag')}
+            </p>
+            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-white/90">
+              DZ-25
+            </span>
+          </div>
+          <p className="mt-1 truncate text-xs font-medium text-white/95">
             {isAr ? currentAccount.fullNameAr : currentAccount.fullNameFr}
           </p>
-          <p className="mt-0.5 truncate text-[11px] font-normal text-emerald-400">
+          <p className="mt-0.5 truncate text-[11px] font-normal text-emerald-300">
             {isAr ? currentAccount.titleAr : currentAccount.titleFr}
           </p>
         </div>
 
-        <nav className="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Workspace navigation">
+        <nav
+          className="relative flex-1 space-y-1 overflow-y-auto p-3"
+          aria-label="Workspace navigation"
+        >
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -139,10 +156,10 @@ export function AppShell() {
                 to={item.to}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs font-normal tracking-wide transition-all duration-150',
+                    'flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-normal tracking-wide transition-all duration-150',
                     isActive
-                      ? 'bg-nexus-emerald/90 text-white shadow-[0_2px_12px_rgba(11,138,68,0.3)] backdrop-blur-xs font-medium'
-                      : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                      ? 'bg-gradient-to-r from-nexus-emerald to-nexus-emerald-deep text-white shadow-[0_4px_16px_rgba(11,138,68,0.35)] backdrop-blur-xs font-medium border border-white/20'
+                      : 'text-emerald-100/80 hover:bg-white/[0.08] hover:text-white'
                   )
                 }
               >
@@ -155,8 +172,8 @@ export function AppShell() {
                     className={cn(
                       'shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium leading-none backdrop-blur-xs',
                       item.highlightBadge
-                        ? 'bg-amber-400 text-nexus-navy font-semibold'
-                        : 'bg-white/10 text-slate-200'
+                        ? 'bg-nexus-red text-white font-semibold shadow-xs ring-1 ring-white/30'
+                        : 'bg-white/10 text-emerald-100'
                     )}
                   >
                     {item.badge}
@@ -167,9 +184,12 @@ export function AppShell() {
           })}
         </nav>
 
-        <div className="border-t border-white/10 p-4 text-xs text-slate-400 bg-white/[0.02]">
-          <p className="font-medium text-white/90">{t('brand.name')}</p>
-          <p className="mt-0.5 text-[11px] font-normal leading-relaxed text-slate-400">
+        <div className="relative border-t border-white/10 p-4 text-xs text-emerald-200/70 bg-white/[0.02]">
+          <div className="flex items-center gap-1.5">
+            <p className="font-medium text-white/90">{t('brand.name')}</p>
+            <span className="text-[10px] text-emerald-400 font-mono">v3.0</span>
+          </div>
+          <p className="mt-0.5 text-[11px] font-normal leading-relaxed text-emerald-200/60">
             {t('brand.tagline')}
           </p>
         </div>
@@ -177,13 +197,13 @@ export function AppShell() {
 
       {/* Main Content Wrapper */}
       <div className="flex flex-1 flex-col min-w-0">
-        {/* Workspace Header - Translucent Frosted Glass */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-white/60 bg-white/70 px-4 backdrop-blur-lg shadow-[0_2px_15px_-3px_rgba(15,23,42,0.03)] sm:px-6">
+        {/* Workspace Header - Translucent Frosted Glass with green tint */}
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-white/80 bg-white/75 px-4 backdrop-blur-xl shadow-[0_4px_20px_-4px_rgba(7,91,53,0.04)] sm:px-6">
           <div className="flex items-center gap-2.5 min-w-0">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200/70 bg-white/80 text-nexus-navy backdrop-blur-xs transition-colors hover:bg-white lg:hidden"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-nexus-emerald/20 bg-white/80 text-nexus-navy backdrop-blur-xs transition-colors hover:bg-white lg:hidden"
               aria-label="Toggle Menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -199,7 +219,7 @@ export function AppShell() {
                 value={activeRole}
                 onChange={(e) => switchRole(e.target.value as UserRole)}
                 aria-label={t('nav.roleSwitch')}
-                className="h-8 max-w-[200px] truncate rounded-lg border border-nexus-emerald/30 bg-emerald-50/50 px-2.5 text-xs font-medium text-nexus-navy backdrop-blur-xs transition-all hover:border-nexus-emerald/60 sm:max-w-none sm:px-3 shadow-2xs"
+                className="h-8 max-w-[200px] truncate rounded-xl border border-nexus-emerald/30 bg-nexus-mint/50 px-2.5 text-xs font-medium text-nexus-emerald-deep backdrop-blur-xs transition-all hover:border-nexus-emerald/60 sm:max-w-none sm:px-3 shadow-2xs"
               >
                 {roles.map((r) => (
                   <option key={r} value={r}>
@@ -213,7 +233,7 @@ export function AppShell() {
           <div className="flex shrink-0 items-center gap-2.5">
             <Badge
               variant="emerald"
-              className="hidden md:inline-flex bg-nexus-emerald/10 text-nexus-emerald border-nexus-emerald/20 font-medium"
+              className="hidden md:inline-flex border-nexus-emerald/25 bg-nexus-mint/70 text-nexus-emerald-deep font-semibold"
             >
               {t(`roles.${activeRole}`)}
             </Badge>
@@ -223,7 +243,7 @@ export function AppShell() {
 
         {/* Mobile Drawer */}
         {mobileMenuOpen && (
-          <div className="border-b border-white/10 bg-[#0F172A]/95 p-4 text-white backdrop-blur-xl lg:hidden">
+          <div className="border-b border-white/10 bg-gradient-to-b from-[#06452D] to-[#0F172A] p-4 text-white backdrop-blur-2xl lg:hidden">
             <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-2.5 text-xs">
               <span className="font-medium text-white">
                 {isAr ? currentAccount.fullNameAr : currentAccount.fullNameFr}
@@ -242,10 +262,10 @@ export function AppShell() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs font-normal transition-colors',
+                        'flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-normal transition-colors',
                         isActive
-                          ? 'bg-nexus-emerald/90 text-white font-medium'
-                          : 'text-slate-300 hover:bg-white/[0.08]'
+                          ? 'bg-nexus-emerald text-white font-medium'
+                          : 'text-emerald-100 hover:bg-white/[0.08]'
                       )
                     }
                   >
@@ -254,7 +274,7 @@ export function AppShell() {
                       <span>{item.label}</span>
                     </span>
                     {item.badge !== undefined && (
-                      <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-slate-200">
+                      <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-emerald-100">
                         {item.badge}
                       </span>
                     )}

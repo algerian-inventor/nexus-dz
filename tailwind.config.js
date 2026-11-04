@@ -21,11 +21,16 @@ export default {
         foreground: 'hsl(var(--foreground))',
         nexus: {
           emerald: '#0B8A44',
+          'emerald-deep': '#075B35',
+          'emerald-forest': '#06452D',
           'emerald-dark': '#086B35',
-          'emerald-light': '#E7F5ED',
+          'emerald-light': '#DDF5E8',
+          mint: '#DDF5E8',
+          red: '#D62828',
+          'red-light': '#FDE8E8',
           navy: '#0F172A',
           'navy-light': '#1E293B',
-          surface: '#F8FAFC',
+          surface: '#EAF2EC',
           white: '#FFFFFF',
           gray: '#64748B',
         },
@@ -59,9 +64,10 @@ export default {
         },
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        xl: 'var(--radius)',
+        lg: 'calc(var(--radius) - 2px)',
+        md: 'calc(var(--radius) - 4px)',
+        sm: 'calc(var(--radius) - 6px)',
       },
       fontFamily: {
         sans: [

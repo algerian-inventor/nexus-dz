@@ -58,23 +58,23 @@ export function LoginPage() {
               return (
                 <Card
                   key={acc.id}
-                  className={
+                  className={`backdrop-blur-md transition-all duration-200 ${
                     isSelected
-                      ? 'border-2 border-nexus-emerald bg-nexus-emerald-light/20'
-                      : 'border-border bg-white'
-                  }
+                      ? 'border-2 border-nexus-emerald bg-white/90 shadow-[0_6px_25px_-5px_rgba(11,138,68,0.2)] ring-2 ring-nexus-emerald/20'
+                      : 'border-white/80 bg-white/70 hover:border-nexus-emerald/30 hover:bg-white/85 shadow-2xs'
+                  }`}
                 >
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between gap-2">
-                      <Badge variant={isSelected ? 'emerald' : 'navy'}>
+                      <Badge variant={isSelected ? 'emerald' : 'outline'}>
                         {t(`roles.${acc.role}`)}
                       </Badge>
                       {isSelected && <CheckCircle2 className="h-4 w-4 text-nexus-emerald" />}
                     </div>
-                    <CardTitle className="pt-1 text-base">
+                    <CardTitle className="pt-1 text-base font-semibold text-nexus-navy">
                       {isAr ? acc.fullNameAr : acc.fullNameFr}
                     </CardTitle>
-                    <CardDescription className="text-xs">
+                    <CardDescription className="text-xs font-normal">
                       {isAr ? acc.titleAr : acc.titleFr}
                     </CardDescription>
                   </CardHeader>
@@ -86,12 +86,16 @@ export function LoginPage() {
                       type="button"
                       size="sm"
                       variant={isSelected ? 'default' : 'outline'}
-                      className="w-full"
+                      className={`w-full ${
+                        isSelected
+                          ? 'bg-nexus-emerald hover:bg-nexus-emerald-deep shadow-xs'
+                          : 'border-slate-200/80 bg-white/80 hover:bg-white'
+                      }`}
                       onClick={() => handleSelectAccount(acc.id)}
                     >
                       <UserCheck className="h-4 w-4" />
                       {t('auth.quickEnterBtn')}
-                      <ArrowUpRight className="h-3.5 w-3.5" />
+                      <ArrowUpRight className="h-3.5 w-3.5 opacity-60" />
                     </Button>
                   </CardFooter>
                 </Card>
@@ -101,11 +105,13 @@ export function LoginPage() {
         </div>
 
         {/* Standard Demo Form */}
-        <Card className="mx-auto max-w-md bg-white">
+        <Card className="mx-auto max-w-md border-white/80 bg-white/75 backdrop-blur-md shadow-xs">
           <CardHeader className="space-y-1">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-nexus-emerald" />
-              <CardTitle className="text-base">{t('auth.submitLogin')}</CardTitle>
+              <CardTitle className="text-base font-semibold text-nexus-navy">
+                {t('auth.submitLogin')}
+              </CardTitle>
             </div>
           </CardHeader>
           <CardContent>
@@ -130,12 +136,15 @@ export function LoginPage() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full bg-nexus-emerald hover:bg-nexus-emerald-deep shadow-xs"
+              >
                 {t('auth.submitLogin')}
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="border-t border-border pt-3 text-xs text-nexus-gray">
+          <CardFooter className="border-t border-slate-200/60 pt-3 text-xs text-nexus-gray">
             {t('auth.demoNotice')}
           </CardFooter>
         </Card>

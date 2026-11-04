@@ -60,32 +60,33 @@ export function LandingPage() {
       <section className="container space-y-6">
         <SupabaseStatusBanner />
 
-        <div className="rounded-2xl border border-white/80 bg-white/70 p-8 shadow-[0_8px_32px_0_rgba(15,23,42,0.05)] backdrop-blur-xl sm:p-12 relative overflow-hidden">
-          {/* Ambient background glow behind hero */}
-          <div className="pointer-events-none absolute -end-24 -top-24 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl" />
-          <div className="pointer-events-none absolute -start-24 -bottom-24 h-96 w-96 rounded-full bg-slate-400/10 blur-3xl" />
+        <div className="relative overflow-hidden rounded-2xl border border-nexus-emerald/25 bg-gradient-to-br from-[#06452D]/95 via-[#075B35]/90 to-[#0F172A]/95 p-8 text-white shadow-[0_20px_50px_rgba(6,69,45,0.22)] backdrop-blur-2xl sm:p-12">
+          {/* Zellij Vector Geometric Pattern Overlay */}
+          <div className="pointer-events-none absolute inset-0 bg-zellij-hero opacity-80" />
+
+          {/* Ambient Lighting Accents */}
+          <div className="pointer-events-none absolute -end-24 -top-24 h-96 w-96 rounded-full bg-nexus-emerald/20 blur-3xl" />
+          <div className="pointer-events-none absolute -start-24 -bottom-24 h-96 w-96 rounded-full bg-[#D62828]/10 blur-3xl" />
 
           <div className="relative max-w-3xl space-y-6">
-            <Badge
-              variant="emerald"
-              className="bg-nexus-emerald/10 text-nexus-emerald border-nexus-emerald/20 px-3 py-1 text-xs font-medium"
-            >
-              <MapPin className="h-3.5 w-3.5" />
-              {t('landing.badge')}
-            </Badge>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-medium text-emerald-100 backdrop-blur-md shadow-xs">
+              <span className="h-2 w-2 rounded-full bg-[#D62828] shadow-[0_0_8px_rgba(214,40,40,0.8)]" />
+              <MapPin className="h-3.5 w-3.5 text-emerald-300" />
+              <span>{t('landing.badge')}</span>
+            </div>
 
-            <h1 className="text-3xl font-semibold leading-tight tracking-tight text-nexus-navy sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
               {t('landing.heroTitle')}
             </h1>
 
-            <p className="text-base font-normal leading-relaxed text-nexus-gray sm:text-lg">
+            <p className="text-base font-normal leading-relaxed text-emerald-50/90 sm:text-lg">
               {t('landing.heroSubtitle')}
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Button
                 size="lg"
-                className="shadow-[0_4px_16px_rgba(11,138,68,0.25)] hover:shadow-[0_6px_20px_rgba(11,138,68,0.35)]"
+                className="bg-nexus-emerald hover:bg-nexus-emerald-deep text-white border border-emerald-400/30 shadow-[0_4px_20px_rgba(11,138,68,0.4)]"
                 asChild
               >
                 <Link to="/app/dashboard">
@@ -93,13 +94,18 @@ export function LandingPage() {
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="navy" asChild>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/20 bg-white/10 text-white hover:bg-white/20 backdrop-blur-md shadow-xs"
+                asChild
+              >
                 <Link to="/login">{t('landing.secondaryCta')}</Link>
               </Button>
               <Button
                 size="lg"
-                variant="outline"
-                className="border-slate-200/80 bg-white/80 hover:bg-white"
+                variant="ghost"
+                className="text-emerald-100 hover:text-white hover:bg-white/10"
                 asChild
               >
                 <Link to="/initiatives">{t('nav.initiatives')}</Link>
@@ -108,62 +114,57 @@ export function LandingPage() {
           </div>
 
           {/* Live Constantine Impact Metrics Strip */}
-          <div className="relative mt-10 grid gap-4 border-t border-slate-200/60 pt-8 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-xl border border-white/70 bg-white/60 p-4.5 backdrop-blur-md shadow-2xs">
-              <div className="flex items-center justify-between text-xs font-normal text-nexus-gray">
+          <div className="relative mt-10 grid gap-4 border-t border-white/15 pt-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl border border-white/15 bg-white/10 p-4.5 backdrop-blur-md shadow-2xs">
+              <div className="flex items-center justify-between text-xs font-normal text-emerald-100/90">
                 <span>{t('pages.dashboard.kpiOrganizations')}</span>
-                <Building2 className="h-4 w-4 text-nexus-emerald/80" />
+                <Building2 className="h-4 w-4 text-emerald-300" />
               </div>
-              <p className="mt-1 text-2xl font-semibold text-nexus-navy">
-                {metrics.totalOrganizations}
-              </p>
+              <p className="mt-1 text-2xl font-semibold text-white">{metrics.totalOrganizations}</p>
             </div>
 
-            <div className="rounded-xl border border-white/70 bg-white/60 p-4.5 backdrop-blur-md shadow-2xs">
-              <div className="flex items-center justify-between text-xs font-normal text-nexus-gray">
+            <div className="rounded-xl border border-white/15 bg-white/10 p-4.5 backdrop-blur-md shadow-2xs">
+              <div className="flex items-center justify-between text-xs font-normal text-emerald-100/90">
                 <span>{t('pages.dashboard.kpiVolunteers')}</span>
-                <Users className="h-4 w-4 text-nexus-emerald/80" />
+                <Users className="h-4 w-4 text-emerald-300" />
               </div>
-              <p className="mt-1 text-2xl font-semibold text-nexus-navy">
-                {metrics.activeVolunteers}
-              </p>
+              <p className="mt-1 text-2xl font-semibold text-white">{metrics.activeVolunteers}</p>
             </div>
 
-            <div className="rounded-xl border border-white/70 bg-white/60 p-4.5 backdrop-blur-md shadow-2xs">
-              <div className="flex items-center justify-between text-xs font-normal text-nexus-gray">
+            <div className="rounded-xl border border-white/15 bg-white/10 p-4.5 backdrop-blur-md shadow-2xs">
+              <div className="flex items-center justify-between text-xs font-normal text-emerald-100/90">
                 <span>{t('pages.dashboard.kpiHours')}</span>
-                <Clock className="h-4 w-4 text-nexus-emerald/80" />
+                <Clock className="h-4 w-4 text-emerald-300" />
               </div>
-              <p className="mt-1 text-2xl font-semibold text-nexus-navy">
+              <p className="mt-1 text-2xl font-semibold text-white">
                 {metrics.totalVolunteerHours}h
               </p>
             </div>
 
-            <div className="rounded-xl border border-white/70 bg-white/60 p-4.5 backdrop-blur-md shadow-2xs">
-              <div className="flex items-center justify-between text-xs font-normal text-nexus-gray">
+            <div className="rounded-xl border border-white/15 bg-white/10 p-4.5 backdrop-blur-md shadow-2xs">
+              <div className="flex items-center justify-between text-xs font-normal text-emerald-100/90">
                 <span>{t('pages.dashboard.kpiBeneficiaries')}</span>
-                <Award className="h-4 w-4 text-nexus-emerald/80" />
+                <Award className="h-4 w-4 text-emerald-300" />
               </div>
-              <p className="mt-1 text-2xl font-semibold text-nexus-emerald">
+              <p className="mt-1 text-2xl font-semibold text-emerald-300">
                 {metrics.totalBeneficiaries.toLocaleString()}
               </p>
             </div>
           </div>
 
           {/* Constantine Municipal Scope Strip */}
-          <div className="relative mt-6 border-t border-slate-200/60 pt-6">
-            <p className="mb-3 text-[11px] font-medium uppercase tracking-wider text-nexus-gray">
+          <div className="relative mt-6 border-t border-white/15 pt-6">
+            <p className="mb-3 text-[11px] font-medium uppercase tracking-wider text-emerald-200/80">
               {t('brand.wilaya')}
             </p>
             <div className="flex flex-wrap gap-2">
               {CONSTANTINE_COMMUNES.map((commune) => (
-                <Badge
+                <span
                   key={commune}
-                  variant="secondary"
-                  className="border-slate-200 bg-white/70 px-3 py-1 font-normal text-nexus-navy/90 backdrop-blur-xs"
+                  className="inline-flex items-center rounded-md border border-white/15 bg-white/10 px-3 py-1 text-xs font-normal text-emerald-50 backdrop-blur-xs"
                 >
                   {t(`common.communes.${commune}`)}
-                </Badge>
+                </span>
               ))}
             </div>
           </div>
@@ -270,8 +271,10 @@ export function LandingPage() {
 
       {/* Lifecycle Steps */}
       <section className="container">
-        <div className="rounded-2xl bg-[#0F172A]/90 p-8 text-white shadow-xl backdrop-blur-xl sm:p-10 border border-white/10 relative overflow-hidden">
-          <div className="pointer-events-none absolute -end-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" />
+        <div className="relative overflow-hidden rounded-2xl border border-nexus-emerald/20 bg-gradient-to-br from-[#06452D]/95 via-[#075B35]/90 to-[#0F172A]/95 p-8 text-white shadow-xl backdrop-blur-2xl sm:p-10">
+          <div className="pointer-events-none absolute inset-0 bg-zellij-subtle opacity-70" />
+          <div className="pointer-events-none absolute -end-24 -top-24 h-72 w-72 rounded-full bg-nexus-emerald/20 blur-3xl" />
+          <div className="pointer-events-none absolute -start-24 -bottom-24 h-72 w-72 rounded-full bg-[#D62828]/10 blur-3xl" />
           <h2 className="relative text-xl font-semibold text-white">
             {t('landing.workflowTitle')}
           </h2>
@@ -279,10 +282,10 @@ export function LandingPage() {
             {steps.map((step) => (
               <div
                 key={step}
-                className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xs"
+                className="flex items-start gap-3 rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur-md transition-colors hover:bg-white/15"
               >
-                <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 shrink-0 text-emerald-400" />
-                <span className="text-xs font-normal text-slate-200 leading-relaxed">{step}</span>
+                <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 shrink-0 text-emerald-300" />
+                <span className="text-xs font-normal text-emerald-50 leading-relaxed">{step}</span>
               </div>
             ))}
           </div>

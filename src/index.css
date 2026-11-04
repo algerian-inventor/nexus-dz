@@ -4,14 +4,17 @@
 
 @layer base {
   :root {
-    /* NEXUS DZ Visual Identity
-       Emerald: #0B8A44 -> hsl(147, 85%, 29%)
-       Navy: #0F172A -> hsl(222, 47%, 11%)
+    /* NEXUS DZ Visual Identity V3 — Algerian Identity & Deep Green Glassmorphism
+       Primary Emerald: #0B8A44 -> hsl(147, 85%, 29%)
+       Deep Emerald: #075B35 -> hsl(153, 86%, 19%)
+       Forest Green: #06452D -> hsl(157, 84%, 15%)
+       Dark Navy: #0F172A -> hsl(222, 47%, 11%)
+       Algerian Red: #D62828 -> hsl(360, 68%, 50%)
+       Soft Mint: #DDF5E8 -> hsl(146, 57%, 92%)
+       Muted Green Background: #EAF2EC -> hsl(137, 23%, 93%)
        White: #FFFFFF -> hsl(0, 0%, 100%)
-       Background: #F8FAFC -> hsl(210, 40%, 98%)
-       Gray: #64748B -> hsl(215, 16%, 47%)
     */
-    --background: 210 40% 98%;
+    --background: 137 23% 94%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
@@ -23,37 +26,40 @@
     --primary: 147 85% 29%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 47% 11%;
+    --secondary: 153 86% 19%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 95%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 140 20% 92%;
+    --muted-foreground: 215 16% 45%;
 
-    --accent: 147 45% 94%;
-    --accent-foreground: 147 85% 24%;
+    --accent: 146 57% 92%;
+    --accent-foreground: 153 86% 19%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 360 68% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --border: 142 22% 87%;
+    --input: 142 22% 87%;
     --ring: 147 85% 29%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
-    /* Glassmorphism Design Tokens */
-    --glass-bg: rgba(255, 255, 255, 0.75);
-    --glass-bg-subtle: rgba(255, 255, 255, 0.55);
-    --glass-bg-solid: rgba(255, 255, 255, 0.92);
+    /* Enhanced Emerald Glassmorphism Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.78);
+    --glass-bg-tinted: rgba(240, 248, 243, 0.82);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.6);
+    --glass-bg-solid: rgba(255, 255, 255, 0.94);
     --glass-border: rgba(255, 255, 255, 0.85);
-    --glass-border-subtle: rgba(226, 232, 240, 0.65);
-    --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
-    --glass-shadow-lg: 0 16px 48px -8px rgba(15, 23, 42, 0.09), 0 4px 12px 0 rgba(15, 23, 42, 0.04);
-    --glass-emerald-glow: 0 0 40px -10px rgba(11, 138, 68, 0.12);
+    --glass-border-emerald: rgba(11, 138, 68, 0.22);
+    --glass-shadow: 0 10px 32px -4px rgba(7, 91, 53, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+    --glass-shadow-lg:
+      0 20px 48px -10px rgba(6, 69, 45, 0.14), 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+    --glass-emerald-glow: 0 0 45px -8px rgba(11, 138, 68, 0.22);
 
-    /* Dark Glass (for Sidebar & Dark Overlays) */
-    --glass-navy-bg: rgba(15, 23, 42, 0.82);
-    --glass-navy-border: rgba(255, 255, 255, 0.08);
+    /* Deep Forest Glass for Sidebar & Hero surfaces */
+    --glass-forest-bg: rgba(6, 69, 45, 0.92);
+    --glass-forest-border: rgba(221, 245, 232, 0.14);
+    --glass-navy-bg: rgba(15, 23, 42, 0.9);
   }
 
   * {
@@ -68,17 +74,17 @@
   body {
     @apply bg-background text-foreground font-sans leading-relaxed;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    /* Ambient backdrop: soft radial emerald gradient meshes behind UI */
-    background-color: #f8fafc;
+    background-color: #eaf2ec;
     background-image:
-      radial-gradient(at 10% 10%, rgba(11, 138, 68, 0.045) 0px, transparent 45%),
-      radial-gradient(at 90% 20%, rgba(15, 23, 42, 0.03) 0px, transparent 40%),
-      radial-gradient(at 50% 85%, rgba(11, 138, 68, 0.035) 0px, transparent 50%);
+      radial-gradient(at 12% 12%, rgba(11, 138, 68, 0.09) 0px, transparent 48%),
+      radial-gradient(at 88% 18%, rgba(7, 91, 53, 0.07) 0px, transparent 45%),
+      radial-gradient(at 50% 88%, rgba(11, 138, 68, 0.06) 0px, transparent 52%),
+      radial-gradient(at 90% 85%, rgba(214, 40, 40, 0.02) 0px, transparent 35%);
     background-attachment: fixed;
     background-size: cover;
   }
 
-  /* Refined Typography Weights — lighter, airier, less dense */
+  /* Refined Typography Weights */
   h1,
   h2,
   h3,
@@ -89,7 +95,7 @@
     letter-spacing: -0.015em;
   }
 
-  /* Refined Arabic RTL Typography & Line-Height Balance */
+  /* Refined Arabic RTL Typography */
   html[dir='rtl'] body {
     line-height: 1.7;
     letter-spacing: 0;
@@ -104,62 +110,82 @@
     font-weight: 600;
   }
 
-  /* Consistent Native Select & Form Focus States */
+  /* Native Select & Input transitions */
   select {
     @apply transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexus-emerald/40 focus-visible:ring-offset-1;
   }
 }
 
 @layer utilities {
+  /* Algerian Maghrebi Zellij Geometric Patterns (Pure SVG Data URIs, lightweight, vector) */
+  .bg-zellij-subtle {
+    background-image: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M24 0l12 12-12 12L12 12 24 0zm0 24l12 12-12 12-12-12 12-12zm-24 0l12 12L0 48l-12-12 12-12zm48 0l12 12-12 12-12-12 12-12zM0 0l12 12L0 24-12 12 0 0zm48 0l12 12-12 12-12-12 12-12z' fill='%230b8a44' fill-opacity='0.04' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .bg-zellij-forest {
+    background-image: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M24 0l12 12-12 12L12 12 24 0zm0 24l12 12-12 12-12-12 12-12zm-24 0l12 12L0 48l-12-12 12-12zm48 0l12 12-12 12-12-12 12-12zM0 0l12 12L0 24-12 12 0 0zm48 0l12 12-12 12-12-12 12-12z' fill='%23ddf5e8' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .bg-zellij-hero {
+    background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ddf5e8' fill-opacity='0.07' fill-rule='evenodd'%3E%3Cpath d='M32 0l16 16-16 16L16 16 32 0zm0 32l16 16-16 16-16-16 16-16zm-32 0l16 16L0 64-16 48 0 32zm64 0l16 16-16 16-16-16 16-16zM0 0l16 16L0 32-16 16 0 0zm64 0l16 16-16 16-16-16 16-16z'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23ffffff' fill-opacity='0.08'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
   /* Frosted Glass Utilities */
   .glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
     border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-panel-tinted {
+    background: var(--glass-bg-tinted);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border-emerald);
     box-shadow: var(--glass-shadow);
   }
 
   .glass-panel-subtle {
     background: var(--glass-bg-subtle);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border-subtle);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(226, 232, 240, 0.7);
     box-shadow: var(--glass-shadow);
   }
 
-  .glass-panel-solid {
-    background: var(--glass-bg-solid);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
+  .glass-panel-forest {
+    background: var(--glass-forest-bg);
+    backdrop-filter: blur(26px);
+    -webkit-backdrop-filter: blur(26px);
+    border: 1px solid var(--glass-forest-border);
+    box-shadow: var(--glass-shadow-lg);
   }
 
-  .glass-panel-navy {
-    background: var(--glass-navy-bg);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-inline-end: 1px solid var(--glass-navy-border);
-  }
-
-  .glass-glow-emerald {
+  .glass-emerald-glow {
     box-shadow: var(--glass-emerald-glow);
   }
+
+  /* Algerian Red Accent Pill / Tag */
+  .badge-algerian-red {
+    background-color: rgba(214, 40, 40, 0.1);
+    color: #d62828;
+    border: 1px solid rgba(214, 40, 40, 0.22);
+  }
 }
 
-/* Graceful Fallback if backdrop-filter is unsupported */
+/* Graceful Fallbacks */
 @supports not (backdrop-filter: blur(10px)) {
   .glass-panel,
-  .glass-panel-subtle {
-    background: rgba(255, 255, 255, 0.95);
+  .glass-panel-tinted {
+    background: rgba(255, 255, 255, 0.96);
   }
-  .glass-panel-navy {
-    background: #0f172a;
+  .glass-panel-forest {
+    background: #06452d;
   }
 }
 
-/* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

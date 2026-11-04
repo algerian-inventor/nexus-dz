@@ -161,20 +161,41 @@ export function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7">
         {kpis.map((kpi) => {
           const Icon = kpi.icon;
+          const isAlert = kpi.to === '/app/verification' && Number(metrics.pendingVerification) > 0;
           return (
             <Link key={kpi.label} to={kpi.to} className="group block">
-              <Card className="h-full border-white/70 bg-white/65 backdrop-blur-md transition-all duration-200 group-hover:bg-white/80 group-hover:border-nexus-emerald/40 group-hover:shadow-[0_8px_25px_-5px_rgba(11,138,68,0.12)]">
+              <Card
+                className={`h-full border-white/75 bg-white/70 backdrop-blur-md transition-all duration-200 group-hover:bg-white/85 group-hover:shadow-[0_8px_25px_-5px_rgba(7,91,53,0.12)] ${
+                  isAlert
+                    ? 'border-nexus-red/30 group-hover:border-nexus-red/60'
+                    : 'group-hover:border-nexus-emerald/40'
+                }`}
+              >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
                   <CardTitle className="text-xs font-medium leading-snug text-nexus-gray">
                     {kpi.label}
                   </CardTitle>
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-nexus-emerald transition-colors group-hover:bg-nexus-emerald group-hover:text-white">
+                  <div
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                      isAlert
+                        ? 'bg-nexus-red/10 text-nexus-red group-hover:bg-nexus-red group-hover:text-white'
+                        : 'bg-emerald-500/10 text-nexus-emerald group-hover:bg-nexus-emerald group-hover:text-white'
+                    }`}
+                  >
                     <Icon className="h-4 w-4" />
                   </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-1">
-                  <div className="text-xl font-semibold tracking-tight text-nexus-navy">
-                    {kpi.value}
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-xl font-semibold tracking-tight text-nexus-navy">
+                      {kpi.value}
+                    </span>
+                    {isAlert && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-nexus-red/25 bg-nexus-red-light/80 px-1.5 py-0.5 text-[10px] font-medium text-nexus-red">
+                        <span className="h-1.5 w-1.5 rounded-full bg-nexus-red animate-pulse" />
+                        Audit
+                      </span>
+                    )}
                   </div>
                   <p className="mt-1 text-[11px] font-normal text-nexus-gray/90">{kpi.sub}</p>
                 </CardContent>
@@ -185,8 +206,9 @@ export function DashboardPage() {
       </div>
 
       {/* Interactive 12-Step Hackathon Presentation Launcher */}
-      <Card className="border-white/80 bg-white/70 backdrop-blur-md">
-        <CardHeader className="pb-3">
+      <Card className="relative overflow-hidden border-white/80 bg-white/70 backdrop-blur-md">
+        <div className="pointer-events-none absolute inset-0 bg-zellij-subtle opacity-35" />
+        <CardHeader className="relative pb-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <CardTitle className="text-base font-semibold">
               {t('pages.dashboard.scenarioTitle')}
@@ -199,7 +221,7 @@ export function DashboardPage() {
             </Badge>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           <div className="grid gap-3.5 md:grid-cols-2 lg:grid-cols-3">
             {scenarioSteps.map((s) => (
               <div
