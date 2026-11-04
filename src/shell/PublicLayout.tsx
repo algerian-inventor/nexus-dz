@@ -21,32 +21,32 @@ export function PublicLayout() {
       <div className="border-b border-border bg-nexus-navy text-white">
         <div className="container flex flex-wrap items-center justify-between gap-2 py-2 text-xs">
           <div className="flex items-center gap-2">
-            <MapPin className="h-3.5 w-3.5 text-nexus-emerald" />
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-nexus-emerald" />
             <span className="font-medium">{t('brand.wilaya')}</span>
-            <span className="text-slate-400">|</span>
-            <span className="text-slate-300">{t('brand.category')}</span>
+            <span className="hidden text-slate-400 sm:inline">|</span>
+            <span className="hidden text-slate-300 sm:inline">{t('brand.category')}</span>
           </div>
-          <span className="text-slate-300 font-mono">{t('common.direction')}</span>
+          <span className="font-mono text-[11px] text-slate-300">{t('common.direction')}</span>
         </div>
       </div>
 
       {/* Main Public Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur-xs">
         <div className="container flex h-16 items-center justify-between gap-4">
-          <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-nexus-emerald text-white shadow-xs">
+          <div className="flex items-center gap-6 lg:gap-8">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-nexus-emerald text-white shadow-xs transition-transform group-hover:scale-105">
                 <Shield className="h-5 w-5" />
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-bold tracking-tight text-nexus-navy">
+                <span className="text-base font-bold leading-tight tracking-tight text-nexus-navy">
                   {t('brand.name')}
                 </span>
                 <span className="text-[11px] font-medium text-nexus-emerald">Constantine 25</span>
               </div>
             </Link>
 
-            <nav className="hidden items-center gap-1 md:flex">
+            <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
@@ -54,9 +54,9 @@ export function PublicLayout() {
                   end={item.end}
                   className={({ isActive }) =>
                     cn(
-                      'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                      'rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150',
                       isActive
-                        ? 'bg-nexus-emerald-light text-nexus-emerald-dark'
+                        ? 'bg-nexus-emerald-light text-nexus-emerald-dark font-semibold'
                         : 'text-nexus-gray hover:bg-nexus-surface hover:text-nexus-navy'
                     )
                   }
@@ -96,7 +96,7 @@ export function PublicLayout() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'whitespace-nowrap rounded px-2.5 py-1 text-xs font-medium',
+                    'whitespace-nowrap rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors',
                     isActive ? 'bg-nexus-emerald text-white' : 'text-nexus-navy hover:bg-white'
                   )
                 }
@@ -105,12 +105,20 @@ export function PublicLayout() {
               </NavLink>
             ))}
           </div>
-          <Link
-            to="/app/dashboard"
-            className="whitespace-nowrap rounded bg-nexus-navy px-2.5 py-1 text-xs font-medium text-white"
-          >
-            {t('nav.workspace')}
-          </Link>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <Link
+              to="/login"
+              className="whitespace-nowrap rounded-md border border-border bg-white px-2.5 py-1.5 text-xs font-medium text-nexus-navy"
+            >
+              {t('nav.login')}
+            </Link>
+            <Link
+              to="/app/dashboard"
+              className="whitespace-nowrap rounded-md bg-nexus-navy px-2.5 py-1.5 text-xs font-medium text-white"
+            >
+              {t('nav.workspace')}
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -123,23 +131,23 @@ export function PublicLayout() {
       <footer className="border-t border-border bg-white py-8">
         <div className="container flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-bold text-nexus-navy">{t('brand.name')}</span>
               <span className="text-xs text-nexus-gray">— {t('brand.tagline')}</span>
             </div>
             <p className="text-xs text-nexus-gray">{t('brand.wilaya')}</p>
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-nexus-gray">
-            <Link to="/about" className="hover:text-nexus-emerald">
+          <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-nexus-gray">
+            <Link to="/about" className="transition-colors hover:text-nexus-emerald">
               {t('nav.about')}
             </Link>
-            <Link to="/initiatives" className="hover:text-nexus-emerald">
+            <Link to="/initiatives" className="transition-colors hover:text-nexus-emerald">
               {t('nav.initiatives')}
             </Link>
-            <Link to="/organizations" className="hover:text-nexus-emerald">
+            <Link to="/organizations" className="transition-colors hover:text-nexus-emerald">
               {t('nav.organizations')}
             </Link>
-            <Link to="/app/dashboard" className="font-semibold text-nexus-emerald">
+            <Link to="/app/dashboard" className="font-semibold text-nexus-emerald hover:underline">
               {t('nav.workspace')}
             </Link>
           </div>

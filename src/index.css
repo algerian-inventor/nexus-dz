@@ -46,8 +46,32 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans leading-relaxed;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* Refined Arabic RTL Typography & Line-Height Balance */
+  html[dir='rtl'] body {
+    line-height: 1.65;
+    letter-spacing: 0;
+  }
+
+  html[dir='rtl'] h1,
+  html[dir='rtl'] h2,
+  html[dir='rtl'] h3,
+  html[dir='rtl'] h4 {
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+
+  /* Consistent Native Select & Form Focus States */
+  select {
+    @apply transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexus-emerald focus-visible:ring-offset-1;
   }
 }

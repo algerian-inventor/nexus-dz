@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Plus, UserPlus, Check, Edit3, UserCheck } from 'lucide-react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { CommuneFilterBar } from '@/components/shared/CommuneFilterBar';
+import { EmptyDatabaseTableState } from '@/components/shared/EmptyDatabaseTableState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -141,13 +142,13 @@ export function InitiativesPage() {
                   {editingId ? t('pages.initiatives.editBtn') : t('pages.initiatives.createBtn')}
                 </DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleSave} className="space-y-3 pt-2">
-                <div className="space-y-1">
+              <form onSubmit={handleSave} className="space-y-3.5 pt-2">
+                <div className="space-y-1.5">
                   <Label>{t('pages.initiatives.colOrg')}</Label>
                   <select
                     value={organizationId}
                     onChange={(e) => setOrganizationId(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs"
+                    className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs text-nexus-navy"
                   >
                     {dataset.organizations.map((o) => (
                       <option key={o.id} value={o.id}>
@@ -156,7 +157,7 @@ export function InitiativesPage() {
                     ))}
                   </select>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <Label>عنوان المبادرة (عربي)</Label>
                   <Input
                     value={titleAr}
@@ -165,7 +166,7 @@ export function InitiativesPage() {
                     required
                   />
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <Label>Titre de l'initiative (Français)</Label>
                   <Input
                     value={titleFr}
@@ -173,13 +174,13 @@ export function InitiativesPage() {
                     placeholder="Ex: Campagne de reboisement Cité Zouaghi Slimane"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>{t('pages.organizations.colCategory')}</Label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value as SectorCategory)}
-                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs"
+                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs text-nexus-navy"
                     >
                       {SECTOR_CATEGORIES.map((s) => (
                         <option key={s} value={s}>
@@ -188,12 +189,12 @@ export function InitiativesPage() {
                       ))}
                     </select>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>{t('pages.organizations.colCommune')}</Label>
                     <select
                       value={commune}
                       onChange={(e) => setCommune(e.target.value as CommuneKey)}
-                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs"
+                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs text-nexus-navy"
                     >
                       {CONSTANTINE_COMMUNES.map((c) => (
                         <option key={c} value={c}>
@@ -203,8 +204,8 @@ export function InitiativesPage() {
                     </select>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <div className="space-y-1.5">
                     <Label>Target Volunteers</Label>
                     <Input
                       type="number"
@@ -212,7 +213,7 @@ export function InitiativesPage() {
                       onChange={(e) => setTargetVolunteers(Number(e.target.value))}
                     />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>Target Beneficiaries</Label>
                     <Input
                       type="number"
@@ -220,12 +221,12 @@ export function InitiativesPage() {
                       onChange={(e) => setTargetBeneficiaries(Number(e.target.value))}
                     />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>{t('pages.initiatives.colStatus')}</Label>
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as InitiativeStatus)}
-                      className="flex h-10 w-full rounded-md border border-input bg-white px-2 text-xs"
+                      className="flex h-10 w-full rounded-md border border-input bg-white px-2 text-xs text-nexus-navy"
                     >
                       <option value="open">{t('statuses.open')}</option>
                       <option value="in_progress">{t('statuses.in_progress')}</option>
@@ -234,7 +235,7 @@ export function InitiativesPage() {
                     </select>
                   </div>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <Label>Location Details</Label>
                   <Input
                     value={locationDetails}
@@ -270,96 +271,102 @@ export function InitiativesPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filtered.map((init) => {
-            const org = dataset.organizations.find((o) => o.id === init.organizationId);
-            const isEnrolled = init.enrolledVolunteerIds.includes(currentVolId);
-            const isApplied = init.applicantVolunteerIds.includes(currentVolId);
+          {filtered.length === 0 ? (
+            <EmptyDatabaseTableState colSpan={7} sqlTableName="initiatives" />
+          ) : (
+            filtered.map((init) => {
+              const org = dataset.organizations.find((o) => o.id === init.organizationId);
+              const isEnrolled = init.enrolledVolunteerIds.includes(currentVolId);
+              const isApplied = init.applicantVolunteerIds.includes(currentVolId);
 
-            return (
-              <TableRow key={init.id}>
-                <TableCell className="max-w-xs">
-                  <p className="font-semibold text-nexus-navy">
-                    {isAr ? init.titleAr : init.titleFr}
-                  </p>
-                  <p className="mt-0.5 text-xs text-nexus-gray">{t(`sectors.${init.category}`)}</p>
-                </TableCell>
-                <TableCell className="text-xs font-medium">
-                  {org ? (isAr ? org.nameAr : org.nameFr) : '-'}
-                </TableCell>
-                <TableCell>
-                  <Badge variant="secondary">{t(`common.communes.${init.commune}`)}</Badge>
-                  <p className="mt-1 text-[11px] text-nexus-gray">{init.locationDetails}</p>
-                </TableCell>
-                <TableCell>
-                  <span className="font-mono text-xs font-semibold">
-                    {init.enrolledVolunteerIds.length} / {init.targetVolunteers}
-                  </span>
-                  {init.applicantVolunteerIds.length > 0 && (
-                    <div className="mt-1 space-y-1">
-                      {init.applicantVolunteerIds.map((appVolId) => {
-                        const v = dataset.volunteers.find((vol) => vol.id === appVolId);
-                        return (
-                          <div key={appVolId} className="flex items-center gap-1">
-                            <Button
-                              size="sm"
-                              variant="default"
-                              className="h-6 px-2 text-[10px]"
-                              onClick={() => approveVolunteerApplication(init.id, appVolId)}
-                            >
-                              <UserCheck className="h-3 w-3" />
-                              {t('pages.initiatives.approveApplicantBtn')}:{' '}
-                              {v ? (isAr ? v.fullNameAr : v.fullNameFr) : appVolId}
-                            </Button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </TableCell>
-                <TableCell className="font-mono text-xs">
-                  <strong className="text-nexus-emerald">{init.verifiedBeneficiaries}</strong> /{' '}
-                  {init.targetBeneficiaries}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={init.status === 'verified' ? 'emerald' : 'outline'}>
-                    {t(`statuses.${init.status}`)}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {isEnrolled ? (
-                      <Badge variant="emerald">
-                        <Check className="h-3 w-3" />
-                        {t('pages.initiatives.enrolledBadge')}
-                      </Badge>
-                    ) : isApplied ? (
-                      <Badge variant="secondary">{t('pages.initiatives.appliedBadge')}</Badge>
-                    ) : (
+              return (
+                <TableRow key={init.id}>
+                  <TableCell className="max-w-xs">
+                    <p className="font-semibold text-nexus-navy">
+                      {isAr ? init.titleAr : init.titleFr}
+                    </p>
+                    <p className="mt-0.5 text-xs text-nexus-gray">
+                      {t(`sectors.${init.category}`)}
+                    </p>
+                  </TableCell>
+                  <TableCell className="max-w-[220px] text-xs font-medium">
+                    {org ? (isAr ? org.nameAr : org.nameFr) : '-'}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary">{t(`common.communes.${init.commune}`)}</Badge>
+                    <p className="mt-1 text-[11px] text-nexus-gray">{init.locationDetails}</p>
+                  </TableCell>
+                  <TableCell>
+                    <span className="font-mono text-xs font-semibold">
+                      {init.enrolledVolunteerIds.length} / {init.targetVolunteers}
+                    </span>
+                    {init.applicantVolunteerIds.length > 0 && (
+                      <div className="mt-1.5 space-y-1">
+                        {init.applicantVolunteerIds.map((appVolId) => {
+                          const v = dataset.volunteers.find((vol) => vol.id === appVolId);
+                          return (
+                            <div key={appVolId} className="flex items-center gap-1">
+                              <Button
+                                size="sm"
+                                variant="default"
+                                className="h-7 px-2.5 text-[11px]"
+                                onClick={() => approveVolunteerApplication(init.id, appVolId)}
+                              >
+                                <UserCheck className="h-3 w-3" />
+                                {t('pages.initiatives.approveApplicantBtn')}:{' '}
+                                {v ? (isAr ? v.fullNameAr : v.fullNameFr) : appVolId}
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell className="font-mono text-xs">
+                    <strong className="text-nexus-emerald">{init.verifiedBeneficiaries}</strong> /{' '}
+                    {init.targetBeneficiaries}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={init.status === 'verified' ? 'emerald' : 'outline'}>
+                      {t(`statuses.${init.status}`)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {isEnrolled ? (
+                        <Badge variant="emerald">
+                          <Check className="h-3 w-3" />
+                          {t('pages.initiatives.enrolledBadge')}
+                        </Badge>
+                      ) : isApplied ? (
+                        <Badge variant="secondary">{t('pages.initiatives.appliedBadge')}</Badge>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 px-2.5 text-xs"
+                          onClick={() => applyToInitiative(init.id, currentVolId)}
+                        >
+                          <UserPlus className="h-3.5 w-3.5" />
+                          {t('pages.initiatives.applyBtn')}
+                        </Button>
+                      )}
+
                       <Button
                         size="sm"
-                        variant="outline"
-                        className="h-7 px-2.5 text-xs"
-                        onClick={() => applyToInitiative(init.id, currentVolId)}
+                        variant="ghost"
+                        className="h-8 px-2.5 text-xs"
+                        onClick={() => openEditModal(init)}
                       >
-                        <UserPlus className="h-3.5 w-3.5" />
-                        {t('pages.initiatives.applyBtn')}
+                        <Edit3 className="h-3.5 w-3.5" />
+                        {t('pages.initiatives.editBtn')}
                       </Button>
-                    )}
-
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 px-2 text-xs"
-                      onClick={() => openEditModal(init)}
-                    >
-                      <Edit3 className="h-3.5 w-3.5" />
-                      {t('pages.initiatives.editBtn')}
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })
+          )}
         </TableBody>
       </Table>
     </div>

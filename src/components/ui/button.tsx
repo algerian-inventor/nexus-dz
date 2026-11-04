@@ -4,22 +4,22 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'bg-nexus-emerald text-white hover:bg-nexus-emerald-dark shadow-sm',
-        navy: 'bg-nexus-navy text-white hover:bg-nexus-navy-light shadow-sm',
+        default: 'bg-nexus-emerald text-white hover:bg-nexus-emerald-dark shadow-xs',
+        navy: 'bg-nexus-navy text-white hover:bg-nexus-navy-light shadow-xs',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border border-border bg-white text-nexus-navy hover:bg-nexus-surface hover:text-nexus-emerald',
+          'border border-border bg-white text-nexus-navy hover:border-nexus-emerald/40 hover:bg-nexus-surface hover:text-nexus-emerald',
         secondary: 'bg-muted text-nexus-navy hover:bg-muted/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost: 'text-nexus-navy hover:bg-accent hover:text-accent-foreground',
         link: 'text-nexus-emerald underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-md px-3 text-xs',
+        sm: 'h-9 rounded-md px-3 text-xs [&_svg]:size-3.5',
         lg: 'h-11 rounded-md px-6 text-base',
         icon: 'h-9 w-9',
       },

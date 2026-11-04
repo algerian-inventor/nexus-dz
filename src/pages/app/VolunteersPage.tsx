@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { UserPlus, Clock } from 'lucide-react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { CommuneFilterBar } from '@/components/shared/CommuneFilterBar';
+import { EmptyDatabaseTableState } from '@/components/shared/EmptyDatabaseTableState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -93,9 +94,9 @@ export function VolunteersPage() {
               <DialogHeader>
                 <DialogTitle>{t('pages.volunteers.inviteBtn')}</DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleCreate} className="space-y-3 pt-2">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
+              <form onSubmit={handleCreate} className="space-y-3.5 pt-2">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>الاسم بالعربية</Label>
                     <Input
                       value={fullNameAr}
@@ -104,7 +105,7 @@ export function VolunteersPage() {
                       required
                     />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>Nom en Français</Label>
                     <Input
                       value={fullNameFr}
@@ -113,13 +114,13 @@ export function VolunteersPage() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>{t('pages.volunteers.colCommune')}</Label>
                     <select
                       value={commune}
                       onChange={(e) => setCommune(e.target.value as CommuneKey)}
-                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs"
+                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs text-nexus-navy"
                     >
                       {CONSTANTINE_COMMUNES.map((c) => (
                         <option key={c} value={c}>
@@ -128,7 +129,7 @@ export function VolunteersPage() {
                       ))}
                     </select>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>Specialty</Label>
                     <Input
                       value={specialty}
@@ -137,17 +138,17 @@ export function VolunteersPage() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>Email</Label>
                     <Input value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>Phone</Label>
                     <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
                   </div>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <Label>{t('pages.volunteers.colSkills')}</Label>
                   <Input value={skillsInput} onChange={(e) => setSkillsInput(e.target.value)} />
                 </div>
@@ -178,45 +179,49 @@ export function VolunteersPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filtered.map((vol) => (
-            <TableRow key={vol.id}>
-              <TableCell>
-                <p className="font-semibold text-nexus-navy">
-                  {isAr ? vol.fullNameAr : vol.fullNameFr}
-                </p>
-                <p className="text-xs text-nexus-gray">
-                  {isAr ? vol.specialtyAr : vol.specialtyFr}
-                </p>
-                <p className="font-mono text-[11px] text-nexus-gray">{vol.email}</p>
-              </TableCell>
-              <TableCell>
-                <Badge variant="secondary">{t(`common.communes.${vol.commune}`)}</Badge>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-wrap gap-1">
-                  {vol.skills.map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-[11px]">
-                      {skill}
+          {filtered.length === 0 ? (
+            <EmptyDatabaseTableState colSpan={5} sqlTableName="volunteers" />
+          ) : (
+            filtered.map((vol) => (
+              <TableRow key={vol.id}>
+                <TableCell>
+                  <p className="font-semibold text-nexus-navy">
+                    {isAr ? vol.fullNameAr : vol.fullNameFr}
+                  </p>
+                  <p className="mt-0.5 text-xs text-nexus-gray">
+                    {isAr ? vol.specialtyAr : vol.specialtyFr}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[11px] text-nexus-gray">{vol.email}</p>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="secondary">{t(`common.communes.${vol.commune}`)}</Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1.5">
+                    {vol.skills.map((skill) => (
+                      <Badge key={skill} variant="outline" className="text-[11px]">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell className="font-semibold">{vol.completedTasksCount}</TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="emerald" className="font-mono">
+                      <Clock className="h-3 w-3" />
+                      {vol.verifiedHours}h
                     </Badge>
-                  ))}
-                </div>
-              </TableCell>
-              <TableCell className="font-semibold">{vol.completedTasksCount}</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Badge variant="emerald" className="font-mono">
-                    <Clock className="h-3 w-3" />
-                    {vol.verifiedHours}h
-                  </Badge>
-                  {vol.pendingHours > 0 && (
-                    <Badge variant="secondary" className="font-mono text-[11px]">
-                      +{vol.pendingHours}h pending
-                    </Badge>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+                    {vol.pendingHours > 0 && (
+                      <Badge variant="secondary" className="font-mono text-[11px]">
+                        +{vol.pendingHours}h pending
+                      </Badge>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>

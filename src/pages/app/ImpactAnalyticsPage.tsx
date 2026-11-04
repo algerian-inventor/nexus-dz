@@ -41,17 +41,32 @@ export function ImpactAnalyticsPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-2">
             <CardTitle className="text-base">{t('pages.analytics.chartCommuneTitle')}</CardTitle>
           </CardHeader>
-          <CardContent className="h-80">
+          <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={communeSeries} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="communeLabel" tick={{ fontSize: 11, fill: '#64748B' }} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} />
-                <Tooltip />
-                <Legend />
+              <BarChart data={communeSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <XAxis
+                  dataKey="communeLabel"
+                  tick={{ fontSize: 11, fill: '#334155' }}
+                  interval={0}
+                  angle={-15}
+                  textAnchor="end"
+                  height={48}
+                />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderColor: '#E2E8F0',
+                    borderRadius: '0.5rem',
+                    fontSize: '12px',
+                    color: '#0F172A',
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }} />
                 <Bar
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}
@@ -70,17 +85,32 @@ export function ImpactAnalyticsPage() {
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-2">
             <CardTitle className="text-base">{t('pages.analytics.chartCategoryTitle')}</CardTitle>
           </CardHeader>
-          <CardContent className="h-80">
+          <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={sectorSeries} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="sectorLabel" tick={{ fontSize: 10, fill: '#64748B' }} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} />
-                <Tooltip />
-                <Legend />
+              <BarChart data={sectorSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <XAxis
+                  dataKey="sectorLabel"
+                  tick={{ fontSize: 11, fill: '#334155' }}
+                  interval={0}
+                  angle={-15}
+                  textAnchor="end"
+                  height={48}
+                />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderColor: '#E2E8F0',
+                    borderRadius: '0.5rem',
+                    fontSize: '12px',
+                    color: '#0F172A',
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }} />
                 <Bar
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}

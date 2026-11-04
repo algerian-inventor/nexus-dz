@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Plus, CheckCircle2, XCircle } from 'lucide-react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { CommuneFilterBar } from '@/components/shared/CommuneFilterBar';
+import { EmptyDatabaseTableState } from '@/components/shared/EmptyDatabaseTableState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -93,8 +94,8 @@ export function OrganizationsPage() {
               <DialogHeader>
                 <DialogTitle>{t('pages.organizations.registerOrgBtn')}</DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleCreate} className="space-y-3 pt-2">
-                <div className="space-y-1">
+              <form onSubmit={handleCreate} className="space-y-3.5 pt-2">
+                <div className="space-y-1.5">
                   <Label>الاسم بالعربية / Nom en Arabe</Label>
                   <Input
                     value={nameAr}
@@ -103,7 +104,7 @@ export function OrganizationsPage() {
                     required
                   />
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <Label>الاسم بالفرنسية / Nom en Français</Label>
                   <Input
                     value={nameFr}
@@ -111,13 +112,13 @@ export function OrganizationsPage() {
                     placeholder="Association Constantine Initiative Jeunesse"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>{t('pages.organizations.colCategory')}</Label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value as SectorCategory)}
-                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs"
+                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs text-nexus-navy"
                     >
                       {SECTOR_CATEGORIES.map((s) => (
                         <option key={s} value={s}>
@@ -126,12 +127,12 @@ export function OrganizationsPage() {
                       ))}
                     </select>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>{t('pages.organizations.colCommune')}</Label>
                     <select
                       value={commune}
                       onChange={(e) => setCommune(e.target.value as CommuneKey)}
-                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs"
+                      className="flex h-10 w-full rounded-md border border-input bg-white px-3 text-xs text-nexus-navy"
                     >
                       {CONSTANTINE_COMMUNES.map((c) => (
                         <option key={c} value={c}>
@@ -141,12 +142,12 @@ export function OrganizationsPage() {
                     </select>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>{t('pages.organizations.colRegNumber')}</Label>
                     <Input value={regNumber} onChange={(e) => setRegNumber(e.target.value)} />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>President</Label>
                     <Input
                       value={presidentName}
@@ -155,12 +156,12 @@ export function OrganizationsPage() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>Email</Label>
                     <Input value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <Label>Phone</Label>
                     <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
                   </div>
@@ -194,60 +195,66 @@ export function OrganizationsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filtered.map((org) => (
-            <TableRow key={org.id}>
-              <TableCell className="max-w-xs">
-                <p className="font-semibold text-nexus-navy">{isAr ? org.nameAr : org.nameFr}</p>
-                <p className="text-xs text-nexus-gray">{org.presidentName}</p>
-                <p className="mt-0.5 text-[11px] text-nexus-gray">{org.address}</p>
-              </TableCell>
-              <TableCell className="text-xs">{t(`sectors.${org.category}`)}</TableCell>
-              <TableCell>
-                <Badge variant="secondary">{t(`common.communes.${org.commune}`)}</Badge>
-              </TableCell>
-              <TableCell className="font-mono text-xs">{org.registrationNumber}</TableCell>
-              <TableCell className="font-semibold">{org.membersCount}</TableCell>
-              <TableCell>
-                <Badge
-                  variant={
-                    org.verificationStatus === 'verified'
-                      ? 'emerald'
-                      : org.verificationStatus === 'rejected'
-                        ? 'navy'
-                        : 'secondary'
-                  }
-                >
-                  {t(`statuses.${org.verificationStatus}`)}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-wrap items-center gap-1.5">
-                  {org.verificationStatus !== 'verified' && (
-                    <Button
-                      size="sm"
-                      variant="default"
-                      className="h-7 px-2.5 text-xs"
-                      onClick={() => updateOrganizationStatus(org.id, 'verified')}
-                    >
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      {t('pages.organizations.approveBtn')}
-                    </Button>
-                  )}
-                  {org.verificationStatus === 'verified' && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 px-2.5 text-xs"
-                      onClick={() => updateOrganizationStatus(org.id, 'under_review')}
-                    >
-                      <XCircle className="h-3.5 w-3.5" />
-                      {t('statuses.under_review')}
-                    </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+          {filtered.length === 0 ? (
+            <EmptyDatabaseTableState colSpan={7} sqlTableName="organizations" />
+          ) : (
+            filtered.map((org) => (
+              <TableRow key={org.id}>
+                <TableCell className="max-w-xs">
+                  <p className="font-semibold text-nexus-navy">{isAr ? org.nameAr : org.nameFr}</p>
+                  <p className="mt-0.5 text-xs text-nexus-gray">{org.presidentName}</p>
+                  <p className="mt-0.5 text-[11px] text-nexus-gray">{org.address}</p>
+                </TableCell>
+                <TableCell className="text-xs font-medium">
+                  {t(`sectors.${org.category}`)}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="secondary">{t(`common.communes.${org.commune}`)}</Badge>
+                </TableCell>
+                <TableCell className="font-mono text-xs">{org.registrationNumber}</TableCell>
+                <TableCell className="font-semibold">{org.membersCount}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      org.verificationStatus === 'verified'
+                        ? 'emerald'
+                        : org.verificationStatus === 'rejected'
+                          ? 'navy'
+                          : 'secondary'
+                    }
+                  >
+                    {t(`statuses.${org.verificationStatus}`)}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {org.verificationStatus !== 'verified' && (
+                      <Button
+                        size="sm"
+                        variant="default"
+                        className="h-8 px-2.5 text-xs"
+                        onClick={() => updateOrganizationStatus(org.id, 'verified')}
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        {t('pages.organizations.approveBtn')}
+                      </Button>
+                    )}
+                    {org.verificationStatus === 'verified' && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-2.5 text-xs"
+                        onClick={() => updateOrganizationStatus(org.id, 'under_review')}
+                      >
+                        <XCircle className="h-3.5 w-3.5" />
+                        {t('statuses.under_review')}
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>

@@ -1,6 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts';
 import {
   Building2,
   Compass,
@@ -148,22 +157,26 @@ export function DashboardPage() {
         badgeText={t(`roles.${activeRole}`)}
       />
 
-      {/* 7 KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+      {/* 7 KPI Cards — Balanced Responsive Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7">
         {kpis.map((kpi) => {
           const Icon = kpi.icon;
           return (
-            <Link key={kpi.label} to={kpi.to} className="block">
-              <Card className="h-full transition-colors hover:border-nexus-emerald">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-xs font-medium text-nexus-gray">{kpi.label}</CardTitle>
-                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-nexus-emerald-light text-nexus-emerald">
-                    <Icon className="h-3.5 w-3.5" />
+            <Link key={kpi.label} to={kpi.to} className="group block">
+              <Card className="h-full transition-all duration-150 group-hover:border-nexus-emerald group-hover:shadow-sm">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+                  <CardTitle className="text-xs font-medium leading-snug text-nexus-gray">
+                    {kpi.label}
+                  </CardTitle>
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-nexus-emerald-light text-nexus-emerald transition-colors group-hover:bg-nexus-emerald group-hover:text-white">
+                    <Icon className="h-4 w-4" />
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-xl font-bold text-nexus-navy">{kpi.value}</div>
-                  <p className="mt-0.5 text-[11px] text-nexus-gray">{kpi.sub}</p>
+                <CardContent className="p-4 pt-1">
+                  <div className="text-xl font-bold tracking-tight text-nexus-navy">
+                    {kpi.value}
+                  </div>
+                  <p className="mt-1 text-[11px] font-medium text-nexus-gray">{kpi.sub}</p>
                 </CardContent>
               </Card>
             </Link>
@@ -180,17 +193,17 @@ export function DashboardPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3.5 md:grid-cols-2 lg:grid-cols-3">
             {scenarioSteps.map((s) => (
               <div
                 key={s.step}
-                className="flex flex-col justify-between gap-3 rounded-lg border border-border bg-nexus-surface p-3.5"
+                className="flex flex-col justify-between gap-3 rounded-lg border border-border bg-nexus-surface p-4 transition-colors hover:border-nexus-emerald/40"
               >
-                <div className="space-y-1">
-                  <Badge variant="outline" className="text-[10px]">
+                <div className="space-y-1.5">
+                  <Badge variant="outline" className="text-[11px]">
                     {t(`roles.${s.role}`)}
                   </Badge>
-                  <p className="text-xs font-semibold text-nexus-navy">
+                  <p className="text-xs font-semibold leading-relaxed text-nexus-navy">
                     {isAr ? s.labelAr : s.labelFr}
                   </p>
                 </div>
@@ -201,7 +214,7 @@ export function DashboardPage() {
                   onClick={() => handleJumpStep(s.role, s.path)}
                 >
                   <span className="flex items-center gap-1.5">
-                    <Play className="h-3 w-3 text-nexus-emerald" />
+                    <Play className="h-3.5 w-3.5 text-nexus-emerald" />
                     {t('auth.quickEnterBtn')}
                   </span>
                   <ArrowUpRight className="h-3.5 w-3.5" />
@@ -215,16 +228,32 @@ export function DashboardPage() {
       {/* Live Recharts Visualizations */}
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-2">
             <CardTitle className="text-base">{t('pages.analytics.chartCommuneTitle')}</CardTitle>
           </CardHeader>
-          <CardContent className="h-72">
+          <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={communeSeries} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="communeLabel" tick={{ fontSize: 11, fill: '#64748B' }} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} />
-                <Tooltip />
+              <BarChart data={communeSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <XAxis
+                  dataKey="communeLabel"
+                  tick={{ fontSize: 11, fill: '#334155' }}
+                  interval={0}
+                  angle={-15}
+                  textAnchor="end"
+                  height={48}
+                />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderColor: '#E2E8F0',
+                    borderRadius: '0.5rem',
+                    fontSize: '12px',
+                    color: '#0F172A',
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }} />
                 <Bar
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}
@@ -243,16 +272,32 @@ export function DashboardPage() {
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-2">
             <CardTitle className="text-base">{t('pages.analytics.chartCategoryTitle')}</CardTitle>
           </CardHeader>
-          <CardContent className="h-72">
+          <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={sectorSeries} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="sectorLabel" tick={{ fontSize: 10, fill: '#64748B' }} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} />
-                <Tooltip />
+              <BarChart data={sectorSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <XAxis
+                  dataKey="sectorLabel"
+                  tick={{ fontSize: 11, fill: '#334155' }}
+                  interval={0}
+                  angle={-15}
+                  textAnchor="end"
+                  height={48}
+                />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderColor: '#E2E8F0',
+                    borderRadius: '0.5rem',
+                    fontSize: '12px',
+                    color: '#0F172A',
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }} />
                 <Bar
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}

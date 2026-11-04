@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { CommuneFilterBar } from '@/components/shared/CommuneFilterBar';
+import { EmptyDatabaseTableState } from '@/components/shared/EmptyDatabaseTableState';
 import {
   Table,
   TableHeader,
@@ -68,25 +69,31 @@ export function PublicOrganizationsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filtered.map((org) => (
-            <TableRow key={org.id}>
-              <TableCell>
-                <p className="font-semibold text-nexus-navy">{isAr ? org.nameAr : org.nameFr}</p>
-                <p className="text-xs text-nexus-gray">{org.presidentName}</p>
-              </TableCell>
-              <TableCell className="text-xs">{t(`sectors.${org.category}`)}</TableCell>
-              <TableCell>
-                <Badge variant="secondary">{t(`common.communes.${org.commune}`)}</Badge>
-              </TableCell>
-              <TableCell className="font-mono text-xs">{org.registrationNumber}</TableCell>
-              <TableCell className="font-semibold">{org.membersCount}</TableCell>
-              <TableCell>
-                <Badge variant={org.verificationStatus === 'verified' ? 'emerald' : 'secondary'}>
-                  {t(`statuses.${org.verificationStatus}`)}
-                </Badge>
-              </TableCell>
-            </TableRow>
-          ))}
+          {filtered.length === 0 ? (
+            <EmptyDatabaseTableState colSpan={6} sqlTableName="organizations" />
+          ) : (
+            filtered.map((org) => (
+              <TableRow key={org.id}>
+                <TableCell>
+                  <p className="font-semibold text-nexus-navy">{isAr ? org.nameAr : org.nameFr}</p>
+                  <p className="mt-0.5 text-xs text-nexus-gray">{org.presidentName}</p>
+                </TableCell>
+                <TableCell className="text-xs font-medium">
+                  {t(`sectors.${org.category}`)}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="secondary">{t(`common.communes.${org.commune}`)}</Badge>
+                </TableCell>
+                <TableCell className="font-mono text-xs">{org.registrationNumber}</TableCell>
+                <TableCell className="font-semibold">{org.membersCount}</TableCell>
+                <TableCell>
+                  <Badge variant={org.verificationStatus === 'verified' ? 'emerald' : 'secondary'}>
+                    {t(`statuses.${org.verificationStatus}`)}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
