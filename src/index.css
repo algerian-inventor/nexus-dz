@@ -26,7 +26,7 @@
     --secondary: 222 47% 11%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 94%;
+    --muted: 210 40% 95%;
     --muted-foreground: 215 16% 47%;
 
     --accent: 147 45% 94%;
@@ -39,7 +39,21 @@
     --input: 214 32% 91%;
     --ring: 147 85% 29%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Glassmorphism Design Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.55);
+    --glass-bg-solid: rgba(255, 255, 255, 0.92);
+    --glass-border: rgba(255, 255, 255, 0.85);
+    --glass-border-subtle: rgba(226, 232, 240, 0.65);
+    --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+    --glass-shadow-lg: 0 16px 48px -8px rgba(15, 23, 42, 0.09), 0 4px 12px 0 rgba(15, 23, 42, 0.04);
+    --glass-emerald-glow: 0 0 40px -10px rgba(11, 138, 68, 0.12);
+
+    /* Dark Glass (for Sidebar & Dark Overlays) */
+    --glass-navy-bg: rgba(15, 23, 42, 0.82);
+    --glass-navy-border: rgba(255, 255, 255, 0.08);
   }
 
   * {
@@ -54,11 +68,30 @@
   body {
     @apply bg-background text-foreground font-sans leading-relaxed;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    /* Ambient backdrop: soft radial emerald gradient meshes behind UI */
+    background-color: #f8fafc;
+    background-image:
+      radial-gradient(at 10% 10%, rgba(11, 138, 68, 0.045) 0px, transparent 45%),
+      radial-gradient(at 90% 20%, rgba(15, 23, 42, 0.03) 0px, transparent 40%),
+      radial-gradient(at 50% 85%, rgba(11, 138, 68, 0.035) 0px, transparent 50%);
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  /* Refined Typography Weights — lighter, airier, less dense */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
   /* Refined Arabic RTL Typography & Line-Height Balance */
   html[dir='rtl'] body {
-    line-height: 1.65;
+    line-height: 1.7;
     letter-spacing: 0;
   }
 
@@ -66,12 +99,72 @@
   html[dir='rtl'] h2,
   html[dir='rtl'] h3,
   html[dir='rtl'] h4 {
-    line-height: 1.35;
+    line-height: 1.4;
     letter-spacing: 0;
+    font-weight: 600;
   }
 
   /* Consistent Native Select & Form Focus States */
   select {
-    @apply transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexus-emerald focus-visible:ring-offset-1;
+    @apply transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexus-emerald/40 focus-visible:ring-offset-1;
+  }
+}
+
+@layer utilities {
+  /* Frosted Glass Utilities */
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-panel-subtle {
+    background: var(--glass-bg-subtle);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border-subtle);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-panel-solid {
+    background: var(--glass-bg-solid);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-panel-navy {
+    background: var(--glass-navy-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-inline-end: 1px solid var(--glass-navy-border);
+  }
+
+  .glass-glow-emerald {
+    box-shadow: var(--glass-emerald-glow);
+  }
+}
+
+/* Graceful Fallback if backdrop-filter is unsupported */
+@supports not (backdrop-filter: blur(10px)) {
+  .glass-panel,
+  .glass-panel-subtle {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  .glass-panel-navy {
+    background: #0f172a;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

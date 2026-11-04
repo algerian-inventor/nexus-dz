@@ -40,17 +40,24 @@ export function ImpactAnalyticsPage() {
       />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
+        <Card className="border-white/80 bg-white/70 backdrop-blur-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">{t('pages.analytics.chartCommuneTitle')}</CardTitle>
+            <CardTitle className="text-base font-semibold">
+              {t('pages.analytics.chartCommuneTitle')}
+            </CardTitle>
           </CardHeader>
           <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={communeSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#E2E8F0"
+                  vertical={false}
+                  opacity={0.7}
+                />
                 <XAxis
                   dataKey="communeLabel"
-                  tick={{ fontSize: 11, fill: '#334155' }}
+                  tick={{ fontSize: 11, fill: '#475569' }}
                   interval={0}
                   angle={-15}
                   textAnchor="end"
@@ -59,9 +66,11 @@ export function ImpactAnalyticsPage() {
                 <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderColor: '#E2E8F0',
-                    borderRadius: '0.5rem',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(8px)',
+                    borderColor: 'rgba(226, 232, 240, 0.8)',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
                     fontSize: '12px',
                     color: '#0F172A',
                   }}
@@ -71,30 +80,39 @@ export function ImpactAnalyticsPage() {
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}
                   fill="#0B8A44"
-                  radius={[4, 4, 0, 0]}
+                  radius={[5, 5, 0, 0]}
+                  opacity={0.92}
                 />
                 <Bar
                   dataKey="verifiedHours"
                   name={t('pages.dashboard.kpiHours')}
                   fill="#0F172A"
-                  radius={[4, 4, 0, 0]}
+                  radius={[5, 5, 0, 0]}
+                  opacity={0.88}
                 />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-white/80 bg-white/70 backdrop-blur-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">{t('pages.analytics.chartCategoryTitle')}</CardTitle>
+            <CardTitle className="text-base font-semibold">
+              {t('pages.analytics.chartCategoryTitle')}
+            </CardTitle>
           </CardHeader>
           <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={sectorSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#E2E8F0"
+                  vertical={false}
+                  opacity={0.7}
+                />
                 <XAxis
                   dataKey="sectorLabel"
-                  tick={{ fontSize: 11, fill: '#334155' }}
+                  tick={{ fontSize: 11, fill: '#475569' }}
                   interval={0}
                   angle={-15}
                   textAnchor="end"
@@ -103,9 +121,11 @@ export function ImpactAnalyticsPage() {
                 <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderColor: '#E2E8F0',
-                    borderRadius: '0.5rem',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(8px)',
+                    borderColor: 'rgba(226, 232, 240, 0.8)',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
                     fontSize: '12px',
                     color: '#0F172A',
                   }}
@@ -115,13 +135,15 @@ export function ImpactAnalyticsPage() {
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}
                   fill="#0B8A44"
-                  radius={[4, 4, 0, 0]}
+                  radius={[5, 5, 0, 0]}
+                  opacity={0.92}
                 />
                 <Bar
                   dataKey="initiativesCount"
                   name={t('pages.dashboard.kpiInitiatives')}
                   fill="#0F172A"
-                  radius={[4, 4, 0, 0]}
+                  radius={[5, 5, 0, 0]}
+                  opacity={0.88}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -142,12 +164,12 @@ export function ImpactAnalyticsPage() {
         <TableBody>
           {communeSeries.map((row) => (
             <TableRow key={row.communeKey}>
-              <TableCell className="font-semibold">{row.communeLabel}</TableCell>
-              <TableCell className="font-mono">{row.initiativesCount}</TableCell>
-              <TableCell className="font-mono font-semibold text-nexus-navy">
+              <TableCell className="font-medium">{row.communeLabel}</TableCell>
+              <TableCell className="font-mono text-xs">{row.initiativesCount}</TableCell>
+              <TableCell className="font-mono text-xs font-medium text-nexus-navy">
                 {row.verifiedHours}h
               </TableCell>
-              <TableCell className="font-mono font-bold text-nexus-emerald">
+              <TableCell className="font-mono text-xs font-semibold text-nexus-emerald">
                 {row.beneficiaries.toLocaleString()}
               </TableCell>
             </TableRow>

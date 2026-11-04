@@ -150,33 +150,33 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <PageHeader
         title={t('pages.dashboard.title')}
         subtitle={t('pages.dashboard.subtitle')}
         badgeText={t(`roles.${activeRole}`)}
       />
 
-      {/* 7 KPI Cards — Balanced Responsive Grid */}
+      {/* 7 KPI Cards — Refined Frosted Glass Appearance */}
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7">
         {kpis.map((kpi) => {
           const Icon = kpi.icon;
           return (
             <Link key={kpi.label} to={kpi.to} className="group block">
-              <Card className="h-full transition-all duration-150 group-hover:border-nexus-emerald group-hover:shadow-sm">
+              <Card className="h-full border-white/70 bg-white/65 backdrop-blur-md transition-all duration-200 group-hover:bg-white/80 group-hover:border-nexus-emerald/40 group-hover:shadow-[0_8px_25px_-5px_rgba(11,138,68,0.12)]">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
                   <CardTitle className="text-xs font-medium leading-snug text-nexus-gray">
                     {kpi.label}
                   </CardTitle>
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-nexus-emerald-light text-nexus-emerald transition-colors group-hover:bg-nexus-emerald group-hover:text-white">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-nexus-emerald transition-colors group-hover:bg-nexus-emerald group-hover:text-white">
                     <Icon className="h-4 w-4" />
                   </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-1">
-                  <div className="text-xl font-bold tracking-tight text-nexus-navy">
+                  <div className="text-xl font-semibold tracking-tight text-nexus-navy">
                     {kpi.value}
                   </div>
-                  <p className="mt-1 text-[11px] font-medium text-nexus-gray">{kpi.sub}</p>
+                  <p className="mt-1 text-[11px] font-normal text-nexus-gray/90">{kpi.sub}</p>
                 </CardContent>
               </Card>
             </Link>
@@ -185,11 +185,18 @@ export function DashboardPage() {
       </div>
 
       {/* Interactive 12-Step Hackathon Presentation Launcher */}
-      <Card className="border-nexus-emerald/30 bg-white">
+      <Card className="border-white/80 bg-white/70 backdrop-blur-md">
         <CardHeader className="pb-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <CardTitle className="text-base">{t('pages.dashboard.scenarioTitle')}</CardTitle>
-            <Badge variant="emerald">12-Step Live Demo Flow</Badge>
+            <CardTitle className="text-base font-semibold">
+              {t('pages.dashboard.scenarioTitle')}
+            </CardTitle>
+            <Badge
+              variant="emerald"
+              className="bg-nexus-emerald/10 text-nexus-emerald border-nexus-emerald/20 font-medium"
+            >
+              12-Step Live Demo Flow
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -197,27 +204,30 @@ export function DashboardPage() {
             {scenarioSteps.map((s) => (
               <div
                 key={s.step}
-                className="flex flex-col justify-between gap-3 rounded-lg border border-border bg-nexus-surface p-4 transition-colors hover:border-nexus-emerald/40"
+                className="flex flex-col justify-between gap-3 rounded-xl border border-slate-200/60 bg-white/60 p-4 backdrop-blur-xs transition-all duration-150 hover:bg-white/85 hover:border-nexus-emerald/40 hover:shadow-xs"
               >
                 <div className="space-y-1.5">
-                  <Badge variant="outline" className="text-[11px]">
+                  <Badge
+                    variant="outline"
+                    className="border-slate-200 bg-white/70 text-[11px] font-normal"
+                  >
                     {t(`roles.${s.role}`)}
                   </Badge>
-                  <p className="text-xs font-semibold leading-relaxed text-nexus-navy">
+                  <p className="text-xs font-medium leading-relaxed text-nexus-navy">
                     {isAr ? s.labelAr : s.labelFr}
                   </p>
                 </div>
                 <Button
                   size="sm"
                   variant="outline"
-                  className="h-8 w-full justify-between text-xs"
+                  className="h-8 w-full justify-between text-xs font-normal border-slate-200/80 bg-white/80 hover:bg-white"
                   onClick={() => handleJumpStep(s.role, s.path)}
                 >
                   <span className="flex items-center gap-1.5">
                     <Play className="h-3.5 w-3.5 text-nexus-emerald" />
                     {t('auth.quickEnterBtn')}
                   </span>
-                  <ArrowUpRight className="h-3.5 w-3.5" />
+                  <ArrowUpRight className="h-3.5 w-3.5 opacity-60" />
                 </Button>
               </div>
             ))}
@@ -227,17 +237,24 @@ export function DashboardPage() {
 
       {/* Live Recharts Visualizations */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
+        <Card className="border-white/80 bg-white/70 backdrop-blur-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">{t('pages.analytics.chartCommuneTitle')}</CardTitle>
+            <CardTitle className="text-base font-semibold">
+              {t('pages.analytics.chartCommuneTitle')}
+            </CardTitle>
           </CardHeader>
           <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={communeSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#E2E8F0"
+                  vertical={false}
+                  opacity={0.7}
+                />
                 <XAxis
                   dataKey="communeLabel"
-                  tick={{ fontSize: 11, fill: '#334155' }}
+                  tick={{ fontSize: 11, fill: '#475569' }}
                   interval={0}
                   angle={-15}
                   textAnchor="end"
@@ -246,9 +263,11 @@ export function DashboardPage() {
                 <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderColor: '#E2E8F0',
-                    borderRadius: '0.5rem',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(8px)',
+                    borderColor: 'rgba(226, 232, 240, 0.8)',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
                     fontSize: '12px',
                     color: '#0F172A',
                   }}
@@ -258,30 +277,39 @@ export function DashboardPage() {
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}
                   fill="#0B8A44"
-                  radius={[4, 4, 0, 0]}
+                  radius={[5, 5, 0, 0]}
+                  opacity={0.92}
                 />
                 <Bar
                   dataKey="verifiedHours"
                   name={t('pages.dashboard.kpiHours')}
                   fill="#0F172A"
-                  radius={[4, 4, 0, 0]}
+                  radius={[5, 5, 0, 0]}
+                  opacity={0.88}
                 />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-white/80 bg-white/70 backdrop-blur-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">{t('pages.analytics.chartCategoryTitle')}</CardTitle>
+            <CardTitle className="text-base font-semibold">
+              {t('pages.analytics.chartCategoryTitle')}
+            </CardTitle>
           </CardHeader>
           <CardContent className="h-80 pt-2" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={sectorSeries} margin={{ top: 12, right: 16, left: 4, bottom: 24 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#E2E8F0"
+                  vertical={false}
+                  opacity={0.7}
+                />
                 <XAxis
                   dataKey="sectorLabel"
-                  tick={{ fontSize: 11, fill: '#334155' }}
+                  tick={{ fontSize: 11, fill: '#475569' }}
                   interval={0}
                   angle={-15}
                   textAnchor="end"
@@ -290,9 +318,11 @@ export function DashboardPage() {
                 <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748B' }} width={42} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderColor: '#E2E8F0',
-                    borderRadius: '0.5rem',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(8px)',
+                    borderColor: 'rgba(226, 232, 240, 0.8)',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
                     fontSize: '12px',
                     color: '#0F172A',
                   }}
@@ -302,7 +332,8 @@ export function DashboardPage() {
                   dataKey="beneficiaries"
                   name={t('pages.dashboard.kpiBeneficiaries')}
                   fill="#0B8A44"
-                  radius={[4, 4, 0, 0]}
+                  radius={[5, 5, 0, 0]}
+                  opacity={0.92}
                 />
               </BarChart>
             </ResponsiveContainer>

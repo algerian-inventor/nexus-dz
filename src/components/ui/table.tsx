@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <div className="relative w-full overflow-x-auto rounded-lg border border-border bg-white shadow-xs">
+    <div className="relative w-full overflow-x-auto rounded-xl border border-slate-200/70 bg-white/80 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(15,23,42,0.03)]">
       <table ref={ref} className={cn('w-full caption-bottom text-sm', className)} {...props} />
     </div>
   )
@@ -16,7 +16,10 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('bg-nexus-surface/90 border-b border-border [&_tr]:border-b', className)}
+    className={cn(
+      'bg-slate-50/70 backdrop-blur-xs border-b border-slate-200/70 [&_tr]:border-b',
+      className
+    )}
     {...props}
   />
 ));
@@ -28,7 +31,7 @@ const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn('divide-y divide-border [&_tr:last-child]:border-0', className)}
+    className={cn('divide-y divide-slate-200/60 [&_tr:last-child]:border-0', className)}
     {...props}
   />
 ));
@@ -39,7 +42,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
     <tr
       ref={ref}
       className={cn(
-        'border-b border-border transition-colors hover:bg-nexus-surface/70',
+        'border-b border-slate-200/50 transition-colors hover:bg-slate-50/60',
         className
       )}
       {...props}
@@ -69,7 +72,10 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('px-4 py-3.5 align-middle text-sm leading-normal text-nexus-navy', className)}
+    className={cn(
+      'px-4 py-3.5 align-middle text-sm font-normal leading-normal text-nexus-navy',
+      className
+    )}
     {...props}
   />
 ));
