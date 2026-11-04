@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from '@/modules/auth/AuthProvider';
+import { DemoStoreProvider } from '@/data/DemoStoreProvider';
 import { PublicLayout } from '@/shell/PublicLayout';
 import { AppShell } from '@/shell/AppShell';
 
@@ -23,7 +23,7 @@ import { SettingsPage } from '@/pages/app/SettingsPage';
 
 export function App() {
   return (
-    <AuthProvider>
+    <DemoStoreProvider>
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}
@@ -54,7 +54,7 @@ export function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    </DemoStoreProvider>
   );
 }
 

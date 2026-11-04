@@ -8,15 +8,24 @@ import {
   ArrowUpRight,
   MapPin,
   CheckCircle2,
+  Users,
+  Clock,
+  Award,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { SupabaseStatusBanner } from '@/components/shared/SupabaseStatusBanner';
 import { CONSTANTINE_COMMUNES } from '@/modules/organizations/service';
+import { useDemoStore } from '@/data/demoStoreContext';
+import { analyticsService } from '@/modules/analytics/service';
 
 export function LandingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { dataset } = useDemoStore();
+  const isAr = i18n.language === 'ar';
+
+  const metrics = analyticsService.computeDashboardMetrics(dataset);
 
   const pillars = [
     {
@@ -43,10 +52,12 @@ export function LandingPage() {
 
   const steps = [t('landing.step1'), t('landing.step2'), t('landing.step3'), t('landing.step4')];
 
+  const featuredInitiatives = dataset.initiatives.slice(0, 3);
+
   return (
-    <div className="space-y-16 py-10 sm:py-16">
+    <div className="space-y-14 py-8 sm:py-12">
       {/* Hero Section */}
-      <section className="container space-y-8">
+      <section className="container space-y-6">
         <SupabaseStatusBanner />
 
         <div className="rounded-xl border border-border bg-white p-8 shadow-xs sm:p-12">
@@ -71,14 +82,58 @@ export function LandingPage() {
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>
+              <Button size="lg" variant="navy" asChild>
+                <Link to="/login">{t('landing.secondaryCta')}</Link>
+              </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/initiatives">{t('landing.secondaryCta')}</Link>
+                <Link to="/initiatives">{t('nav.initiatives')}</Link>
               </Button>
             </div>
           </div>
 
+          {/* Live Constantine Impact Metrics Strip */}
+          <div className="mt-10 grid gap-4 border-t border-border pt-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-lg border border-border bg-nexus-surface p-4">
+              <div className="flex items-center justify-between text-xs text-nexus-gray">
+                <span>{t('pages.dashboard.kpiOrganizations')}</span>
+                <Building2 className="h-4 w-4 text-nexus-emerald" />
+              </div>
+              <p className="mt-1 text-2xl font-bold text-nexus-navy">
+                {metrics.totalOrganizations}
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-border bg-nexus-surface p-4">
+              <div className="flex items-center justify-between text-xs text-nexus-gray">
+                <span>{t('pages.dashboard.kpiVolunteers')}</span>
+                <Users className="h-4 w-4 text-nexus-emerald" />
+              </div>
+              <p className="mt-1 text-2xl font-bold text-nexus-navy">{metrics.activeVolunteers}</p>
+            </div>
+
+            <div className="rounded-lg border border-border bg-nexus-surface p-4">
+              <div className="flex items-center justify-between text-xs text-nexus-gray">
+                <span>{t('pages.dashboard.kpiHours')}</span>
+                <Clock className="h-4 w-4 text-nexus-emerald" />
+              </div>
+              <p className="mt-1 text-2xl font-bold text-nexus-navy">
+                {metrics.totalVolunteerHours}h
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-border bg-nexus-surface p-4">
+              <div className="flex items-center justify-between text-xs text-nexus-gray">
+                <span>{t('pages.dashboard.kpiBeneficiaries')}</span>
+                <Award className="h-4 w-4 text-nexus-emerald" />
+              </div>
+              <p className="mt-1 text-2xl font-bold text-nexus-emerald">
+                {metrics.totalBeneficiaries.toLocaleString()}
+              </p>
+            </div>
+          </div>
+
           {/* Constantine Municipal Scope Strip */}
-          <div className="mt-10 border-t border-border pt-6">
+          <div className="mt-6 border-t border-border pt-6">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-nexus-gray">
               {t('brand.wilaya')}
             </p>
@@ -90,6 +145,57 @@ export function LandingPage() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Featured Constantine Initiatives */}
+      <section className="container space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 className="text-2xl font-bold text-nexus-navy">
+              {t('pages.dashboard.recentInitiatives')}
+            </h2>
+            <p className="text-sm text-nexus-gray">{t('common.demoTag')}</p>
+          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/initiatives">
+              {t('nav.initiatives')} ({dataset.initiatives.length})
+            </Link>
+          </Button>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {featuredInitiatives.map((init) => (
+            <Card key={init.id} className="flex flex-col justify-between bg-white">
+              <CardHeader className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <Badge variant="emerald">{t(`common.communes.${init.commune}`)}</Badge>
+                  <Badge variant="outline">{t(`statuses.${init.status}`)}</Badge>
+                </div>
+                <CardTitle className="text-base leading-snug">
+                  {isAr ? init.titleAr : init.titleFr}
+                </CardTitle>
+                <CardDescription className="line-clamp-2 text-xs">
+                  {isAr ? init.summaryAr : init.summaryFr}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="border-t border-border pt-4 text-xs text-nexus-gray">
+                <div className="flex items-center justify-between">
+                  <span>
+                    {t('pages.dashboard.kpiBeneficiaries')}:{' '}
+                    <strong className="text-nexus-navy">{init.verifiedBeneficiaries}</strong> /{' '}
+                    {init.targetBeneficiaries}
+                  </span>
+                  <Link
+                    to="/app/initiatives"
+                    className="font-semibold text-nexus-emerald hover:underline"
+                  >
+                    {t('nav.workspace')} &rarr;
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
