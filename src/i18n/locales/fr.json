@@ -1,0 +1,216 @@
+{
+  "brand": {
+    "name": "NEXUS DZ",
+    "tagline": "Des besoins communautaires à un impact mesurable.",
+    "wilaya": "Wilaya de Constantine (25) — Algérie",
+    "category": "Plateforme Civic-Tech, Impact Social & Gestion du Bénévolat"
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "initiatives": "Initiatives",
+    "organizations": "Organisations",
+    "login": "Connexion",
+    "register": "Inscription",
+    "workspace": "Espace de travail",
+    "dashboard": "Tableau de bord",
+    "volunteers": "Bénévoles",
+    "tasks": "Tâches terrain",
+    "documentation": "Documentation & Preuves",
+    "verification": "Vérification & Audit",
+    "analytics": "Analytique d'impact",
+    "notifications": "Notifications",
+    "settings": "Paramètres & Gouvernance",
+    "language": "Langue",
+    "roleSwitch": "Perspective de rôle (Aperçu architectural)"
+  },
+  "roles": {
+    "volunteer": "Bénévole terrain",
+    "organization_admin": "Admin d'organisation",
+    "verifier": "Vérificateur d'impact",
+    "super_admin": "Super Administrateur"
+  },
+  "status": {
+    "supabaseNotConfiguredTitle": "Base de données Supabase en attente de configuration",
+    "supabaseNotConfiguredDesc": "Le client typé, les schémas SQL, les politiques RLS et la structure Storage sont prêts. Renseignez vos clés dans .env.local pour activer les opérations en direct.",
+    "supabaseConfiguredTitle": "Connecté à Supabase",
+    "supabaseConfiguredDesc": "L'intégration cloud est active et prête pour l'authentification et les requêtes.",
+    "pendingConfiguration": "En attente de Supabase",
+    "architectureReady": "Architecture prête",
+    "verifiedFramework": "Cadre d'audit standardisé",
+    "emptyTableTitle": "Aucun enregistrement actif affiché",
+    "emptyTableDesc": "Aucune donnée fictive n'est générée. Les enregistrements apparaîtront dès la connexion de votre projet Supabase et l'exécution des migrations SQL."
+  },
+  "common": {
+    "searchPlaceholder": "Rechercher des initiatives ou dossiers...",
+    "filterByCommune": "Filtrer par commune (Constantine)",
+    "allCommunes": "Toutes les communes de Constantine",
+    "communes": {
+      "constantine": "Constantine Centre",
+      "el_khroub": "El Khroub",
+      "ali_mendjeli": "Ali Mendjeli",
+      "ain_smara": "Aïn Smara",
+      "hamma_bouziane": "Hamma Bouziane",
+      "didouche_mourad": "Didouche Mourad",
+      "zighoud_youcef": "Zighoud Youcef"
+    },
+    "actions": "Actions",
+    "viewDetails": "Voir détails",
+    "createRecord": "Nouvel enregistrement",
+    "exportSchema": "Inspecter le schéma",
+    "requiresAuth": "Nécessite une session Supabase Auth active",
+    "direction": "Direction : Gauche à Droite (LTR)"
+  },
+  "landing": {
+    "badge": "Déploiement pilote — Wilaya de Constantine (25)",
+    "heroTitle": "Structurer l'engagement citoyen et transformer les actions terrain en impact vérifié",
+    "heroSubtitle": "NEXUS DZ fournit une infrastructure numérique reliant associations agréées, bénévoles et auditeurs d'impact à Constantine : de l'identification du besoin jusqu'à la vérification rigoureuse.",
+    "primaryCta": "Ouvrir l'espace de travail",
+    "secondaryCta": "Explorer les initiatives",
+    "pillarsTitle": "Piliers architecturaux de la plateforme",
+    "pillarsSubtitle": "Conçue selon les standards de transparence institutionnelle et de séparation des rôles",
+    "pillar1Title": "Organisations & Agréments",
+    "pillar1Desc": "Gestion des associations locales à travers les communes de Constantine avec vérification documentaire.",
+    "pillar2Title": "Initiatives & Tâches",
+    "pillar2Desc": "Découpage des programmes citoyens en missions opérationnelles et affectation des bénévoles.",
+    "pillar3Title": "Preuves & Documentation",
+    "pillar3Desc": "Collecte de preuves terrain horodatées et géolocalisées dans des conteneurs Supabase Storage sécurisés.",
+    "pillar4Title": "Vérification & Analytique",
+    "pillar4Desc": "Audit indépendant des preuves avant validation des heures de bénévolat et des indicateurs de bénéficiaires.",
+    "workflowTitle": "Cycle de vie de l'impact sur NEXUS DZ",
+    "step1": "1. Enregistrement & Agrément de l'association",
+    "step2": "2. Lancement d'initiative & Assignation des tâches",
+    "step3": "3. Exécution terrain & Dépôt des preuves",
+    "step4": "4. Audit indépendant & Publication des métriques"
+  },
+  "about": {
+    "title": "À propos de NEXUS DZ",
+    "subtitle": "Une architecture logicielle dédiée à la modernisation de l'action associative et citoyenne en Algérie, lancée à Constantine.",
+    "missionTitle": "Mission Institutionnelle",
+    "missionBody": "NEXUS DZ comble le fossé entre l'action bénévole de terrain et l'évaluation d'impact mesurable grâce à un registre numérique vérifiable pour les associations, bénévoles et partenaires.",
+    "scopeTitle": "Périmètre initial : Wilaya de Constantine (25)",
+    "scopeBody": "Conçu initialement pour les communes de Constantine (Constantine, El Khroub, Ali Mendjeli, Aïn Smara, Hamma Bouziane, Didouche Mourad, Zighoud Youcef) avec une architecture extensible aux 58 wilayas.",
+    "governanceTitle": "Principes d'intégrité technique",
+    "gov1": "Séparation stricte entre la logique métier et les composants d'interface.",
+    "gov2": "Sécurité au niveau des lignes (PostgreSQL RLS) appliquée à chaque rôle.",
+    "gov3": "Aucun indicateur d'impact n'est comptabilisé sans validation par un vérificateur."
+  },
+  "auth": {
+    "loginTitle": "Connexion à NEXUS DZ",
+    "loginSubtitle": "Accédez à votre compte via l'authentification Supabase Auth",
+    "registerTitle": "Créer un nouveau compte",
+    "registerSubtitle": "Rejoignez en tant que bénévole ou inscrivez votre organisation à Constantine",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "nom@organisation.dz",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "••••••••",
+    "fullNameLabel": "Nom complet",
+    "fullNamePlaceholder": "Prénom et Nom",
+    "roleLabel": "Type de compte",
+    "communeLabel": "Commune (Wilaya de Constantine)",
+    "submitLogin": "Se connecter",
+    "submitRegister": "Créer le compte",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "validation": {
+      "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+      "passwordMin": "Le mot de passe doit contenir au moins 8 caractères",
+      "nameMin": "Veuillez saisir votre nom complet (minimum 3 caractères)"
+    },
+    "supabaseNotice": "Note : L'authentification réelle nécessite la configuration de VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans votre fichier d'environnement."
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Tableau de bord exécutif",
+      "subtitle": "Vue d'ensemble de l'état des modules et de l'intégration base de données pour Constantine.",
+      "kpiOrganizations": "Organisations vérifiées",
+      "kpiInitiatives": "Initiatives actives",
+      "kpiVolunteers": "Heures bénévoles certifiées",
+      "kpiVerification": "Dossiers de preuves audités",
+      "awaitingDb": "En attente de connexion DB",
+      "systemReadiness": "État de préparation des modules et tables",
+      "moduleCol": "Module architectural",
+      "tableCol": "Table PostgreSQL",
+      "rlsCol": "Politique RLS",
+      "statusCol": "Statut"
+    },
+    "organizations": {
+      "title": "Répertoire des Organisations & Associations",
+      "subtitle": "Associations enregistrées dans la Wilaya de Constantine et statut de conformité (Agrément).",
+      "registerOrgBtn": "Enregistrer une organisation",
+      "colName": "Nom de l'organisation",
+      "colCategory": "Catégorie",
+      "colCommune": "Commune",
+      "colRegNumber": "N° d'agrément",
+      "colStatus": "Statut de vérification"
+    },
+    "volunteers": {
+      "title": "Registre des Bénévoles",
+      "subtitle": "Coordination des bénévoles, répartition par commune et heures d'impact certifiées.",
+      "inviteBtn": "Inscrire un bénévole",
+      "colName": "Bénévole",
+      "colCommune": "Commune",
+      "colRole": "Rôle",
+      "colVerifiedHours": "Heures vérifiées"
+    },
+    "initiatives": {
+      "title": "Initiatives & Programmes Citoyens",
+      "subtitle": "Planification et suivi des initiatives communautaires à travers la Wilaya de Constantine.",
+      "createBtn": "Nouvelle initiative",
+      "colTitle": "Titre de l'initiative",
+      "colOrg": "Organisation porteuse",
+      "colCommune": "Commune",
+      "colTarget": "Objectif",
+      "colStatus": "Statut"
+    },
+    "tasks": {
+      "title": "Tâches & Affectations Terrain",
+      "subtitle": "Attribution des missions opérationnelles aux bénévoles et suivi des heures engagées.",
+      "createBtn": "Créer une tâche",
+      "colTask": "Tâche",
+      "colInitiative": "Initiative liée",
+      "colAssignee": "Bénévole assigné",
+      "colHours": "Heures prévues / déclarées",
+      "colStatus": "Statut"
+    },
+    "documentation": {
+      "title": "Documentation & Preuves Terrain",
+      "subtitle": "Référentiel des justificatifs terrain (photos, feuilles de présence, GPS) lié au bucket initiative-evidence.",
+      "uploadBtn": "Soumettre une preuve",
+      "bucketNotice": "Bucket cible : initiative-evidence (Supabase Storage)",
+      "colTitle": "Intitulé de la preuve",
+      "colInitiative": "Initiative",
+      "colSubmittedBy": "Soumis par",
+      "colMime": "Type de fichier",
+      "colVerification": "Statut d'audit"
+    },
+    "verification": {
+      "title": "Centre de Vérification & Audit d'Impact",
+      "subtitle": "Revue indépendante des preuves soumises et certification des indicateurs par les vérificateurs.",
+      "auditBtn": "Démarrer une revue",
+      "colEvidence": "Preuve référencée",
+      "colVerifier": "Auditeur",
+      "colDecision": "Décision",
+      "colTimestamp": "Date de revue"
+    },
+    "analytics": {
+      "title": "Analytique d'Impact Social",
+      "subtitle": "Visualisation des indicateurs certifiés à Constantine (alimentée dynamiquement après connexion DB).",
+      "chartCommuneTitle": "Répartition par commune de Constantine (Structure de mesure)",
+      "chartCategoryTitle": "Initiatives par secteur d'intervention",
+      "zeroDataNotice": "Les graphiques Recharts sont reliés au service d'analytique. Les valeurs à zéro reflètent l'absence de données fictives avant la configuration de Supabase."
+    },
+    "notifications": {
+      "title": "Centre de Notifications",
+      "subtitle": "Alertes système concernant les audits de preuves, les affectations de tâches et les agréments.",
+      "markAllRead": "Tout marquer comme lu"
+    },
+    "settings": {
+      "title": "Paramètres & Gouvernance Technique",
+      "subtitle": "Configuration de la langue, de l'orientation (RTL/LTR) et diagnostic de connexion Supabase.",
+      "envSection": "Diagnostic de l'environnement Supabase",
+      "localeSection": "Préférences linguistiques et directionnelles",
+      "rlsSection": "Synthèse des politiques de sécurité (RLS)"
+    }
+  }
+}

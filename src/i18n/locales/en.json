@@ -1,0 +1,216 @@
+{
+  "brand": {
+    "name": "NEXUS DZ",
+    "tagline": "From Community Needs to Measurable Impact.",
+    "wilaya": "Constantine Province (Wilaya 25) — Algeria",
+    "category": "Civic-Tech, Social Impact & Volunteer Management Platform"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "initiatives": "Initiatives",
+    "organizations": "Organizations",
+    "login": "Sign In",
+    "register": "Register",
+    "workspace": "Workspace",
+    "dashboard": "Dashboard",
+    "volunteers": "Volunteers",
+    "tasks": "Tasks",
+    "documentation": "Documentation",
+    "verification": "Verification",
+    "analytics": "Impact Analytics",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "language": "Language",
+    "roleSwitch": "Role Perspective (Architecture Preview)"
+  },
+  "roles": {
+    "volunteer": "Field Volunteer",
+    "organization_admin": "Organization Admin",
+    "verifier": "Impact Verifier",
+    "super_admin": "Super Administrator"
+  },
+  "status": {
+    "supabaseNotConfiguredTitle": "Supabase Database Awaiting Environment Configuration",
+    "supabaseNotConfiguredDesc": "Typed client, SQL migrations, RLS policies, and Storage schemas are prepared. Provide your project credentials in .env.local to activate live persistence.",
+    "supabaseConfiguredTitle": "Connected to Supabase",
+    "supabaseConfiguredDesc": "Cloud database and authentication integration are configured and ready.",
+    "pendingConfiguration": "Awaiting Supabase Config",
+    "architectureReady": "Architecture Ready",
+    "verifiedFramework": "Standardized Audit Framework",
+    "emptyTableTitle": "No Live Records Displayed",
+    "emptyTableDesc": "Fake data is never generated. Live records will populate automatically once your Supabase project is connected and SQL migrations are applied."
+  },
+  "common": {
+    "searchPlaceholder": "Search initiatives or records...",
+    "filterByCommune": "Filter by Commune (Constantine)",
+    "allCommunes": "All Constantine Communes",
+    "communes": {
+      "constantine": "Constantine Center",
+      "el_khroub": "El Khroub",
+      "ali_mendjeli": "Ali Mendjeli",
+      "ain_smara": "Ain Smara",
+      "hamma_bouziane": "Hamma Bouziane",
+      "didouche_mourad": "Didouche Mourad",
+      "zighoud_youcef": "Zighoud Youcef"
+    },
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "createRecord": "New Record",
+    "exportSchema": "Inspect Schema",
+    "requiresAuth": "Requires an active Supabase Auth session",
+    "direction": "Direction: Left-to-Right (LTR)"
+  },
+  "landing": {
+    "badge": "Initial Target Deployment — Constantine, Algeria (Wilaya 25)",
+    "heroTitle": "Governing Civic Action to Turn Community Needs into Verifiable Impact",
+    "heroSubtitle": "NEXUS DZ provides the digital infrastructure connecting accredited associations, field volunteers, and impact verifiers in Constantine across a complete lifecycle: from need identification to audited proof.",
+    "primaryCta": "Enter Workspace",
+    "secondaryCta": "Browse Initiatives",
+    "pillarsTitle": "Core Architectural Pillars",
+    "pillarsSubtitle": "Engineered for institutional transparency, role isolation, and measurable outcomes",
+    "pillar1Title": "Organization Governance",
+    "pillar1Desc": "Directory and compliance management for local associations across Constantine's communes.",
+    "pillar2Title": "Initiatives & Field Tasks",
+    "pillar2Desc": "Structured breakdown of community programs into actionable volunteer assignments.",
+    "pillar3Title": "Field Evidence & Storage",
+    "pillar3Desc": "Structured collection of field documentation stored in access-controlled Supabase buckets.",
+    "pillar4Title": "Verification & Impact Analytics",
+    "pillar4Desc": "Independent verification workflows before volunteer hours and beneficiary metrics are certified.",
+    "workflowTitle": "The NEXUS DZ Impact Lifecycle",
+    "step1": "1. Organization Registration & Compliance",
+    "step2": "2. Initiative Launch & Task Allocation",
+    "step3": "3. Field Execution & Evidence Submission",
+    "step4": "4. Independent Audit & Impact Analytics"
+  },
+  "about": {
+    "title": "About NEXUS DZ",
+    "subtitle": "A modern software foundation advancing civic-tech and volunteer management in Algeria, starting in Constantine.",
+    "missionTitle": "Institutional Mission",
+    "missionBody": "NEXUS DZ bridges the gap between grassroots community action and measurable institutional reporting by providing a verifiable system of record for associations, volunteers, and civic partners.",
+    "scopeTitle": "Initial Target: Constantine (Wilaya 25)",
+    "scopeBody": "Tailored initially for the municipalities of Constantine (Constantine Center, El Khroub, Ali Mendjeli, Ain Smara, Hamma Bouziane, Didouche Mourad, Zighoud Youcef) while architected to scale across all 58 Algerian wilayas.",
+    "governanceTitle": "Engineering & Integrity Principles",
+    "gov1": "Strict separation between domain business logic and UI presentation components.",
+    "gov2": "Row-Level Security (PostgreSQL RLS) enforced across every table and role.",
+    "gov3": "Zero unverified impact claims: metrics require explicit audit sign-off."
+  },
+  "auth": {
+    "loginTitle": "Sign In to NEXUS DZ",
+    "loginSubtitle": "Authenticate with your account backed by Supabase Auth",
+    "registerTitle": "Create a NEXUS DZ Account",
+    "registerSubtitle": "Register as a field volunteer or onboard an organization in Constantine",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "name@organization.dz",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "fullNameLabel": "Full Name",
+    "fullNamePlaceholder": "First and Last Name",
+    "roleLabel": "Account Role",
+    "communeLabel": "Commune (Constantine)",
+    "submitLogin": "Sign In",
+    "submitRegister": "Create Account",
+    "noAccount": "Don't have an account yet?",
+    "haveAccount": "Already have an account?",
+    "validation": {
+      "emailInvalid": "Please enter a valid email address",
+      "passwordMin": "Password must be at least 8 characters long",
+      "nameMin": "Please enter your full name (at least 3 characters)"
+    },
+    "supabaseNotice": "Note: Live authentication requires setting VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment configuration."
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Executive Operations Dashboard",
+      "subtitle": "Comprehensive overview of module readiness and database integration status for Constantine.",
+      "kpiOrganizations": "Verified Organizations",
+      "kpiInitiatives": "Active Initiatives",
+      "kpiVolunteers": "Certified Volunteer Hours",
+      "kpiVerification": "Audited Evidence Records",
+      "awaitingDb": "Awaiting DB Connection",
+      "systemReadiness": "Architectural Module & Database Readiness",
+      "moduleCol": "Domain Module",
+      "tableCol": "PostgreSQL Table",
+      "rlsCol": "RLS Policy",
+      "statusCol": "Status"
+    },
+    "organizations": {
+      "title": "Organizations & Civic Associations",
+      "subtitle": "Directory of registered organizations in Constantine and legal accreditation status.",
+      "registerOrgBtn": "Register Organization",
+      "colName": "Organization Name",
+      "colCategory": "Sector",
+      "colCommune": "Commune",
+      "colRegNumber": "Accreditation No.",
+      "colStatus": "Verification Status"
+    },
+    "volunteers": {
+      "title": "Volunteers & Field Contributors",
+      "subtitle": "Volunteer coordination, municipal distribution, and certified contribution hours.",
+      "inviteBtn": "Register Volunteer",
+      "colName": "Volunteer",
+      "colCommune": "Commune",
+      "colRole": "Role",
+      "colVerifiedHours": "Verified Hours"
+    },
+    "initiatives": {
+      "title": "Community Initiatives",
+      "subtitle": "Planning and execution tracking for social impact programs across Constantine.",
+      "createBtn": "Launch Initiative",
+      "colTitle": "Initiative Title",
+      "colOrg": "Lead Organization",
+      "colCommune": "Commune",
+      "colTarget": "Target Scope",
+      "colStatus": "Lifecycle Status"
+    },
+    "tasks": {
+      "title": "Field Tasks & Assignments",
+      "subtitle": "Operational task breakdown, volunteer assignments, and logged field hours.",
+      "createBtn": "Create Field Task",
+      "colTask": "Task Title",
+      "colInitiative": "Parent Initiative",
+      "colAssignee": "Assigned Volunteer",
+      "colHours": "Est. / Logged Hours",
+      "colStatus": "Status"
+    },
+    "documentation": {
+      "title": "Field Documentation & Evidence",
+      "subtitle": "Evidence repository (photos, attendance logs, GPS metadata) mapped to the initiative-evidence bucket.",
+      "uploadBtn": "Submit Field Evidence",
+      "bucketNotice": "Target Storage Bucket: initiative-evidence (Supabase Storage)",
+      "colTitle": "Evidence Title",
+      "colInitiative": "Initiative",
+      "colSubmittedBy": "Submitted By",
+      "colMime": "File Type",
+      "colVerification": "Audit Status"
+    },
+    "verification": {
+      "title": "Impact Verification & Audit Center",
+      "subtitle": "Independent review of submitted field evidence and sign-off by accredited verifiers.",
+      "auditBtn": "Start Verification Audit",
+      "colEvidence": "Evidence Record",
+      "colVerifier": "Assigned Verifier",
+      "colDecision": "Audit Decision",
+      "colTimestamp": "Reviewed At"
+    },
+    "analytics": {
+      "title": "Measurable Impact Analytics",
+      "subtitle": "Visual analytics for certified social impact across Constantine communes (populates upon DB connection).",
+      "chartCommuneTitle": "Impact Distribution by Constantine Commune (Measurement Structure)",
+      "chartCategoryTitle": "Initiatives by Civic Sector",
+      "zeroDataNotice": "Recharts visualizations are wired to the analytics domain service. Current zero values reflect strict adherence to no fake data prior to Supabase connection."
+    },
+    "notifications": {
+      "title": "Notifications Center",
+      "subtitle": "System alerts regarding verification decisions, task assignments, and organization approvals.",
+      "markAllRead": "Mark All as Read"
+    },
+    "settings": {
+      "title": "Platform Settings & Governance",
+      "subtitle": "Manage language localization, RTL/LTR layout direction, and inspect Supabase connection readiness.",
+      "envSection": "Supabase Environment Diagnostics",
+      "localeSection": "Language & Direction Preferences",
+      "rlsSection": "Row-Level Security (RLS) Governance Summary"
+    }
+  }
+}
