@@ -120,6 +120,8 @@ export interface DemoEvidence {
   id: string;
   initiativeId: string;
   taskId: string | null;
+  submittedByAccountId: string;
+  submittedByOrgId?: string;
   submittedByName: string;
   submittedByRole: UserRole;
   titleAr: string;
@@ -142,6 +144,14 @@ export interface DemoVerificationRecord {
   decision: VerificationStatus;
   reviewNotes: string;
   reviewedAt: string;
+}
+
+export interface DemoSessionLog {
+  id: string;
+  action: string;
+  actorRole: UserRole;
+  details: string;
+  timestamp: string;
 }
 
 export interface DemoNotification {
@@ -167,4 +177,5 @@ export interface DemoDataset {
   evidence: DemoEvidence[];
   verifications: DemoVerificationRecord[];
   notifications: DemoNotification[];
+  sessionLogs?: DemoSessionLog[];
 }

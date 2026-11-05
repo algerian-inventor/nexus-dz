@@ -1,28 +1,29 @@
 import type { DemoDataset } from './demoTypes';
 
 /**
- * NEXUS DZ — Authentic Baseline Dataset (Pilot Deployment Phase)
+ * NEXUS DZ — Authentic Baseline Dataset (Local Prototype Phase)
  *
  * In accordance with NEXUS DZ integrity principles:
  * - No fictional associations or fabricated registration numbers.
  * - No invented volunteer profiles or synthetic identities.
  * - No fake community initiatives, tasks, or attendance sheets.
  * - No unverified beneficiary counts or fabricated hours.
+ * - No implied government or Wilaya institutional affiliation.
  *
- * Records are populated exclusively through verified submissions during the pilot phase.
+ * All prototype interactions are stored strictly in browser localStorage.
  */
 export const INITIAL_DEMO_DATASET: DemoDataset = {
-  version: '2026.pilot.v4',
+  version: '2026.pilot.v6',
   accounts: [
     {
       id: 'acc-pilot-coordinator',
-      email: 'coordination.constantine@nexus-dz.org',
-      fullNameAr: 'منسق المرحلة التجريبية — قسنطينة',
-      fullNameFr: 'Coordinateur Phase Pilote — Constantine',
+      email: 'prototype@nexus-dz.org',
+      fullNameAr: 'حساب معاينة النموذج الأولي (محلي)',
+      fullNameFr: 'Session Prototype Locale (Aperçu)',
       role: 'super_admin',
       commune: 'constantine',
-      titleAr: 'المكتب التنسيقي للعمل المدني (الولاية 25)',
-      titleFr: 'Bureau de Coordination Civique (Wilaya 25)',
+      titleAr: 'بيئة تجريبية محلية — بدون مصادقة خادم',
+      titleFr: 'Environnement Prototype Local — Sans serveur d’authentification',
     },
   ],
   organizations: [],
@@ -33,4 +34,5 @@ export const INITIAL_DEMO_DATASET: DemoDataset = {
   evidence: [],
   verifications: [],
   notifications: [],
+  sessionLogs: [],
 };

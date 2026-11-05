@@ -38,12 +38,12 @@ export function OrganizationsPage() {
 
   const [nameAr, setNameAr] = useState('');
   const [nameFr, setNameFr] = useState('');
-  const [regNumber, setRegNumber] = useState('AGR-25-2026-0612');
+  const [regNumber, setRegNumber] = useState('');
   const [category, setCategory] = useState<SectorCategory>('environment');
   const [commune, setCommune] = useState<CommuneKey>('constantine');
   const [presidentName, setPresidentName] = useState('');
-  const [phone, setPhone] = useState('+213 31 90 00 00');
-  const [email, setEmail] = useState('contact@asso-constantine.dz');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
 
   const filtered = dataset.organizations.filter((org) => {
     const matchesCommune = selectedCommune === 'all' || org.commune === selectedCommune;
@@ -232,26 +232,26 @@ export function OrganizationsPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap items-center gap-1.5">
-                    {org.verificationStatus !== 'verified' && (
+                    {org.verificationStatus !== 'under_review' && (
                       <Button
                         size="sm"
                         variant="default"
                         className="h-8 px-2.5 text-xs"
-                        onClick={() => updateOrganizationStatus(org.id, 'verified')}
+                        onClick={() => updateOrganizationStatus(org.id, 'under_review')}
                       >
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         {t('pages.organizations.approveBtn')}
                       </Button>
                     )}
-                    {org.verificationStatus === 'verified' && (
+                    {org.verificationStatus !== 'rejected' && (
                       <Button
                         size="sm"
                         variant="outline"
                         className="h-8 px-2.5 text-xs"
-                        onClick={() => updateOrganizationStatus(org.id, 'under_review')}
+                        onClick={() => updateOrganizationStatus(org.id, 'rejected')}
                       >
                         <XCircle className="h-3.5 w-3.5" />
-                        {t('statuses.under_review')}
+                        {t('statuses.rejected')}
                       </Button>
                     )}
                   </div>

@@ -6,341 +6,373 @@ import {
   Clock,
   Award,
   CheckCircle2,
-  MapPin,
+  Compass,
   Calendar,
-  ArrowUpRight,
-  Send,
+  FileCheck2,
+  Sparkles,
+  AlertTriangle,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useDemoStore } from '@/data/demoStoreContext';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 export function VolunteerPortalPage() {
   const { t, i18n } = useTranslation();
-  const { dataset, currentAccount, recordAttendance, updateTaskStatus } = useDemoStore();
+  const { dataset, currentAccount, updateTaskStatus, recordAttendance } = useDemoStore();
   const isAr = i18n.language === 'ar';
 
-  const currentVolId = currentAccount.volunteerId || 'vol-1';
-  const volunteer = dataset.volunteers.find((v) => v.id === currentVolId);
-
-  // My tasks
-  const myTasks = dataset.tasks.filter((t) => t.assignedVolunteerId === currentVolId);
-  // My attendance records
-  const myAttendance = dataset.attendance.filter((a) => a.volunteerId === currentVolId);
-  const totalVerifiedHours = myAttendance.reduce((sum, a) => sum + a.hoursLogged, 0);
-
-  // My initiatives
-  const myInitiatives = dataset.initiatives.filter(
-    (init) =>
-      init.enrolledVolunteerIds.includes(currentVolId) ||
-      init.applicantVolunteerIds.includes(currentVolId)
-  );
-
-  // Check-in simulator state
-  const [selectedInitId, setSelectedInitId] = useState(
-    myInitiatives[0]?.id || dataset.initiatives[0]?.id || ''
-  );
-  const [hoursToLog, setHoursToLog] = useState(3);
+  const [checkInHours, setCheckInHours] = useState('3');
+  const [selectedInitId, setSelectedInitId] = useState(dataset.initiatives[0]?.id || '');
+  const [checkInNote, setCheckInNote] = useState('');
   const [checkInDone, setCheckInDone] = useState(false);
 
-  const handleCheckIn = () => {
-    if (!selectedInitId) return;
+  const volId = currentAccount.volunteerId || currentAccount.id;
+
+  const myTasks = dataset.tasks.filter(
+    (task) => !task.assignedVolunteerId || task.assignedVolunteerId === volId
+  );
+  const myAttendance = dataset.attendance.filter((a) => a.volunteerId === volId);
+  const myReportedHours = myAttendance.reduce((acc, a) => acc + a.hoursLogged, 0);
+  const myVolRecord = dataset.volunteers.find((v) => v.id === volId);
+  const myVerifiedHours = myVolRecord?.verifiedHours ?? 0;
+
+  const myInitiatives = dataset.initiatives.filter(
+    (i) => i.enrolledVolunteerIds.includes(volId) || i.applicantVolunteerIds.includes(volId)
+  );
+
+  const handleCheckIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    const targetInitId = selectedInitId || dataset.initiatives[0]?.id;
+    if (!targetInitId) return;
+
     recordAttendance({
-      initiativeId: selectedInitId,
-      taskId: myTasks[0]?.id || null,
-      volunteerId: currentVolId,
-      date: new Date().toISOString().split('T')[0],
-      hoursLogged: Number(hoursToLog),
-      status: 'completed',
-      notes: 'تسجيل حضور تلقائي مؤكد بإحداثيات GPS (قسنطينة)',
+      volunteerId: volId,
+      initiativeId: targetInitId,
+      taskId: null,
+      date: new Date().toISOString().slice(0, 10),
+      hoursLogged: Number(checkInHours) || 2,
+      status: 'present',
+      notes: checkInNote.trim() || t('statuses.pending'),
     });
     setCheckInDone(true);
-    setTimeout(() => setCheckInDone(false), 3000);
+    setCheckInNote('');
+    setTimeout(() => setCheckInDone(false), 3500);
   };
 
   return (
-    <div className="container space-y-10 py-10">
-      {/* Portal Header */}
-      <div className="relative overflow-hidden rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-[#06452D] via-[#075B35] to-[#042E1E] p-8 text-white backdrop-blur-2xl sm:p-10 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-zellij-hero opacity-60" />
-        <div className="relative flex flex-col justify-between gap-6 md:flex-row md:items-center">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-950/60 px-3.5 py-1 text-xs font-semibold text-emerald-300">
+    <div className="space-y-6">
+      {/* Prototype Transparency Notice */}
+      <div className="flex items-start gap-3 rounded-2xl border border-amber-300/70 bg-amber-50/90 p-4 text-xs text-amber-950 shadow-2xs">
+        <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
+        <p className="leading-relaxed">{t('prototype.localStorageNotice')}</p>
+      </div>
+
+      {/* Volunteer Header Banner */}
+      <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-[#042E1E] via-[#06452D] to-[#075B35] p-6 text-white shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-zellij-Hero opacity-25" />
+        <div className="relative flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-300">
               <UserCheck className="h-3.5 w-3.5" />
-              <span>فضاء المتطوع الميداني</span>
+              <span>{t('v5portals.volunteer.badge')}</span>
             </div>
-            <h1 className="text-3xl font-extrabold sm:text-4xl text-white">
-              {volunteer
-                ? isAr
-                  ? volunteer.fullNameAr
-                  : volunteer.fullNameFr
-                : 'المتطوع الميداني'}
+            <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+              {t('v5portals.volunteer.title')}
             </h1>
-            <p className="text-xs sm:text-sm text-emerald-200/80 max-w-xl">
-              متابعة المهام الموكلة، تسجيل الحضور الميداني الموثق، وإدارة سجل ساعات التطوع المعتمدة.
+            <p className="text-xs text-emerald-100/80 max-w-2xl">
+              {t('v5portals.volunteer.subtitle')}
             </p>
           </div>
 
-          {/* Quick Civic Passport Badge */}
-          <div className="rounded-2xl border border-emerald-400/30 bg-emerald-950/70 p-5 text-center backdrop-blur-xl space-y-1.5 shadow-inner">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-300">
-              جواز السفر المدني (Wilaya 25)
-            </span>
-            <div className="text-3xl font-black text-white">{totalVerifiedHours} ساعة</div>
-            <p className="text-[10px] text-emerald-200/70">ساعات تطوع معتمدة وموثقة</p>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="rounded-xl border border-emerald-400/30 bg-emerald-950/60 px-4 py-2.5 backdrop-blur-md">
+              <span className="block text-[10px] text-emerald-300/80">
+                {t('v5portals.volunteer.passportLabel')}
+              </span>
+              <div className="flex items-center gap-2 mt-0.5">
+                <Award className="h-4 w-4 text-emerald-400" />
+                <span className="font-mono text-sm font-bold text-white">
+                  {myVerifiedHours}h / {myReportedHours}h
+                </span>
+              </div>
+              <span className="block text-[10px] text-amber-300/90 mt-0.5">
+                {t('v5portals.volunteer.reportedHoursSub')}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* KPI Counters */}
-      <div className="grid gap-6 sm:grid-cols-3">
-        <Card className="border-emerald-500/25 bg-emerald-950/40 text-white backdrop-blur-xl">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold text-emerald-200/80">
-              المهام الميدانية المسندة
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-black text-white">{myTasks.length}</div>
-            <p className="text-[11px] text-emerald-200/60">مهام نشطة قيد التنفيذ</p>
+      {/* KPI Summary Cards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-emerald-500/20 bg-white/85">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-nexus-gray">
+                {t('pages.volunteers.colVerifiedHours')}
+              </span>
+              <Clock className="h-4 w-4 text-nexus-emerald" />
+            </div>
+            <p className="mt-2 text-2xl font-bold text-nexus-navy">
+              {myVerifiedHours}h{' '}
+              <span className="text-sm font-normal text-nexus-gray">/ {myReportedHours}h</span>
+            </p>
+            <p className="mt-1 text-[11px] text-amber-700 font-medium">
+              {t('v5portals.volunteer.reportedHoursSub')}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="border-emerald-500/25 bg-emerald-950/40 text-white backdrop-blur-xl">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold text-emerald-200/80">
-              المبادرات المسجل بها
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-black text-emerald-400">{myInitiatives.length}</div>
-            <p className="text-[11px] text-emerald-200/60">مشاريع مجتمعية معتمدة</p>
+        <Card className="border-emerald-500/20 bg-white/85">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-nexus-gray">
+                {t('v5portals.volunteer.kpiTasks')}
+              </span>
+              <CheckCircle2 className="h-4 w-4 text-nexus-emerald" />
+            </div>
+            <p className="mt-2 text-2xl font-bold text-nexus-navy">{myTasks.length}</p>
+            <p className="mt-1 text-[11px] text-nexus-gray">
+              {t('v5portals.volunteer.kpiTasksSub')}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="border-emerald-500/25 bg-emerald-950/40 text-white backdrop-blur-xl">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold text-emerald-200/80">
-              حالة التوثيق والاعتماد
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-black text-emerald-300">100%</div>
-            <p className="text-[11px] text-emerald-200/60">شهادة صادرة ومطابقة</p>
+        <Card className="border-emerald-500/20 bg-white/85">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-nexus-gray">
+                {t('v5portals.volunteer.kpiInitiatives')}
+              </span>
+              <Compass className="h-4 w-4 text-nexus-emerald" />
+            </div>
+            <p className="mt-2 text-2xl font-bold text-nexus-navy">{myInitiatives.length}</p>
+            <p className="mt-1 text-[11px] text-nexus-gray">
+              {t('v5portals.volunteer.kpiInitiativesSub')}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-amber-500/25 bg-white/85">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-nexus-gray">
+                {t('v5portals.volunteer.kpiStatus')}
+              </span>
+              <FileCheck2 className="h-4 w-4 text-amber-600" />
+            </div>
+            <p className="mt-2 text-lg font-bold text-amber-800">
+              {t('v5portals.volunteer.kpiStatusValue')}
+            </p>
+            <p className="mt-1 text-[11px] text-nexus-gray">
+              {t('v5portals.volunteer.kpiStatusSub')}
+            </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-12">
-        {/* Left Column: Tasks & Missions */}
-        <div className="space-y-6 lg:col-span-8">
-          <div className="rounded-3xl border border-emerald-500/25 bg-emerald-950/50 p-6 sm:p-8 backdrop-blur-xl space-y-6">
-            <div className="flex items-center justify-between border-b border-emerald-500/20 pb-4">
-              <div className="flex items-center gap-2.5">
-                <Clock className="h-5 w-5 text-emerald-400" />
-                <h3 className="text-base font-bold text-white">جدول المهام الميدانية</h3>
-              </div>
-              <span className="text-xs font-mono text-emerald-300">{myTasks.length} مهام</span>
-            </div>
-
-            {myTasks.length === 0 ? (
-              <div className="text-center py-10 space-y-2">
-                <p className="text-xs text-emerald-200/70">
-                  ليس لديك مهام ميدانية مسندة حالياً. يمكنك تصفح المبادرات المفتوحة والانضمام إليها.
-                </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-emerald-500/30 text-emerald-200"
-                  asChild
-                >
-                  <Link to="/initiatives">استعراض المبادرات</Link>
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {myTasks.map((task) => (
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Left 2 cols: Assigned Tasks & Enrolled Initiatives */}
+        <div className="space-y-6 lg:col-span-2">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardTitle className="text-base font-bold text-nexus-navy">
+                {t('v5portals.volunteer.tasksTitle')}
+              </CardTitle>
+              <Badge variant="emerald">{myTasks.length}</Badge>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {myTasks.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-nexus-border bg-nexus-bg/50 p-8 text-center">
+                  <Compass className="mx-auto h-8 w-8 text-nexus-emerald/60 mb-2" />
+                  <p className="text-sm font-medium text-nexus-navy">
+                    {t('v5portals.volunteer.emptyTasks')}
+                  </p>
+                  <Button size="sm" variant="outline" className="mt-4" asChild>
+                    <Link to="/initiatives">{t('v5portals.volunteer.browseInitiativesBtn')}</Link>
+                  </Button>
+                </div>
+              ) : (
+                myTasks.map((task) => (
                   <div
                     key={task.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-emerald-500/20 bg-emerald-900/30 p-4"
+                    className="flex flex-col justify-between gap-3 rounded-xl border border-nexus-border bg-white/70 p-4 sm:flex-row sm:items-center"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-white text-sm">
+                        <span className="font-semibold text-sm text-nexus-navy">
                           {isAr ? task.titleAr : task.titleFr}
                         </span>
-                        <Badge
-                          variant="outline"
-                          className="border-emerald-400/30 text-emerald-300 text-[10px]"
-                        >
+                        <Badge variant={task.status === 'verified' ? 'emerald' : 'secondary'}>
                           {t(`statuses.${task.status}`)}
                         </Badge>
                       </div>
-                      <p className="text-xs text-emerald-200/70">
-                        {isAr ? task.descriptionAr : task.descriptionFr}
+                      <p className="text-xs text-nexus-gray">
+                        {t('pages.tasks.colHours')}: {task.loggedHours}h / {task.estimatedHours}h
                       </p>
-                      <div className="flex items-center gap-3 text-[11px] text-emerald-300/80 pt-1">
-                        <span className="flex items-center gap-1 font-mono">
-                          <Calendar className="h-3 w-3" />
-                          {task.dueDate}
-                        </span>
-                        <span className="font-mono">{task.estimatedHours} ساعات تقديرية</span>
-                      </div>
                     </div>
-
-                    <div className="flex items-center gap-2 self-end sm:self-center">
-                      {task.status !== 'verified' && task.status !== 'submitted' ? (
+                    <div className="flex items-center gap-2">
+                      {task.status !== 'submitted' && task.status !== 'verified' ? (
                         <Button
                           size="sm"
-                          className="bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs rounded-xl"
                           onClick={() => updateTaskStatus(task.id, 'submitted')}
+                          className="text-xs"
                         >
-                          <CheckCircle2 className="h-3.5 w-3.5 me-1" />
-                          إتمام المهمة
+                          {t('v5portals.volunteer.submitTaskBtn')}
                         </Button>
                       ) : (
-                        <Badge variant="emerald" className="text-xs">
-                          {task.status === 'verified' ? 'معتمدة وموثقة' : 'مقدمة للتدقيق'}
+                        <Badge variant="secondary">
+                          {t('v5portals.volunteer.taskSubmittedBadge')}
                         </Badge>
                       )}
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                ))
+              )}
+            </CardContent>
+          </Card>
 
-          {/* Enrolled Initiatives */}
-          <div className="rounded-3xl border border-emerald-500/25 bg-emerald-950/50 p-6 sm:p-8 backdrop-blur-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-emerald-500/20 pb-4">
-              <h3 className="text-base font-bold text-white">مشاركاتي في المبادرات</h3>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-emerald-300 hover:text-white text-xs"
-                asChild
-              >
-                <Link to="/initiatives">
-                  دليل المبادرات <ArrowUpRight className="h-3.5 w-3.5 ms-1" />
-                </Link>
-              </Button>
-            </div>
-
-            <div className="space-y-3">
-              {myInitiatives.map((init) => {
-                const isEnrolled = init.enrolledVolunteerIds.includes(currentVolId);
-                return (
-                  <div
-                    key={init.id}
-                    className="flex items-center justify-between rounded-2xl border border-emerald-500/20 bg-emerald-900/30 p-4 text-xs"
-                  >
-                    <div>
-                      <h4 className="font-bold text-white text-sm">
-                        {isAr ? init.titleAr : init.titleFr}
-                      </h4>
-                      <div className="flex items-center gap-2 text-emerald-200/70 mt-1">
-                        <MapPin className="h-3 w-3 text-emerald-400" />
-                        <span>{t(`common.communes.${init.commune}`)}</span>
-                        <span>•</span>
-                        <span>{t(`sectors.${init.category}`)}</span>
+          {/* Enrolled / Applied Initiatives */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-bold text-nexus-navy">
+                {t('v5portals.volunteer.myInitiativesTitle')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {myInitiatives.length === 0 ? (
+                <p className="text-xs text-nexus-gray py-4 text-center">
+                  {t('pages.initiatives.emptyDesc')}
+                </p>
+              ) : (
+                myInitiatives.map((init) => {
+                  const isEnrolled = init.enrolledVolunteerIds.includes(volId);
+                  return (
+                    <div
+                      key={init.id}
+                      className="flex items-center justify-between rounded-xl border border-nexus-border p-3.5 bg-white/60"
+                    >
+                      <div>
+                        <Link
+                          to={`/initiatives/${init.id}`}
+                          className="text-sm font-semibold text-nexus-navy hover:text-nexus-emerald"
+                        >
+                          {isAr ? init.titleAr : init.titleFr}
+                        </Link>
+                        <div className="flex items-center gap-2 mt-1 text-[11px] text-nexus-gray">
+                          <span>{t(`common.communes.${init.commune}`)}</span>
+                          <span>•</span>
+                          <span>{init.startDate}</span>
+                        </div>
                       </div>
-                    </div>
-
-                    <div>
                       <Badge variant={isEnrolled ? 'emerald' : 'secondary'}>
-                        {isEnrolled ? 'مشارك رسمي' : 'طلب قيد المراجعة'}
+                        {isEnrolled
+                          ? t('v5portals.volunteer.enrolledBadge')
+                          : t('v5portals.volunteer.pendingAppBadge')}
                       </Badge>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+                  );
+                })
+              )}
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Right Column: Attendance Check-in Widget & Passport */}
-        <div className="space-y-6 lg:col-span-4">
-          {/* Geolocation Attendance Check-in */}
-          <div className="rounded-3xl border border-emerald-400/30 bg-emerald-950/60 p-6 backdrop-blur-xl space-y-4 shadow-lg">
-            <div className="flex items-center gap-2 text-emerald-300 font-bold text-sm">
-              <MapPin className="h-4 w-4" />
-              <span>تسجيل الحضور الميداني (GPS)</span>
-            </div>
-            <p className="text-xs text-emerald-200/80 leading-relaxed font-normal">
-              إثبات التواجد الفعلي في موقع المبادرة بقسنطينة لاعتماد ساعات التطوع.
-            </p>
-
-            <div className="space-y-3 pt-2">
-              <div>
-                <label className="text-[11px] text-emerald-200 block mb-1">
-                  المبادرة الميدانية:
-                </label>
-                <select
-                  value={selectedInitId}
-                  onChange={(e) => setSelectedInitId(e.target.value)}
-                  className="w-full rounded-xl border border-emerald-500/30 bg-emerald-900/80 p-2.5 text-xs text-white"
-                >
-                  {dataset.initiatives.map((init) => (
-                    <option key={init.id} value={init.id}>
-                      {isAr ? init.titleAr : init.titleFr}
-                    </option>
-                  ))}
-                </select>
+        {/* Right Col: Declarative Attendance Log & Honest Badges Empty State */}
+        <div className="space-y-6">
+          <Card className="border-emerald-500/30 bg-gradient-to-b from-white to-nexus-mint/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2 text-nexus-emerald-deep">
+                <Calendar className="h-4 w-4" />
+                <CardTitle className="text-sm font-bold">
+                  {t('v5portals.volunteer.checkInTitle')}
+                </CardTitle>
               </div>
-
-              <div>
-                <label className="text-[11px] text-emerald-200 block mb-1">
-                  عدد الساعات المنجزة:
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="12"
-                  value={hoursToLog}
-                  onChange={(e) => setHoursToLog(Number(e.target.value))}
-                  className="w-full rounded-xl border border-emerald-500/30 bg-emerald-900/80 p-2.5 text-xs text-white font-mono"
-                />
-              </div>
-
-              <div className="rounded-xl border border-emerald-500/20 bg-emerald-900/40 p-2.5 text-[11px] text-emerald-300/80 font-mono">
-                📍 إحداثيات الموقع: 36.3650° N, 6.6147° E (قسنطينة)
-              </div>
-
-              <Button
-                className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold rounded-xl text-xs shadow-md gap-2"
-                onClick={handleCheckIn}
-              >
-                <Send className="h-3.5 w-3.5" />
-                تأكيد الحضور وتسجيل الساعات
-              </Button>
-
-              {checkInDone && (
-                <div className="rounded-xl bg-emerald-500/20 border border-emerald-400/40 p-2 text-center text-xs text-emerald-300 font-semibold animate-in fade-in">
-                  ✓ تم قيد {hoursToLog} ساعات في سجل الحضور بنجاح!
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleCheckIn} className="space-y-3.5 text-xs">
+                <p className="text-nexus-gray leading-relaxed">
+                  {t('v5portals.volunteer.checkInDesc')}
+                </p>
+                <div>
+                  <label className="block font-medium text-nexus-navy mb-1">
+                    {t('v5portals.volunteer.selectInitiativeLabel')}
+                  </label>
+                  <select
+                    value={selectedInitId}
+                    onChange={(e) => setSelectedInitId(e.target.value)}
+                    className="w-full rounded-xl border border-nexus-border bg-white px-3 py-2 text-xs"
+                  >
+                    {dataset.initiatives.length === 0 ? (
+                      <option value="">{t('v5portals.volunteer.noInitiativesOption')}</option>
+                    ) : (
+                      dataset.initiatives.map((i) => (
+                        <option key={i.id} value={i.id}>
+                          {isAr ? i.titleAr : i.titleFr}
+                        </option>
+                      ))
+                    )}
+                  </select>
                 </div>
-              )}
-            </div>
-          </div>
+                <div>
+                  <label className="block font-medium text-nexus-navy mb-1">
+                    {t('v5portals.volunteer.hoursLabel')}
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="12"
+                    value={checkInHours}
+                    onChange={(e) => setCheckInHours(e.target.value)}
+                    className="w-full rounded-xl border border-nexus-border bg-white px-3 py-2 text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium text-nexus-navy mb-1">
+                    {t('v5portals.volunteer.notesLabel')}
+                  </label>
+                  <input
+                    type="text"
+                    value={checkInNote}
+                    onChange={(e) => setCheckInNote(e.target.value)}
+                    placeholder={t('v5portals.volunteer.notesPlaceholder')}
+                    className="w-full rounded-xl border border-nexus-border bg-white px-3 py-2 text-xs"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={dataset.initiatives.length === 0}
+                  className="w-full bg-nexus-emerald hover:bg-nexus-emerald-deep text-white text-xs"
+                >
+                  {t('v5portals.volunteer.submitCheckInBtn')}
+                </Button>
+                {checkInDone && (
+                  <p className="text-amber-800 font-medium text-center pt-1">
+                    {t('v5portals.volunteer.checkInSuccess')}
+                  </p>
+                )}
+              </form>
+            </CardContent>
+          </Card>
 
-          {/* Civic Passport Badge */}
-          <div className="rounded-3xl border border-emerald-500/25 bg-emerald-950/50 p-6 backdrop-blur-xl space-y-4">
-            <div className="flex items-center gap-2 text-emerald-300 font-bold text-sm">
-              <Award className="h-4 w-4" />
-              <span>شارات الكفاءة المجتمعية</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-emerald-900/60 px-3 py-1 text-xs text-emerald-300 border border-emerald-500/30">
-                🌱 تشجير وتهيئة بيئية
-              </span>
-              <span className="rounded-full bg-emerald-900/60 px-3 py-1 text-xs text-emerald-300 border border-emerald-500/30">
-                📦 إغاثة وتوزيع عيني
-              </span>
-              <span className="rounded-full bg-emerald-900/60 px-3 py-1 text-xs text-emerald-300 border border-emerald-500/30">
-                💻 تنظيم وتنسيق رقمي
-              </span>
-            </div>
-          </div>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-nexus-emerald" />
+                <CardTitle className="text-sm font-bold text-nexus-navy">
+                  {t('v5portals.volunteer.badgesTitle')}
+                </CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-xl border border-dashed border-nexus-border bg-nexus-bg/40 p-4 text-center">
+                <p className="text-xs text-nexus-gray leading-relaxed">
+                  {t('v5portals.volunteer.badgesEmpty')}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

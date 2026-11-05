@@ -38,7 +38,7 @@ export function NotificationsPage() {
         <TableHeader>
           <TableRow>
             <TableHead>{t('pages.notifications.title')}</TableHead>
-            <TableHead>Rôle Destinataire</TableHead>
+            <TableHead>{t('pages.notifications.colRole')}</TableHead>
             <TableHead>{t('pages.verification.colTimestamp')}</TableHead>
             <TableHead>{t('common.actions')}</TableHead>
           </TableRow>
@@ -68,7 +68,7 @@ export function NotificationsPage() {
                 </TableCell>
                 <TableCell>
                   <Badge variant="outline">
-                    {notif.roleTarget === 'all' ? 'All Roles' : t(`roles.${notif.roleTarget}`)}
+                    {notif.roleTarget === 'all' ? 'All' : t(`roles.${notif.roleTarget}`)}
                   </Badge>
                 </TableCell>
                 <TableCell className="font-mono text-xs text-nexus-gray">
@@ -82,10 +82,12 @@ export function NotificationsPage() {
                       className="h-7 text-xs"
                       onClick={() => markNotificationRead(notif.id)}
                     >
-                      Marquer lu
+                      {t('pages.notifications.markReadBtn')}
                     </Button>
                   ) : (
-                    <span className="text-xs text-nexus-gray">Lu</span>
+                    <span className="text-xs text-nexus-gray">
+                      {t('pages.notifications.readLabel')}
+                    </span>
                   )}
                 </TableCell>
               </TableRow>

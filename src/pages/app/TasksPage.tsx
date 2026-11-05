@@ -321,7 +321,6 @@ export function TasksPage() {
                       <option value="assigned">{t('statuses.assigned')}</option>
                       <option value="in_progress">{t('statuses.in_progress')}</option>
                       <option value="submitted">{t('statuses.submitted')}</option>
-                      <option value="verified">{t('statuses.verified')}</option>
                     </select>
                   </TableCell>
                 </TableRow>

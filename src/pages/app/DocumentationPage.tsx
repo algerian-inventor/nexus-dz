@@ -34,11 +34,11 @@ export function DocumentationPage() {
   const [taskId, setTaskId] = useState('task-5');
   const [titleAr, setTitleAr] = useState('');
   const [titleFr, setTitleFr] = useState('');
-  const [notes, setNotes] = useState('توثيق ميداني مرفق بالصور وقائمة الحضور الموقعة.');
-  const [gpsCoordinates, setGpsCoordinates] = useState('36.3650° N, 6.6147° E (Constantine)');
-  const [beneficiariesReached, setBeneficiariesReached] = useState(120);
-  const [hoursClaimed, setHoursClaimed] = useState(12);
-  const [fileName, setFileName] = useState('constantine_field_proof.jpg');
+  const [notes, setNotes] = useState('');
+  const [gpsCoordinates, setGpsCoordinates] = useState('');
+  const [beneficiariesReached, setBeneficiariesReached] = useState(25);
+  const [hoursClaimed, setHoursClaimed] = useState(4);
+  const [fileName, setFileName] = useState('');
   const [mimeType, setMimeType] = useState('image/jpeg');
   const [previewDataUrl, setPreviewDataUrl] = useState<string | undefined>(undefined);
 

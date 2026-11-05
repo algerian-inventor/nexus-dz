@@ -39,28 +39,25 @@ export function AppShell() {
   const portalItems = [
     {
       to: '/app/volunteer',
-      label: isAr ? 'فضاء المتطوع الميداني' : 'Espace Bénévole',
+      label: t('prototype.portalVolunteerShort'),
       icon: UserCheck,
-      badge: isAr ? 'متطوع' : 'Vol',
     },
     {
       to: '/app/organization',
-      label: isAr ? 'فضاء إدارة الجمعية' : 'Espace Association',
+      label: t('prototype.portalOrgShort'),
       icon: Building2,
-      badge: isAr ? 'جمعية' : 'Org',
     },
     {
       to: '/app/verifier',
-      label: isAr ? 'مركز التدقيق المستقل' : "Centre d'Audit",
+      label: t('prototype.portalVerifierShort'),
       icon: ShieldCheck,
       badge: pendingVerificationCount > 0 ? pendingVerificationCount : undefined,
       highlightBadge: pendingVerificationCount > 0,
     },
     {
       to: '/app/admin',
-      label: isAr ? 'الإشراف والحوكمة' : 'Supervision Wilaya',
+      label: t('prototype.portalAdminShort'),
       icon: FolderLock,
-      badge: isAr ? 'إدارة' : 'Admin',
     },
   ];
 
@@ -178,7 +175,7 @@ export function AppShell() {
           aria-label="Workspace navigation"
         >
           <div className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300/70">
-            {isAr ? 'فضاءات العمل المتخصصة' : 'Espaces Dédiés'}
+            {t('prototype.sidebarPortalsGroup')}
           </div>
           {portalItems.map((item) => {
             const Icon = item.icon;
@@ -216,7 +213,7 @@ export function AppShell() {
           })}
 
           <div className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300/70">
-            {isAr ? 'سجلات وقواعد البيانات' : 'Registres & Données'}
+            {t('prototype.sidebarRegistriesGroup')}
           </div>
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -257,10 +254,10 @@ export function AppShell() {
         <div className="relative border-t border-white/10 p-4 text-xs text-emerald-200/70 bg-white/[0.02]">
           <div className="flex items-center gap-1.5">
             <p className="font-medium text-white/90">{t('brand.name')}</p>
-            <span className="text-[10px] text-emerald-400 font-mono">V5</span>
+            <span className="text-[10px] text-emerald-400 font-mono">{t('brand.version')}</span>
           </div>
           <p className="mt-0.5 text-[11px] font-normal leading-relaxed text-emerald-200/60">
-            {t('brand.tagline')}
+            {t('prototype.modeBadge')}
           </p>
         </div>
       </aside>
@@ -281,15 +278,15 @@ export function AppShell() {
             </button>
 
             <div className="flex items-center gap-2 min-w-0">
-              <UserCheck className="h-4 w-4 shrink-0 text-nexus-emerald" />
-              <span className="hidden text-xs font-normal text-nexus-gray md:inline">
-                {t('nav.roleSwitch')}:
+              <UserCheck className="h-4 w-4 shrink-0 text-amber-600" />
+              <span className="hidden text-xs font-medium text-amber-800 md:inline">
+                {t('prototype.roleSimulatorLabel')}:
               </span>
               <select
                 value={activeRole}
                 onChange={(e) => switchRole(e.target.value as UserRole)}
-                aria-label={t('nav.roleSwitch')}
-                className="h-8 max-w-[200px] truncate rounded-xl border border-nexus-emerald/30 bg-nexus-mint/50 px-2.5 text-xs font-medium text-nexus-emerald-deep backdrop-blur-xs transition-all hover:border-nexus-emerald/60 sm:max-w-none sm:px-3 shadow-2xs"
+                aria-label={t('prototype.roleSimulatorLabel')}
+                className="h-8 max-w-[200px] truncate rounded-xl border border-amber-300 bg-amber-50/90 px-2.5 text-xs font-medium text-amber-950 backdrop-blur-xs transition-all hover:border-amber-400 sm:max-w-none sm:px-3 shadow-2xs"
               >
                 {roles.map((r) => (
                   <option key={r} value={r}>
@@ -301,6 +298,12 @@ export function AppShell() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2.5">
+            <Badge
+              variant="secondary"
+              className="hidden xl:inline-flex font-medium border-amber-300 bg-amber-50 text-amber-900"
+            >
+              {t('prototype.modeBadge')}
+            </Badge>
             <Badge
               variant="emerald"
               className="hidden md:inline-flex border-nexus-emerald/25 bg-nexus-mint/70 text-nexus-emerald-deep font-semibold"

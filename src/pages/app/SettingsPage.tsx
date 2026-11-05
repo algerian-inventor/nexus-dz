@@ -32,7 +32,7 @@ export function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Pilot Session & Account Status */}
+        {/* Prototype Session Status (No false secure session claims) */}
         <Card className="border-white/80 bg-white/75 backdrop-blur-md shadow-xs">
           <CardHeader>
             <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export function SettingsPage() {
               </CardTitle>
             </div>
             <CardDescription className="text-xs">
-              Session active pour la phase pilote à Constantine (Wilaya 25).
+              {t('pages.settings.pilotStatusDesc')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -53,11 +53,10 @@ export function SettingsPage() {
               >
                 {t(`roles.${activeRole}`)}
               </Badge>
-              <span className="text-xs text-nexus-gray font-mono">DZ-25 • Pilote Conforme</span>
+              <span className="text-xs text-nexus-gray font-mono">{t('prototype.modeBadge')}</span>
             </div>
             <p className="text-xs leading-relaxed text-nexus-gray font-normal">
-              Vos contributions et enregistrements restent stockés localement dans votre session
-              sécurisée.
+              {t('prototype.localStorageNotice')}
             </p>
           </CardContent>
         </Card>
@@ -78,23 +77,29 @@ export function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-nexus-gray bg-white/60 p-3 rounded-xl border border-slate-200/60">
-            <span>Associations : {dataset.organizations.length}</span>
+            <span>
+              {t('nav.organizations')} : {dataset.organizations.length}
+            </span>
             <span>•</span>
-            <span>Bénévoles : {dataset.volunteers.length}</span>
+            <span>
+              {t('nav.volunteers')} : {dataset.volunteers.length}
+            </span>
             <span>•</span>
-            <span>Initiatives : {dataset.initiatives.length}</span>
+            <span>
+              {t('nav.initiatives')} : {dataset.initiatives.length}
+            </span>
             <span>•</span>
-            <span>Missions : {dataset.tasks.length}</span>
+            <span>
+              {t('nav.tasks')} : {dataset.tasks.length}
+            </span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200/60 pt-4">
             <div className="space-y-0.5">
               <p className="text-xs font-semibold text-nexus-navy">
-                Réinitialiser la session de travail
+                {t('pages.settings.resetTitle')}
               </p>
-              <p className="text-[11px] text-nexus-gray">
-                Remet le référentiel local à l'état vierge officiel de la phase pilote.
-              </p>
+              <p className="text-[11px] text-nexus-gray">{t('pages.settings.resetDesc')}</p>
             </div>
             <Button
               variant="outline"
@@ -103,7 +108,7 @@ export function SettingsPage() {
               className="border-slate-300 text-xs text-nexus-navy hover:bg-slate-100"
             >
               <RotateCcw className="h-3.5 w-3.5" />
-              Réinitialiser la session
+              {t('pages.settings.resetBtn')}
             </Button>
           </div>
         </CardContent>

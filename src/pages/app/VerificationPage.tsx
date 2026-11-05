@@ -98,12 +98,12 @@ export function VerificationPage() {
                       className="h-8 text-xs"
                     />
                     <div className="flex flex-wrap items-center gap-1.5">
-                      {ev.verificationStatus !== 'verified' && (
+                      {ev.verificationStatus !== 'under_review' && (
                         <Button
                           size="sm"
                           variant="default"
                           className="h-7 px-2.5 text-xs"
-                          onClick={() => reviewEvidence(ev.id, 'verified', noteVal)}
+                          onClick={() => reviewEvidence(ev.id, 'under_review', noteVal)}
                         >
                           <CheckCircle2 className="h-3.5 w-3.5" />
                           {t('pages.verification.approveEvidenceBtn')}
@@ -148,8 +148,8 @@ export function VerificationPage() {
             {dataset.verifications.length === 0 ? (
               <EmptyDatabaseTableState
                 colSpan={5}
-                title="سجل التدقيق فارغ حالياً"
-                description="تُسجل هنا كافة القرارات والملاحظات الصادرة عن المدققين المستقلين."
+                title={t('v5portals.verifier.emptyHistory')}
+                description={t('pages.verification.emptyDesc')}
               />
             ) : (
               dataset.verifications.map((ver) => {

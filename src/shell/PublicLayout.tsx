@@ -32,8 +32,11 @@ export function PublicLayout() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/30">
-              الجمهورية الجزائرية الديمقراطية الشعبية
+            <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-200 border border-amber-400/30">
+              {t('prototype.modeBadge')}
+            </span>
+            <span className="hidden md:inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/30">
+              {t('prototype.noAffiliationNotice')}
             </span>
             <span className="font-mono text-[11px] text-emerald-300/70">
               {t('common.direction')}
@@ -56,12 +59,12 @@ export function PublicLayout() {
                     {t('brand.name')}
                   </span>
                   <span className="inline-flex items-center rounded-full bg-emerald-400/20 px-1.5 py-0.2 text-[10px] font-bold text-emerald-300 border border-emerald-400/40">
-                    V5
+                    {t('brand.version')}
                   </span>
                   <span className="h-1.5 w-1.5 rounded-full bg-nexus-red" />
                 </div>
                 <span className="text-[10px] font-normal text-emerald-200/80">
-                  {t('brand.subtag') || 'منصة التطوع والعمل الجمعوي في الجزائر'}
+                  {t('brand.subtag')}
                 </span>
               </div>
             </Link>
@@ -184,7 +187,7 @@ export function PublicLayout() {
                 </div>
                 <span className="font-bold text-white">{t('brand.name')}</span>
                 <span className="inline-flex items-center rounded-full bg-emerald-400/20 px-1.5 py-0.2 text-[9px] font-bold text-emerald-300 border border-emerald-400/40">
-                  V5
+                  {t('brand.version')}
                 </span>
                 <span className="h-1.5 w-1.5 rounded-full bg-nexus-red" />
               </div>
@@ -200,7 +203,7 @@ export function PublicLayout() {
             {/* Navigation Links */}
             <div className="space-y-2">
               <h4 className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
-                المنصة
+                {t('footer.colPlatform')}
               </h4>
               <ul className="space-y-1.5 text-xs text-emerald-200/80">
                 <li>
@@ -239,7 +242,7 @@ export function PublicLayout() {
             {/* Coordination Portals */}
             <div className="space-y-2">
               <h4 className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
-                فضاءات العمل المتخصصة
+                {t('footer.colPortals')}
               </h4>
               <ul className="space-y-1.5 text-xs text-emerald-200/80">
                 <li>
@@ -273,7 +276,7 @@ export function PublicLayout() {
             {/* Official Contact & Governance */}
             <div className="space-y-2">
               <h4 className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
-                الاتصال والامتثال القانوني
+                {t('footer.colContact')}
               </h4>
               <div className="space-y-2 text-xs text-emerald-200/80">
                 <div className="flex items-center gap-2">
@@ -287,9 +290,7 @@ export function PublicLayout() {
                 </div>
                 <div className="flex items-start gap-2">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span className="text-[11px] leading-relaxed">
-                    منصة مدنية مطابقة لأحكام القانون 12-06 المنظم للجمعيات في الجزائر.
-                  </span>
+                  <span className="text-[11px] leading-relaxed">{t('footer.legalNote')}</span>
                 </div>
               </div>
             </div>
@@ -297,11 +298,10 @@ export function PublicLayout() {
 
           <div className="border-t border-emerald-500/20 pt-6 flex flex-col items-center justify-between gap-3 text-xs text-emerald-300/70 sm:flex-row">
             <p className="text-[11px] font-normal">
-              © {new Date().getFullYear()} NEXUS DZ V5 • منصة التطوع والعمل الجمعوي في الجزائر •
-              قسنطينة (25).
+              © {new Date().getFullYear()} {t('footer.copyright')}
             </p>
             <p className="text-[11px] text-emerald-400/90 font-medium">
-              نزاهة ثلاثية للأثر • تدقيق ميداني مستقل • صفر أرقام وهمية
+              {t('footer.integrityNote')}
             </p>
           </div>
         </div>

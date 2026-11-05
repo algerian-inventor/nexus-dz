@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { INITIAL_DEMO_DATASET } from './constantineDemoData';
-import type { DemoDataset, UserRole, VerificationStatus, TaskStatus } from './demoTypes';
+import type {
+  DemoDataset,
+  DemoAccount,
+  UserRole,
+  VerificationStatus,
+  TaskStatus,
+} from './demoTypes';
 import {
   DemoStoreContext,
   getRolePermissions,
@@ -11,9 +17,55 @@ import {
   type RecordAttendancePayload,
   type SubmitEvidencePayload,
 } from './demoStoreContext';
+import { validateEvidenceReview } from '@/modules/auth/service';
 
-const STORAGE_KEY_DATASET = 'nexus_dz_pilot_dataset_v4';
-const STORAGE_KEY_ACCOUNT = 'nexus_dz_pilot_account_v4';
+const STORAGE_KEY_DATASET = 'nexus_dz_pilot_dataset_v6';
+const STORAGE_KEY_ACCOUNT = 'nexus_dz_pilot_account_v6';
+
+const PROTOTYPE_ROLE_ACCOUNTS: Record<UserRole, DemoAccount> = {
+  super_admin: {
+    id: 'sim-super-admin',
+    email: 'admin.prototype@nexus-dz.org',
+    fullNameAr: 'معاينة دور: تنسيق المنصة (نموذج أولي)',
+    fullNameFr: 'Aperçu Rôle : Coordination Plateforme (Prototype)',
+    role: 'super_admin',
+    commune: 'constantine',
+    titleAr: 'حساب محاكاة محلي — بدون صلاحيات خادم',
+    titleFr: 'Compte de simulation local — Sans serveur',
+  },
+  organization_admin: {
+    id: 'sim-org-admin',
+    email: 'asso.prototype@nexus-dz.org',
+    fullNameAr: 'معاينة دور: ممثل جمعية (نموذج أولي)',
+    fullNameFr: 'Aperçu Rôle : Responsable Association (Prototype)',
+    role: 'organization_admin',
+    commune: 'constantine',
+    titleAr: 'محاكاة تقديم المبادرات والتقارير (محلي)',
+    titleFr: 'Simulation de soumission associative (Local)',
+    organizationId: 'org-local-1',
+  },
+  volunteer: {
+    id: 'sim-volunteer',
+    email: 'volunteer.prototype@nexus-dz.org',
+    fullNameAr: 'معاينة دور: متطوع ميداني (نموذج أولي)',
+    fullNameFr: 'Aperçu Rôle : Bénévole de Terrain (Prototype)',
+    role: 'volunteer',
+    commune: 'constantine',
+    titleAr: 'محاكاة الترشح وتسجيل الساعات التصريحية',
+    titleFr: 'Simulation de bénévolat déclaratif (Local)',
+    volunteerId: 'vol-local-1',
+  },
+  verifier: {
+    id: 'sim-verifier',
+    email: 'verifier.prototype@nexus-dz.org',
+    fullNameAr: 'معاينة دور: مراجع مستقل (نموذج أولي)',
+    fullNameFr: 'Aperçu Rôle : Vérificateur Indépendant (Prototype)',
+    role: 'verifier',
+    commune: 'constantine',
+    titleAr: 'محاكاة الفحص الأولي — الاعتماد النهائي معطل بدون خادم',
+    titleFr: 'Simulation de pré-contrôle — Certification désactivée sans serveur',
+  },
+};
 
 function loadInitialDataset(): DemoDataset {
   if (typeof window === 'undefined') return INITIAL_DEMO_DATASET;
@@ -22,7 +74,10 @@ function loadInitialDataset(): DemoDataset {
     if (!raw) return INITIAL_DEMO_DATASET;
     const parsed = JSON.parse(raw) as DemoDataset;
     if (parsed && parsed.version === INITIAL_DEMO_DATASET.version) {
-      return parsed;
+      return {
+        ...parsed,
+        sessionLogs: parsed.sessionLogs ?? [],
+      };
     }
   } catch {
     // Fallback to initial dataset
@@ -30,15 +85,23 @@ function loadInitialDataset(): DemoDataset {
   return INITIAL_DEMO_DATASET;
 }
 
-function loadInitialAccountId(): string {
-  if (typeof window === 'undefined') return 'acc-pilot-coordinator';
-  return window.localStorage.getItem(STORAGE_KEY_ACCOUNT) || 'acc-pilot-coordinator';
+function loadInitialRole(): UserRole {
+  if (typeof window === 'undefined') return 'volunteer';
+  const saved = window.localStorage.getItem(STORAGE_KEY_ACCOUNT);
+  if (
+    saved === 'super_admin' ||
+    saved === 'organization_admin' ||
+    saved === 'volunteer' ||
+    saved === 'verifier'
+  ) {
+    return saved;
+  }
+  return 'volunteer';
 }
 
 export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
   const [dataset, setDataset] = useState<DemoDataset>(loadInitialDataset);
-  const [currentAccountId, setCurrentAccountId] = useState<string>(loadInitialAccountId);
-  const [activeRoleOverride, setActiveRoleOverride] = useState<UserRole | null>(null);
+  const [activeRole, setActiveRole] = useState<UserRole>(loadInitialRole);
   const [feedbackBanner, setFeedbackBanner] = useState<{
     message: string;
     type: 'success' | 'info';
@@ -54,11 +117,11 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY_ACCOUNT, currentAccountId);
+      window.localStorage.setItem(STORAGE_KEY_ACCOUNT, activeRole);
     } catch {
       // Ignore storage errors
     }
-  }, [currentAccountId]);
+  }, [activeRole]);
 
   const notify = useCallback((message: string, type: 'success' | 'info' = 'success') => {
     setFeedbackBanner({ message, type });
@@ -68,31 +131,44 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
     setFeedbackBanner(null);
   }, []);
 
-  const currentAccount = useMemo(() => {
-    return (
-      dataset.accounts.find((a) => a.id === currentAccountId) ??
-      dataset.accounts[0] ?? {
-        id: 'acc-pilot-coordinator',
-        email: 'coordination.constantine@nexus-dz.org',
-        fullNameAr: 'منسق المرحلة التجريبية — قسنطينة',
-        fullNameFr: 'Coordinateur Phase Pilote — Constantine',
-        role: 'super_admin' as UserRole,
-        commune: 'constantine' as const,
-        titleAr: 'المكتب التنسيقي للعمل المدني (الولاية 25)',
-        titleFr: 'Bureau de Coordination Civique (Wilaya 25)',
-      }
-    );
-  }, [dataset.accounts, currentAccountId]);
+  const currentAccount = useMemo<DemoAccount>(() => {
+    const base = PROTOTYPE_ROLE_ACCOUNTS[activeRole] ?? PROTOTYPE_ROLE_ACCOUNTS.volunteer;
+    if (activeRole === 'organization_admin' && dataset.organizations.length > 0) {
+      return {
+        ...base,
+        organizationId: dataset.organizations[0].id,
+      };
+    }
+    if (activeRole === 'volunteer' && dataset.volunteers.length > 0) {
+      return {
+        ...base,
+        volunteerId: dataset.volunteers[0].id,
+      };
+    }
+    return base;
+  }, [activeRole, dataset.organizations, dataset.volunteers]);
 
-  const activeRole = activeRoleOverride ?? currentAccount.role;
   const permissions = useMemo(() => getRolePermissions(activeRole), [activeRole]);
+
+  const appendLog = useCallback(
+    (prev: DemoDataset, action: string, details: string, role: UserRole) => {
+      const entry = {
+        id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        action,
+        actorRole: role,
+        details,
+        timestamp: new Date().toISOString(),
+      };
+      return [entry, ...(prev.sessionLogs ?? [])];
+    },
+    []
+  );
 
   const loginWithDemoAccount = useCallback(
     (accountId: string) => {
       const target = dataset.accounts.find((a) => a.id === accountId);
       if (target) {
-        setCurrentAccountId(target.id);
-        setActiveRoleOverride(target.role);
+        setActiveRole(target.role);
         notify(`${target.fullNameAr} — ${target.fullNameFr}`, 'info');
       }
     },
@@ -101,13 +177,19 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
 
   const switchRole = useCallback(
     (role: UserRole) => {
-      setActiveRoleOverride(role);
-      const target = dataset.accounts.find((a) => a.role === role);
-      if (target) {
-        setCurrentAccountId(target.id);
-      }
+      setActiveRole(role);
+      setDataset((prev) => ({
+        ...prev,
+        sessionLogs: appendLog(
+          prev,
+          'ROLE_SIMULATION_SWITCH',
+          `Switched local prototype role preview to: ${role}`,
+          role
+        ),
+      }));
+      notify(`Prototype Role Simulation: ${role}`, 'info');
     },
-    [dataset.accounts]
+    [appendLog, notify]
   );
 
   const createOrganization = useCallback(
@@ -119,9 +201,10 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           {
             id: newId,
             ...payload,
+            registrationNumber: payload.registrationNumber.trim() || 'غير مرفق (تصريحي)',
             verificationStatus: 'pending',
-            foundedYear: 2026,
-            membersCount: 25,
+            foundedYear: new Date().getFullYear(),
+            membersCount: 0, // Never fabricate member counts
             createdAt: new Date().toISOString(),
           },
           ...prev.organizations,
@@ -129,10 +212,10 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
         notifications: [
           {
             id: `notif-${Date.now()}`,
-            titleAr: `تسجيل جمعية جديدة: ${payload.nameAr}`,
-            titleFr: `Nouvelle organisation : ${payload.nameFr}`,
-            bodyAr: `تم إيداع ملف الجمعية ببلدية قسنطينة للمراجعة والاعتماد.`,
-            bodyFr: `Le dossier d'agrément a été enregistré pour vérification.`,
+            titleAr: `مسودة تسجيل جمعية (محلي): ${payload.nameAr}`,
+            titleFr: `Brouillon d'organisation (Local) : ${payload.nameFr}`,
+            bodyAr: `تم حفظ بيانات الجمعية محلياً في المتصفح (غير مصادق عليها رسمياً).`,
+            bodyFr: `Données enregistrées localement dans le navigateur (non vérifiées).`,
             roleTarget: 'super_admin',
             category: 'organization',
             read: false,
@@ -140,23 +223,47 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           },
           ...prev.notifications,
         ],
+        sessionLogs: appendLog(
+          prev,
+          'CREATE_ORGANIZATION_DRAFT',
+          `Submitted unverified organization profile: ${payload.nameAr || payload.nameFr}`,
+          activeRole
+        ),
       }));
-      notify(`${payload.nameAr} / ${payload.nameFr}`);
+      notify(`${payload.nameAr || payload.nameFr} (Saved locally — Unverified)`, 'info');
     },
-    [notify]
+    [activeRole, appendLog, notify]
   );
 
   const updateOrganizationStatus = useCallback(
     (orgId: string, status: VerificationStatus) => {
+      if (!permissions.canApproveOrganizations) {
+        notify('Unauthorized role for organization status update.', 'info');
+        return;
+      }
+      // In client-only prototype mode, never allow setting 'verified' as official accreditation
+      const safeStatus: VerificationStatus = status === 'verified' ? 'under_review' : status;
+
       setDataset((prev) => ({
         ...prev,
         organizations: prev.organizations.map((o) =>
-          o.id === orgId ? { ...o, verificationStatus: status } : o
+          o.id === orgId ? { ...o, verificationStatus: safeStatus } : o
+        ),
+        sessionLogs: appendLog(
+          prev,
+          'UPDATE_ORG_PROTOTYPE_STATUS',
+          `Changed organization ${orgId} prototype status to ${safeStatus}`,
+          activeRole
         ),
       }));
-      notify(`Organization status updated: ${status.toUpperCase()}`);
+      notify(
+        status === 'verified'
+          ? 'Marked as Under Review (Official accreditation requires backend verification)'
+          : `Prototype status updated: ${safeStatus}`,
+        'info'
+      );
     },
-    [notify]
+    [activeRole, appendLog, notify, permissions.canApproveOrganizations]
   );
 
   const createVolunteer = useCallback(
@@ -171,19 +278,32 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
             verifiedHours: 0,
             pendingHours: 0,
             completedTasksCount: 0,
-            status: 'active',
+            status: 'onboarding',
             joinedAt: new Date().toISOString().slice(0, 10),
           },
           ...prev.volunteers,
         ],
+        sessionLogs: appendLog(
+          prev,
+          'CREATE_VOLUNTEER_DRAFT',
+          `Registered local volunteer profile: ${payload.fullNameAr || payload.fullNameFr}`,
+          activeRole
+        ),
       }));
-      notify(`${payload.fullNameAr} / ${payload.fullNameFr}`);
+      notify(`${payload.fullNameAr || payload.fullNameFr} (Local prototype profile)`, 'info');
     },
-    [notify]
+    [activeRole, appendLog, notify]
   );
 
   const upsertInitiative = useCallback(
     (payload: UpsertInitiativePayload) => {
+      if (!permissions.canCreateInitiatives && activeRole !== 'super_admin') {
+        notify('Only association coordinators can create or edit initiatives.', 'info');
+        return;
+      }
+      // Never allow creating/editing an initiative directly as 'verified'
+      const safeStatus = payload.status === 'verified' ? 'open' : payload.status;
+
       setDataset((prev) => {
         if (payload.id) {
           return {
@@ -193,9 +313,16 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
                 ? {
                     ...init,
                     ...payload,
+                    status: safeStatus,
                     id: init.id,
                   }
                 : init
+            ),
+            sessionLogs: appendLog(
+              prev,
+              'UPDATE_INITIATIVE_DRAFT',
+              `Updated initiative: ${payload.titleAr}`,
+              activeRole
             ),
           };
         }
@@ -213,9 +340,9 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
               category: payload.category,
               commune: payload.commune,
               locationDetails: payload.locationDetails,
-              status: payload.status,
+              status: safeStatus,
               targetVolunteers: payload.targetVolunteers,
-              enrolledVolunteerIds: ['vol-1'],
+              enrolledVolunteerIds: [], // Never fabricate enrolled volunteers
               applicantVolunteerIds: [],
               targetBeneficiaries: payload.targetBeneficiaries,
               verifiedBeneficiaries: 0,
@@ -228,10 +355,10 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           notifications: [
             {
               id: `notif-${Date.now()}`,
-              titleAr: `إطلاق مبادرة جديدة: ${payload.titleAr}`,
-              titleFr: `Nouvelle initiative lancée : ${payload.titleFr}`,
-              bodyAr: `باب التطوع مفتوح الآن ضمن مبادرة ${payload.titleAr}.`,
-              bodyFr: `Les candidatures bénévoles sont ouvertes pour ${payload.titleFr}.`,
+              titleAr: `مبادرة مقترحة (محلي): ${payload.titleAr}`,
+              titleFr: `Initiative proposée (Local) : ${payload.titleFr}`,
+              bodyAr: `تم إدراج مسودة مبادرة ${payload.titleAr} في الجلسة المحلية.`,
+              bodyFr: `Brouillon d'initiative ${payload.titleFr} enregistré localement.`,
               roleTarget: 'volunteer',
               category: 'initiative',
               read: false,
@@ -239,16 +366,22 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
             },
             ...prev.notifications,
           ],
+          sessionLogs: appendLog(
+            prev,
+            'CREATE_INITIATIVE_DRAFT',
+            `Created unverified initiative draft: ${payload.titleAr}`,
+            activeRole
+          ),
         };
       });
-      notify(`${payload.titleAr}`);
+      notify(`${payload.titleAr} (Local draft saved)`, 'info');
     },
-    [notify]
+    [activeRole, appendLog, notify, permissions.canCreateInitiatives]
   );
 
   const applyToInitiative = useCallback(
     (initiativeId: string, volunteerId?: string) => {
-      const volId = volunteerId || currentAccount.volunteerId || 'vol-1';
+      const volId = volunteerId || currentAccount.volunteerId || 'vol-local-1';
       setDataset((prev) => {
         const targetInit = prev.initiatives.find((i) => i.id === initiativeId);
         const vol = prev.volunteers.find((v) => v.id === volId);
@@ -270,10 +403,10 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           notifications: [
             {
               id: `notif-${Date.now()}`,
-              titleAr: `طلب تطوع جديد من ${vol?.fullNameAr ?? 'متطوع'}`,
-              titleFr: `Candidature bénévole de ${vol?.fullNameFr ?? 'Bénévole'}`,
-              bodyAr: `تم تسجيل طلب انضمام إلى مبادرة: ${targetInit?.titleAr ?? ''}`,
-              bodyFr: `Nouvelle candidature pour l'initiative : ${targetInit?.titleFr ?? ''}`,
+              titleAr: `طلب ترشح محلي من ${vol?.fullNameAr ?? 'متطوع (نموذج أولي)'}`,
+              titleFr: `Candidature locale de ${vol?.fullNameFr ?? 'Bénévole (Prototype)'}`,
+              bodyAr: `تم تسجيل طلب انضمام مبدئي إلى مبادرة: ${targetInit?.titleAr ?? ''}`,
+              bodyFr: `Demande préliminaire pour l'initiative : ${targetInit?.titleFr ?? ''}`,
               roleTarget: 'organization_admin',
               category: 'initiative',
               read: false,
@@ -281,15 +414,25 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
             },
             ...prev.notifications,
           ],
+          sessionLogs: appendLog(
+            prev,
+            'VOLUNTEER_APPLICATION',
+            `Submitted prototype application to initiative ${initiativeId}`,
+            activeRole
+          ),
         };
       });
-      notify('Volunteer application submitted / Candidature envoyée');
+      notify('Application recorded in local prototype session', 'info');
     },
-    [currentAccount.volunteerId, notify]
+    [activeRole, appendLog, currentAccount.volunteerId, notify]
   );
 
   const approveVolunteerApplication = useCallback(
     (initiativeId: string, volunteerId: string) => {
+      if (!permissions.canCreateInitiatives) {
+        notify('Only association coordinators can review volunteer applications.', 'info');
+        return;
+      }
       setDataset((prev) => ({
         ...prev,
         initiatives: prev.initiatives.map((init) => {
@@ -302,14 +445,24 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
               : [...init.enrolledVolunteerIds, volunteerId],
           };
         }),
+        sessionLogs: appendLog(
+          prev,
+          'ACCEPT_VOLUNTEER_PROTOTYPE',
+          `Preliminarily accepted applicant ${volunteerId} for ${initiativeId} (Unverified)`,
+          activeRole
+        ),
       }));
-      notify('Volunteer enrolled in initiative / Bénévole accepté');
+      notify('Applicant preliminarily accepted in local prototype (Unverified)', 'info');
     },
-    [notify]
+    [activeRole, appendLog, notify, permissions.canCreateInitiatives]
   );
 
   const createTask = useCallback(
     (payload: CreateTaskPayload) => {
+      if (!permissions.canAssignTasks && activeRole !== 'super_admin') {
+        notify('Unauthorized role for creating tasks.', 'info');
+        return;
+      }
       const newId = `task-${Date.now()}`;
       setDataset((prev) => ({
         ...prev,
@@ -323,14 +476,24 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           },
           ...prev.tasks,
         ],
+        sessionLogs: appendLog(
+          prev,
+          'CREATE_TASK_DRAFT',
+          `Created task draft: ${payload.titleAr}`,
+          activeRole
+        ),
       }));
-      notify(payload.titleAr);
+      notify(payload.titleAr, 'info');
     },
-    [notify]
+    [activeRole, appendLog, notify, permissions.canAssignTasks]
   );
 
   const assignTaskVolunteer = useCallback(
     (taskId: string, volunteerId: string | null) => {
+      if (!permissions.canAssignTasks && activeRole !== 'super_admin') {
+        notify('Unauthorized role for task assignment.', 'info');
+        return;
+      }
       setDataset((prev) => ({
         ...prev,
         tasks: prev.tasks.map((t) =>
@@ -343,20 +506,28 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
             : t
         ),
       }));
-      notify('Task assignment updated / Affectation mise à jour');
+      notify('Task assignment updated (Local prototype)', 'info');
     },
-    [notify]
+    [activeRole, notify, permissions.canAssignTasks]
   );
 
   const updateTaskStatus = useCallback(
     (taskId: string, status: TaskStatus) => {
+      // Never allow setting task status directly to 'verified' from client UI
+      const safeStatus: TaskStatus = status === 'verified' ? 'submitted' : status;
       setDataset((prev) => ({
         ...prev,
-        tasks: prev.tasks.map((t) => (t.id === taskId ? { ...t, status } : t)),
+        tasks: prev.tasks.map((t) => (t.id === taskId ? { ...t, status: safeStatus } : t)),
+        sessionLogs: appendLog(
+          prev,
+          'UPDATE_TASK_STATUS',
+          `Task ${taskId} status changed to ${safeStatus}`,
+          activeRole
+        ),
       }));
-      notify(`Task status updated: ${status}`);
+      notify(`Task status updated: ${safeStatus} (Unverified)`, 'info');
     },
-    [notify]
+    [activeRole, appendLog, notify]
   );
 
   const recordAttendance = useCallback(
@@ -368,6 +539,7 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           {
             id: newId,
             ...payload,
+            status: 'present', // Self-reported presence only, never confirmed physical attendance
           },
           ...prev.attendance,
         ],
@@ -384,19 +556,35 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           v.id === payload.volunteerId
             ? {
                 ...v,
-                pendingHours: v.pendingHours + payload.hoursLogged,
+                pendingHours: v.pendingHours + payload.hoursLogged, // Only pending (reported), never verifiedHours
               }
             : v
         ),
+        sessionLogs: appendLog(
+          prev,
+          'LOG_REPORTED_ATTENDANCE',
+          `Logged ${payload.hoursLogged}h unverified self-reported attendance`,
+          activeRole
+        ),
       }));
-      notify(`Attendance & ${payload.hoursLogged}h recorded`);
+      notify(
+        `Self-reported ${payload.hoursLogged}h recorded as Pending (Unverified — not certified)`,
+        'info'
+      );
     },
-    [notify]
+    [activeRole, appendLog, notify]
   );
 
   const submitEvidence = useCallback(
     (payload: SubmitEvidencePayload) => {
+      if (!permissions.canSubmitEvidence) {
+        notify('Current role cannot submit field evidence.', 'info');
+        return;
+      }
       const newId = `ev-${Date.now()}`;
+      const targetInit = dataset.initiatives.find((i) => i.id === payload.initiativeId);
+      const submitterOrgId = currentAccount.organizationId || targetInit?.organizationId;
+
       setDataset((prev) => ({
         ...prev,
         evidence: [
@@ -404,15 +592,17 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
             id: newId,
             initiativeId: payload.initiativeId,
             taskId: payload.taskId,
+            submittedByAccountId: currentAccount.id,
+            submittedByOrgId: submitterOrgId,
             submittedByName: `${currentAccount.fullNameAr} / ${currentAccount.fullNameFr}`,
-            submittedByRole: currentAccount.role,
+            submittedByRole: activeRole,
             titleAr: payload.titleAr,
             titleFr: payload.titleFr,
             notes: payload.notes,
-            fileName: payload.fileName,
-            mimeType: payload.mimeType,
+            fileName: payload.fileName || 'unattached_prototype_reference',
+            mimeType: payload.mimeType || 'text/plain',
             previewDataUrl: payload.previewDataUrl,
-            gpsCoordinates: payload.gpsCoordinates,
+            gpsCoordinates: payload.gpsCoordinates || 'غير مرفق (بدون تحقق جغرافي)',
             beneficiariesReached: payload.beneficiariesReached,
             hoursClaimed: payload.hoursClaimed,
             verificationStatus: 'pending',
@@ -424,10 +614,10 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
         notifications: [
           {
             id: `notif-${Date.now()}`,
-            titleAr: `دليل ميداني جديد للمراجعة: ${payload.titleAr}`,
-            titleFr: `Nouvelle preuve soumise : ${payload.titleFr}`,
-            bodyAr: `تم رفع دليل جديد (${payload.beneficiariesReached} مستفيد) بانتظار مصادقة المدقق.`,
-            bodyFr: `Preuve déposée (${payload.beneficiariesReached} bénéficiaires) en attente d'audit.`,
+            titleAr: `تصريح أثر مبدئي (غير مدقق): ${payload.titleAr}`,
+            titleFr: `Déclaration d'impact (Non vérifiée) : ${payload.titleFr}`,
+            bodyAr: `تم تسجيل تصريح بـ ${payload.beneficiariesReached} مستفيد (قيد الانتظار — لا يُحتسب في الأثر الموثق).`,
+            bodyFr: `Déclaration de ${payload.beneficiariesReached} bénéficiaires enregistrée (en attente).`,
             roleTarget: 'verifier',
             category: 'verification',
             read: false,
@@ -435,52 +625,66 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           },
           ...prev.notifications,
         ],
+        sessionLogs: appendLog(
+          prev,
+          'SUBMIT_DECLARATIVE_EVIDENCE',
+          `Submitted unverified evidence declaration: ${payload.titleAr}`,
+          activeRole
+        ),
       }));
-      notify(`${payload.titleAr}`);
+      notify(`${payload.titleAr} (Submitted as unverified declaration)`, 'info');
     },
-    [currentAccount, notify]
+    [
+      activeRole,
+      appendLog,
+      currentAccount,
+      dataset.initiatives,
+      notify,
+      permissions.canSubmitEvidence,
+    ]
   );
 
   const reviewEvidence = useCallback(
-    (evidenceId: string, decision: 'verified' | 'rejected', reviewNotes: string) => {
+    (
+      evidenceId: string,
+      decision: 'under_review' | 'rejected' | 'verified',
+      reviewNotes: string
+    ): { allowed: boolean; reason?: string } => {
+      const targetEv = dataset.evidence.find((e) => e.id === evidenceId);
+      if (!targetEv) {
+        return { allowed: false, reason: 'not_found' };
+      }
+
+      const check = validateEvidenceReview({
+        evidenceSubmittedByAccountId: targetEv.submittedByAccountId,
+        evidenceSubmittedByOrgId: targetEv.submittedByOrgId,
+        reviewerAccountId: currentAccount.id,
+        reviewerOrgId: currentAccount.organizationId,
+        activeRole,
+        decision,
+        hasBackendVerifierIsolation: false, // Client-only prototype has no backend isolation
+      });
+
+      if (!check.allowed) {
+        if (check.reason === 'conflict_of_interest_same_party') {
+          notify(
+            'Conflict of Interest Blocked: Submitter or same organization cannot review its own evidence.',
+            'info'
+          );
+        } else if (check.reason === 'certification_disabled_without_backend') {
+          notify(
+            'Official Impact Certification is disabled in client-only prototype mode (requires backend verifier isolation).',
+            'info'
+          );
+        } else {
+          notify('Only the Independent Verifier role may review evidence submissions.', 'info');
+        }
+        return check;
+      }
+
       setDataset((prev) => {
-        const targetEv = prev.evidence.find((e) => e.id === evidenceId);
-        if (!targetEv) return prev;
-
-        const isApproving = decision === 'verified' && targetEv.verificationStatus !== 'verified';
-
         const updatedEvidence = prev.evidence.map((e) =>
           e.id === evidenceId ? { ...e, verificationStatus: decision } : e
-        );
-
-        const updatedInitiatives = prev.initiatives.map((init) => {
-          if (init.id !== targetEv.initiativeId) return init;
-          return {
-            ...init,
-            verifiedBeneficiaries: isApproving
-              ? init.verifiedBeneficiaries + targetEv.beneficiariesReached
-              : init.verifiedBeneficiaries,
-            status: isApproving ? 'verified' : init.status,
-          };
-        });
-
-        const linkedTask = prev.tasks.find((t) => t.id === targetEv.taskId);
-        const targetVolId = linkedTask?.assignedVolunteerId || 'vol-1';
-
-        const updatedVolunteers = prev.volunteers.map((v) => {
-          if (v.id !== targetVolId || !isApproving) return v;
-          return {
-            ...v,
-            verifiedHours: v.verifiedHours + targetEv.hoursClaimed,
-            pendingHours: Math.max(0, v.pendingHours - targetEv.hoursClaimed),
-            completedTasksCount: v.completedTasksCount + 1,
-          };
-        });
-
-        const updatedTasks = prev.tasks.map((t) =>
-          t.id === targetEv.taskId && decision === 'verified'
-            ? { ...t, status: 'verified' as TaskStatus }
-            : t
         );
 
         const newAuditRecord = {
@@ -490,54 +694,30 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
           decision,
           reviewNotes:
             reviewNotes ||
-            (decision === 'verified'
-              ? 'تم التحقق من المطابقة الميدانية واعتماد مؤشرات الأثر.'
-              : 'يرجى استكمال الوثائق المرفقة.'),
+            (decision === 'under_review'
+              ? 'ملاحظة فحص أولي في النموذج التجريبي (لا تُعد مصادقة نهائية).'
+              : 'مرفوض لعدم كفاية التوثيق.'),
           reviewedAt: new Date().toISOString(),
         };
 
         return {
           ...prev,
           evidence: updatedEvidence,
-          initiatives: updatedInitiatives,
-          volunteers: updatedVolunteers,
-          tasks: updatedTasks,
+          // NEVER increment verifiedBeneficiaries or verifiedHours in client-only prototype mode
           verifications: [newAuditRecord, ...prev.verifications],
-          notifications: [
-            {
-              id: `notif-${Date.now()}`,
-              titleAr:
-                decision === 'verified'
-                  ? `تمت المصادقة على الدليل: ${targetEv.titleAr}`
-                  : `ملاحظات تدقيق حول الدليل: ${targetEv.titleAr}`,
-              titleFr:
-                decision === 'verified'
-                  ? `Preuve certifiée : ${targetEv.titleFr}`
-                  : `Preuve rejetée : ${targetEv.titleFr}`,
-              bodyAr:
-                decision === 'verified'
-                  ? `تم اعتماد ${targetEv.beneficiariesReached} مستفيد و ${targetEv.hoursClaimed} ساعة تطوع في لوحة الأثر.`
-                  : reviewNotes,
-              bodyFr:
-                decision === 'verified'
-                  ? `${targetEv.beneficiariesReached} bénéficiaires et ${targetEv.hoursClaimed}h ont été ajoutés aux indicateurs d'impact.`
-                  : reviewNotes,
-              roleTarget: 'all',
-              category: 'verification',
-              read: false,
-              createdAt: new Date().toISOString(),
-            },
-            ...prev.notifications,
-          ],
+          sessionLogs: appendLog(
+            prev,
+            'PRELIMINARY_EVIDENCE_REVIEW',
+            `Reviewed evidence ${evidenceId} with prototype status: ${decision}`,
+            activeRole
+          ),
         };
       });
-      notify(
-        decision === 'verified'
-          ? 'Evidence verified & Impact metrics updated!'
-          : 'Evidence marked as rejected'
-      );
+
+      notify(`Evidence status updated to: ${decision} (Unverified prototype mode)`, 'info');
+      return { allowed: true };
     },
-    [currentAccount, notify]
+    [activeRole, appendLog, currentAccount, dataset.evidence, notify]
   );
 
   const markNotificationRead = useCallback((notifId: string) => {
@@ -552,15 +732,15 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
       ...prev,
       notifications: prev.notifications.map((n) => ({ ...n, read: true })),
     }));
-    notify('All notifications marked as read');
+    notify('All notifications marked as read', 'info');
   }, [notify]);
 
   const resetDemoData = useCallback(() => {
     window.localStorage.removeItem(STORAGE_KEY_DATASET);
     window.localStorage.removeItem(STORAGE_KEY_ACCOUNT);
     setDataset(INITIAL_DEMO_DATASET);
-    setCurrentAccountId('acc-pilot-coordinator');
-    notify('Session réinitialisée au référentiel pilote vierge.', 'info');
+    setActiveRole('volunteer');
+    notify('Local browser storage reset to clean zero-data baseline.', 'info');
   }, [notify]);
 
   const value = useMemo(

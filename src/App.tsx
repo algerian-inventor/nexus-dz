@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { DemoStoreProvider } from '@/data/DemoStoreProvider';
 import { PublicLayout } from '@/shell/PublicLayout';
 import { AppShell } from '@/shell/AppShell';
+import { RoleRouteGuard } from '@/components/shared/RoleRouteGuard';
 
 import { LandingPage } from '@/pages/public/LandingPage';
 import { AboutPage } from '@/pages/public/AboutPage';
@@ -46,20 +47,55 @@ export function App() {
             <Route path="/register" element={<RegisterPage />} />
           </Route>
 
-          {/* Application Workspace Routes */}
+          {/* Application Workspace Routes (Local Prototype Mode) */}
           <Route path="/app" element={<AppShell />}>
             <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="volunteer" element={<VolunteerPortalPage />} />
-            <Route path="organization" element={<OrganizationPortalPage />} />
-            <Route path="verifier" element={<VerificationPortalPage />} />
-            <Route path="admin" element={<AdminPortalPage />} />
+            <Route
+              path="volunteer"
+              element={
+                <RoleRouteGuard allowedRoles={['volunteer']}>
+                  <VolunteerPortalPage />
+                </RoleRouteGuard>
+              }
+            />
+            <Route
+              path="organization"
+              element={
+                <RoleRouteGuard allowedRoles={['organization_admin']}>
+                  <OrganizationPortalPage />
+                </RoleRouteGuard>
+              }
+            />
+            <Route
+              path="verifier"
+              element={
+                <RoleRouteGuard allowedRoles={['verifier']}>
+                  <VerificationPortalPage />
+                </RoleRouteGuard>
+              }
+            />
+            <Route
+              path="admin"
+              element={
+                <RoleRouteGuard allowedRoles={['super_admin']}>
+                  <AdminPortalPage />
+                </RoleRouteGuard>
+              }
+            />
             <Route path="organizations" element={<OrganizationsPage />} />
             <Route path="volunteers" element={<VolunteersPage />} />
             <Route path="initiatives" element={<InitiativesPage />} />
             <Route path="tasks" element={<TasksPage />} />
             <Route path="documentation" element={<DocumentationPage />} />
-            <Route path="verification" element={<VerificationPage />} />
+            <Route
+              path="verification"
+              element={
+                <RoleRouteGuard allowedRoles={['verifier']}>
+                  <VerificationPage />
+                </RoleRouteGuard>
+              }
+            />
             <Route path="analytics" element={<ImpactAnalyticsPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
             <Route path="settings" element={<SettingsPage />} />

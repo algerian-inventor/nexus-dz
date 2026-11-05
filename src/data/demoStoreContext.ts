@@ -123,9 +123,9 @@ export interface DemoStoreContextValue {
   submitEvidence: (payload: SubmitEvidencePayload) => void;
   reviewEvidence: (
     evidenceId: string,
-    decision: 'verified' | 'rejected',
+    decision: 'under_review' | 'rejected' | 'verified',
     reviewNotes: string
-  ) => void;
+  ) => { allowed: boolean; reason?: string };
 
   // Notifications & Reset
   markNotificationRead: (notifId: string) => void;

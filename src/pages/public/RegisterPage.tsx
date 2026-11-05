@@ -41,15 +41,15 @@ export function RegisterPage() {
       createOrganization({
         nameAr: orgName || fullName,
         nameFr: orgName || fullName,
-        registrationNumber: regNumber || 'En cours de validation',
+        registrationNumber: regNumber.trim() || 'DRAFT-LOCAL',
         category: sector,
         commune,
-        address: `${commune}, Constantine`,
+        address: t(`common.communes.${commune}`),
         presidentName: fullName,
         phone,
         email,
-        descriptionAr: notes || 'طلب اعتماد للانضمام للمرحلة التجريبية',
-        descriptionFr: notes || 'Dossier de candidature pour la phase pilote',
+        descriptionAr: notes.trim() || orgName || fullName,
+        descriptionFr: notes.trim() || orgName || fullName,
       });
     } else {
       createVolunteer({
@@ -58,9 +58,9 @@ export function RegisterPage() {
         email,
         phone,
         commune,
-        specialtyAr: notes || 'بénévole de terrain',
-        specialtyFr: notes || 'Bénévole de terrain',
-        skills: ['Coordination de terrain', 'Engagement citoyen'],
+        specialtyAr: notes.trim() || t('roles.volunteer'),
+        specialtyFr: notes.trim() || t('roles.volunteer'),
+        skills: [t(`sectors.${sector}`)],
       });
     }
 
@@ -72,20 +72,18 @@ export function RegisterPage() {
       <div className="space-y-3 text-center">
         <Badge
           variant="emerald"
-          className="bg-nexus-mint/80 text-nexus-emerald-deep border-nexus-emerald/30 font-medium px-3 py-1"
+          className="bg-emerald-500/20 text-emerald-200 border-emerald-400/30 font-medium px-3 py-1"
         >
           {t('pilotBanner.badge')}
         </Badge>
-        <h1 className="text-2xl font-semibold text-nexus-navy sm:text-3xl">
-          {t('auth.registerTitle')}
-        </h1>
-        <p className="text-sm text-nexus-gray max-w-lg mx-auto leading-relaxed">
+        <h1 className="text-2xl font-semibold text-white sm:text-3xl">{t('auth.registerTitle')}</h1>
+        <p className="text-sm text-emerald-100/80 max-w-lg mx-auto leading-relaxed">
           {t('auth.registerSubtitle')}
         </p>
       </div>
 
       {submitted ? (
-        <Card className="border-nexus-emerald/30 bg-white/90 backdrop-blur-xl shadow-lg p-6 sm:p-8 text-center space-y-6">
+        <Card className="border-nexus-emerald/30 bg-white/95 backdrop-blur-xl shadow-lg p-6 sm:p-8 text-center space-y-6">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-nexus-mint text-nexus-emerald-deep">
             <CheckCircle2 className="h-8 w-8" />
           </div>
@@ -100,42 +98,41 @@ export function RegisterPage() {
           </div>
 
           <div className="rounded-xl border border-slate-200/80 bg-slate-50/80 p-4 text-xs text-start space-y-2 text-nexus-navy">
-            <p className="font-semibold text-nexus-emerald-deep">
-              Étapes suivantes du protocole pilote :
-            </p>
+            <p className="font-semibold text-nexus-emerald-deep">{t('auth.nextStepsTitle')}</p>
             <ul className="space-y-1.5 list-disc list-inside text-nexus-gray">
-              <li>
-                Examen des pièces administratives (conformité Loi 12-06 pour les associations).
-              </li>
-              <li>Prise de contact par la coordination wilaya de Constantine.</li>
-              <li>Attribution de vos accès à l'espace de coordination.</li>
+              <li>{t('auth.nextStep1')}</li>
+              <li>{t('auth.nextStep2')}</li>
+              <li>{t('auth.nextStep3')}</li>
             </ul>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Button asChild className="bg-nexus-emerald hover:bg-nexus-emerald-deep text-white">
-              <Link to="/">
-                {isAr ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
-                {t('auth.backHome')}
+              <Link to="/app/dashboard">
+                {isAr ? (
+                  <ArrowRight className="h-4 w-4 me-1.5" />
+                ) : (
+                  <ArrowLeft className="h-4 w-4 me-1.5" />
+                )}
+                {t('nav.workspace')}
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/initiatives">{t('nav.initiatives')}</Link>
+              <Link to="/">{t('auth.backHome')}</Link>
             </Button>
           </div>
         </Card>
       ) : (
-        <Card className="border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(7,91,53,0.06)]">
+        <Card className="border-white/80 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(7,91,53,0.06)]">
           <CardHeader className="space-y-2 pb-4">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-nexus-emerald" />
               <CardTitle className="text-base font-semibold text-nexus-navy">
-                Candidature Pilote — Wilaya de Constantine (25)
+                {t('auth.registerTitle')}
               </CardTitle>
             </div>
             <CardDescription className="text-xs leading-relaxed">
-              Renseignez vos coordonnées pour que l'équipe de coordination puisse vous contacter et
-              valider votre dossier.
+              {t('prototype.localStorageNotice')}
             </CardDescription>
           </CardHeader>
 
@@ -143,7 +140,7 @@ export function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Profile Selector */}
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium">{t('auth.roleLabel')}</Label>
+                <Label className="text-xs font-medium text-nexus-navy">{t('auth.roleLabel')}</Label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
@@ -155,7 +152,7 @@ export function RegisterPage() {
                     }`}
                   >
                     <Building2 className="h-4 w-4" />
-                    Association Agréée
+                    {t('auth.orgProfileOption')}
                   </button>
 
                   <button
@@ -168,22 +165,21 @@ export function RegisterPage() {
                     }`}
                   >
                     <Users className="h-4 w-4" />
-                    Bénévole Individuel
+                    {t('auth.volProfileOption')}
                   </button>
                 </div>
               </div>
 
               {/* Common Fields */}
               <div className="space-y-1.5">
-                <Label htmlFor="fullName" className="text-xs font-medium">
+                <Label htmlFor="fullName" className="text-xs font-medium text-nexus-navy">
                   {t('auth.fullNameLabel')}
                 </Label>
                 <Input
                   id="fullName"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Ex: Tarek Mansouri / طارق منصوري"
-                  className="bg-white/90 border-slate-200"
+                  className="bg-white/90 border-slate-200 text-nexus-navy"
                   required
                 />
               </div>
@@ -191,29 +187,28 @@ export function RegisterPage() {
               {profileType === 'organization' && (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-1.5">
-                    <Label htmlFor="orgName" className="text-xs font-medium">
+                    <Label htmlFor="orgName" className="text-xs font-medium text-nexus-navy">
                       {t('auth.orgNameLabel')}
                     </Label>
                     <Input
                       id="orgName"
                       value={orgName}
                       onChange={(e) => setOrgName(e.target.value)}
-                      placeholder="Ex: Association Cirta pour l'Environnement"
-                      className="bg-white/90 border-slate-200"
+                      className="bg-white/90 border-slate-200 text-nexus-navy"
                       required
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="regNumber" className="text-xs font-medium">
+                    <Label htmlFor="regNumber" className="text-xs font-medium text-nexus-navy">
                       {t('auth.regNumberLabel')}
                     </Label>
                     <Input
                       id="regNumber"
                       value={regNumber}
                       onChange={(e) => setRegNumber(e.target.value)}
-                      placeholder="Ex: AGR-25-2023-XXXX"
-                      className="bg-white/90 border-slate-200"
+                      placeholder="—"
+                      className="bg-white/90 border-slate-200 text-nexus-navy font-mono"
                     />
                   </div>
                 </div>
@@ -221,7 +216,7 @@ export function RegisterPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <Label htmlFor="email" className="text-xs font-medium">
+                  <Label htmlFor="email" className="text-xs font-medium text-nexus-navy">
                     {t('auth.emailLabel')}
                   </Label>
                   <Input
@@ -229,22 +224,22 @@ export function RegisterPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="contact@organisation.dz"
-                    className="bg-white/90 border-slate-200"
+                    placeholder="contact@example.org"
+                    className="bg-white/90 border-slate-200 text-nexus-navy"
                     required
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="phone" className="text-xs font-medium">
+                  <Label htmlFor="phone" className="text-xs font-medium text-nexus-navy">
                     {t('auth.phoneLabel')}
                   </Label>
                   <Input
                     id="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+213 5XX XX XX XX"
-                    className="bg-white/90 border-slate-200"
+                    placeholder="+213"
+                    className="bg-white/90 border-slate-200 text-nexus-navy"
                     required
                   />
                 </div>
@@ -252,7 +247,7 @@ export function RegisterPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <Label htmlFor="commune" className="text-xs font-medium">
+                  <Label htmlFor="commune" className="text-xs font-medium text-nexus-navy">
                     {t('auth.communeLabel')}
                   </Label>
                   <select
@@ -270,8 +265,8 @@ export function RegisterPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="sector" className="text-xs font-medium">
-                    Secteur d'activité principal
+                  <Label htmlFor="sector" className="text-xs font-medium text-nexus-navy">
+                    {t('auth.sectorLabel')}
                   </Label>
                   <select
                     id="sector"
@@ -290,7 +285,7 @@ export function RegisterPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="notes" className="text-xs font-medium">
+                <Label htmlFor="notes" className="text-xs font-medium text-nexus-navy">
                   {t('auth.motivationLabel')}
                 </Label>
                 <textarea
@@ -298,7 +293,6 @@ export function RegisterPage() {
                   rows={3}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Décrivez brièvement les objectifs de votre association ou vos motivations pour le bénévolat..."
                   className="flex w-full rounded-md border border-slate-200 bg-white/90 px-3 py-2 text-xs text-nexus-navy focus:border-nexus-emerald focus:outline-none"
                 />
               </div>
