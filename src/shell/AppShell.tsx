@@ -130,7 +130,7 @@ export function AppShell() {
         <div className="relative border-b border-white/10 bg-white/[0.04] px-5 py-3.5 backdrop-blur-md">
           <div className="flex items-center justify-between">
             <p className="text-[10px] uppercase tracking-wider font-semibold text-emerald-300/80">
-              {t('common.demoTag')}
+              {t('common.pilotTag')}
             </p>
             <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-white/90">
               DZ-25

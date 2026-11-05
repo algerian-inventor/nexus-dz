@@ -70,7 +70,11 @@ export function PublicOrganizationsPage() {
         </TableHeader>
         <TableBody>
           {filtered.length === 0 ? (
-            <EmptyDatabaseTableState colSpan={6} sqlTableName="organizations" />
+            <EmptyDatabaseTableState
+              colSpan={6}
+              title={t('pages.organizations.emptyTitle')}
+              description={t('pages.organizations.emptyDesc')}
+            />
           ) : (
             filtered.map((org) => (
               <TableRow key={org.id}>

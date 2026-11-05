@@ -12,8 +12,8 @@ import {
   type SubmitEvidencePayload,
 } from './demoStoreContext';
 
-const STORAGE_KEY_DATASET = 'nexus_dz_hackathon_dataset_v1';
-const STORAGE_KEY_ACCOUNT = 'nexus_dz_hackathon_account_v1';
+const STORAGE_KEY_DATASET = 'nexus_dz_pilot_dataset_v4';
+const STORAGE_KEY_ACCOUNT = 'nexus_dz_pilot_account_v4';
 
 function loadInitialDataset(): DemoDataset {
   if (typeof window === 'undefined') return INITIAL_DEMO_DATASET;
@@ -31,13 +31,14 @@ function loadInitialDataset(): DemoDataset {
 }
 
 function loadInitialAccountId(): string {
-  if (typeof window === 'undefined') return 'acc-super-admin';
-  return window.localStorage.getItem(STORAGE_KEY_ACCOUNT) || 'acc-super-admin';
+  if (typeof window === 'undefined') return 'acc-pilot-coordinator';
+  return window.localStorage.getItem(STORAGE_KEY_ACCOUNT) || 'acc-pilot-coordinator';
 }
 
 export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
   const [dataset, setDataset] = useState<DemoDataset>(loadInitialDataset);
   const [currentAccountId, setCurrentAccountId] = useState<string>(loadInitialAccountId);
+  const [activeRoleOverride, setActiveRoleOverride] = useState<UserRole | null>(null);
   const [feedbackBanner, setFeedbackBanner] = useState<{
     message: string;
     type: 'success' | 'info';
@@ -68,10 +69,22 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const currentAccount = useMemo(() => {
-    return dataset.accounts.find((a) => a.id === currentAccountId) ?? dataset.accounts[0];
+    return (
+      dataset.accounts.find((a) => a.id === currentAccountId) ??
+      dataset.accounts[0] ?? {
+        id: 'acc-pilot-coordinator',
+        email: 'coordination.constantine@nexus-dz.org',
+        fullNameAr: 'منسق المرحلة التجريبية — قسنطينة',
+        fullNameFr: 'Coordinateur Phase Pilote — Constantine',
+        role: 'super_admin' as UserRole,
+        commune: 'constantine' as const,
+        titleAr: 'المكتب التنسيقي للعمل المدني (الولاية 25)',
+        titleFr: 'Bureau de Coordination Civique (Wilaya 25)',
+      }
+    );
   }, [dataset.accounts, currentAccountId]);
 
-  const activeRole = currentAccount.role;
+  const activeRole = activeRoleOverride ?? currentAccount.role;
   const permissions = useMemo(() => getRolePermissions(activeRole), [activeRole]);
 
   const loginWithDemoAccount = useCallback(
@@ -79,6 +92,7 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
       const target = dataset.accounts.find((a) => a.id === accountId);
       if (target) {
         setCurrentAccountId(target.id);
+        setActiveRoleOverride(target.role);
         notify(`${target.fullNameAr} — ${target.fullNameFr}`, 'info');
       }
     },
@@ -87,13 +101,13 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
 
   const switchRole = useCallback(
     (role: UserRole) => {
+      setActiveRoleOverride(role);
       const target = dataset.accounts.find((a) => a.role === role);
       if (target) {
         setCurrentAccountId(target.id);
-        notify(`${target.fullNameAr} (${target.fullNameFr})`, 'info');
       }
     },
-    [dataset.accounts, notify]
+    [dataset.accounts]
   );
 
   const createOrganization = useCallback(
@@ -545,8 +559,8 @@ export function DemoStoreProvider({ children }: { children: React.ReactNode }) {
     window.localStorage.removeItem(STORAGE_KEY_DATASET);
     window.localStorage.removeItem(STORAGE_KEY_ACCOUNT);
     setDataset(INITIAL_DEMO_DATASET);
-    setCurrentAccountId('acc-super-admin');
-    notify('Constantine Demo Dataset restored to initial state', 'info');
+    setCurrentAccountId('acc-pilot-coordinator');
+    notify('Session réinitialisée au référentiel pilote vierge.', 'info');
   }, [notify]);
 
   const value = useMemo(

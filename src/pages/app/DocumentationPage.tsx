@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Upload, MapPin, FileText, Image as ImageIcon } from 'lucide-react';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { EmptyDatabaseTableState } from '@/components/shared/EmptyDatabaseTableState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -197,70 +198,78 @@ export function DocumentationPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataset.evidence.map((ev) => {
-            const init = dataset.initiatives.find((i) => i.id === ev.initiativeId);
-            return (
-              <TableRow key={ev.id}>
-                <TableCell className="max-w-sm">
-                  <div className="flex items-start gap-2.5">
-                    {ev.previewDataUrl ? (
-                      <img
-                        src={ev.previewDataUrl}
-                        alt={ev.fileName}
-                        className="h-12 w-12 rounded border border-border object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-nexus-surface text-nexus-emerald">
-                        {ev.mimeType.includes('pdf') ? (
-                          <FileText className="h-5 w-5" />
-                        ) : (
-                          <ImageIcon className="h-5 w-5" />
-                        )}
+          {dataset.evidence.length === 0 ? (
+            <EmptyDatabaseTableState
+              colSpan={5}
+              title={t('pages.documentation.emptyTitle')}
+              description={t('pages.documentation.emptyDesc')}
+            />
+          ) : (
+            dataset.evidence.map((ev) => {
+              const init = dataset.initiatives.find((i) => i.id === ev.initiativeId);
+              return (
+                <TableRow key={ev.id}>
+                  <TableCell className="max-w-sm">
+                    <div className="flex items-start gap-2.5">
+                      {ev.previewDataUrl ? (
+                        <img
+                          src={ev.previewDataUrl}
+                          alt={ev.fileName}
+                          className="h-12 w-12 rounded border border-border object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-nexus-surface text-nexus-emerald">
+                          {ev.mimeType.includes('pdf') ? (
+                            <FileText className="h-5 w-5" />
+                          ) : (
+                            <ImageIcon className="h-5 w-5" />
+                          )}
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-semibold text-nexus-navy">
+                          {isAr ? ev.titleAr : ev.titleFr}
+                        </p>
+                        <p className="mt-0.5 text-xs text-nexus-gray">{ev.notes}</p>
+                        <p className="mt-1 flex items-center gap-1 font-mono text-[11px] text-nexus-gray">
+                          <MapPin className="h-3 w-3 text-nexus-emerald" />
+                          {ev.gpsCoordinates} ({ev.fileName})
+                        </p>
                       </div>
-                    )}
-                    <div>
-                      <p className="font-semibold text-nexus-navy">
-                        {isAr ? ev.titleAr : ev.titleFr}
-                      </p>
-                      <p className="mt-0.5 text-xs text-nexus-gray">{ev.notes}</p>
-                      <p className="mt-1 flex items-center gap-1 font-mono text-[11px] text-nexus-gray">
-                        <MapPin className="h-3 w-3 text-nexus-emerald" />
-                        {ev.gpsCoordinates} ({ev.fileName})
-                      </p>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell className="max-w-xs text-xs font-medium">
-                  {init ? (isAr ? init.titleAr : init.titleFr) : '-'}
-                </TableCell>
-                <TableCell className="text-xs">
-                  <p className="font-medium text-nexus-navy">{ev.submittedByName}</p>
-                  <Badge variant="outline" className="mt-1 text-[10px]">
-                    {t(`roles.${ev.submittedByRole}`)}
-                  </Badge>
-                </TableCell>
-                <TableCell className="font-mono text-xs">
-                  <p className="font-semibold text-nexus-emerald">
-                    +{ev.beneficiariesReached} Beneficiaries
-                  </p>
-                  <p className="text-nexus-navy">+{ev.hoursClaimed}h Volunteer Hours</p>
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={
-                      ev.verificationStatus === 'verified'
-                        ? 'emerald'
-                        : ev.verificationStatus === 'rejected'
-                          ? 'navy'
-                          : 'secondary'
-                    }
-                  >
-                    {t(`statuses.${ev.verificationStatus}`)}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+                  </TableCell>
+                  <TableCell className="max-w-xs text-xs font-medium">
+                    {init ? (isAr ? init.titleAr : init.titleFr) : '-'}
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <p className="font-medium text-nexus-navy">{ev.submittedByName}</p>
+                    <Badge variant="outline" className="mt-1 text-[10px]">
+                      {t(`roles.${ev.submittedByRole}`)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="font-mono text-xs">
+                    <p className="font-semibold text-nexus-emerald">
+                      +{ev.beneficiariesReached} Beneficiaries
+                    </p>
+                    <p className="text-nexus-navy">+{ev.hoursClaimed}h Volunteer Hours</p>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        ev.verificationStatus === 'verified'
+                          ? 'emerald'
+                          : ev.verificationStatus === 'rejected'
+                            ? 'navy'
+                            : 'secondary'
+                      }
+                    >
+                      {t(`statuses.${ev.verificationStatus}`)}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              );
+            })
+          )}
         </TableBody>
       </Table>
     </div>

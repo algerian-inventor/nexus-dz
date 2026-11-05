@@ -272,7 +272,11 @@ export function InitiativesPage() {
         </TableHeader>
         <TableBody>
           {filtered.length === 0 ? (
-            <EmptyDatabaseTableState colSpan={7} sqlTableName="initiatives" />
+            <EmptyDatabaseTableState
+              colSpan={7}
+              title={t('pages.initiatives.emptyTitle')}
+              description={t('pages.initiatives.emptyDesc')}
+            />
           ) : (
             filtered.map((init) => {
               const org = dataset.organizations.find((o) => o.id === init.organizationId);

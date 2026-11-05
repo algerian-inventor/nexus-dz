@@ -180,7 +180,11 @@ export function VolunteersPage() {
         </TableHeader>
         <TableBody>
           {filtered.length === 0 ? (
-            <EmptyDatabaseTableState colSpan={5} sqlTableName="volunteers" />
+            <EmptyDatabaseTableState
+              colSpan={5}
+              title={t('pages.volunteers.emptyTitle')}
+              description={t('pages.volunteers.emptyDesc')}
+            />
           ) : (
             filtered.map((vol) => (
               <TableRow key={vol.id}>
