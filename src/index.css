@@ -173,6 +173,37 @@
     color: #d62828;
     border: 1px solid rgba(214, 40, 40, 0.22);
   }
+
+  /* V5 3D Island Floating & Ambient Glow Animations */
+  @keyframes v5-float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes v5-pulse-glow {
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-v5-float {
+    animation: v5-float 6s ease-in-out infinite;
+  }
+
+  .animate-v5-glow {
+    animation: v5-pulse-glow 5s ease-in-out infinite;
+  }
 }
 
 /* Graceful Fallbacks */

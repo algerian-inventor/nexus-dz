@@ -7,6 +7,9 @@ import { LandingPage } from '@/pages/public/LandingPage';
 import { AboutPage } from '@/pages/public/AboutPage';
 import { PublicInitiativesPage } from '@/pages/public/PublicInitiativesPage';
 import { PublicOrganizationsPage } from '@/pages/public/PublicOrganizationsPage';
+import { PublicImpactPage } from '@/pages/public/PublicImpactPage';
+import { PublicResourcesPage } from '@/pages/public/PublicResourcesPage';
+import { InitiativeDetailPage } from '@/pages/public/InitiativeDetailPage';
 import { LoginPage } from '@/pages/public/LoginPage';
 import { RegisterPage } from '@/pages/public/RegisterPage';
 
@@ -20,6 +23,10 @@ import { VerificationPage } from '@/pages/app/VerificationPage';
 import { ImpactAnalyticsPage } from '@/pages/app/ImpactAnalyticsPage';
 import { NotificationsPage } from '@/pages/app/NotificationsPage';
 import { SettingsPage } from '@/pages/app/SettingsPage';
+import { VolunteerPortalPage } from '@/pages/app/VolunteerPortalPage';
+import { OrganizationPortalPage } from '@/pages/app/OrganizationPortalPage';
+import { VerificationPortalPage } from '@/pages/app/VerificationPortalPage';
+import { AdminPortalPage } from '@/pages/app/AdminPortalPage';
 
 export function App() {
   return (
@@ -31,7 +38,10 @@ export function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/initiatives" element={<PublicInitiativesPage />} />
+            <Route path="/initiatives/:id" element={<InitiativeDetailPage />} />
             <Route path="/organizations" element={<PublicOrganizationsPage />} />
+            <Route path="/impact" element={<PublicImpactPage />} />
+            <Route path="/resources" element={<PublicResourcesPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Route>
@@ -40,6 +50,10 @@ export function App() {
           <Route path="/app" element={<AppShell />}>
             <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="volunteer" element={<VolunteerPortalPage />} />
+            <Route path="organization" element={<OrganizationPortalPage />} />
+            <Route path="verifier" element={<VerificationPortalPage />} />
+            <Route path="admin" element={<AdminPortalPage />} />
             <Route path="organizations" element={<OrganizationsPage />} />
             <Route path="volunteers" element={<VolunteersPage />} />
             <Route path="initiatives" element={<InitiativesPage />} />

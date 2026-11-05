@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   UserCheck,
+  FolderLock,
 } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { SupabaseStatusBanner } from '@/components/shared/SupabaseStatusBanner';
@@ -34,6 +35,34 @@ export function AppShell() {
   const pendingVerificationCount = dataset.evidence.filter(
     (e) => e.verificationStatus === 'pending' || e.verificationStatus === 'under_review'
   ).length;
+
+  const portalItems = [
+    {
+      to: '/app/volunteer',
+      label: isAr ? 'فضاء المتطوع الميداني' : 'Espace Bénévole',
+      icon: UserCheck,
+      badge: isAr ? 'متطوع' : 'Vol',
+    },
+    {
+      to: '/app/organization',
+      label: isAr ? 'فضاء إدارة الجمعية' : 'Espace Association',
+      icon: Building2,
+      badge: isAr ? 'جمعية' : 'Org',
+    },
+    {
+      to: '/app/verifier',
+      label: isAr ? 'مركز التدقيق المستقل' : "Centre d'Audit",
+      icon: ShieldCheck,
+      badge: pendingVerificationCount > 0 ? pendingVerificationCount : undefined,
+      highlightBadge: pendingVerificationCount > 0,
+    },
+    {
+      to: '/app/admin',
+      label: isAr ? 'الإشراف والحوكمة' : 'Supervision Wilaya',
+      icon: FolderLock,
+      badge: isAr ? 'إدارة' : 'Admin',
+    },
+  ];
 
   const navItems = [
     {
@@ -148,6 +177,47 @@ export function AppShell() {
           className="relative flex-1 space-y-1 overflow-y-auto p-3"
           aria-label="Workspace navigation"
         >
+          <div className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300/70">
+            {isAr ? 'فضاءات العمل المتخصصة' : 'Espaces Dédiés'}
+          </div>
+          {portalItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  cn(
+                    'flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-normal tracking-wide transition-all duration-150',
+                    isActive
+                      ? 'bg-gradient-to-r from-nexus-emerald to-nexus-emerald-deep text-white shadow-[0_4px_16px_rgba(11,138,68,0.35)] backdrop-blur-xs font-medium border border-white/20'
+                      : 'text-emerald-100/80 hover:bg-white/[0.08] hover:text-white'
+                  )
+                }
+              >
+                <span className="flex items-center gap-3 min-w-0">
+                  <Icon className="h-4 w-4 shrink-0 opacity-80" />
+                  <span className="truncate">{item.label}</span>
+                </span>
+                {item.badge !== undefined && (
+                  <span
+                    className={cn(
+                      'shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium leading-none backdrop-blur-xs',
+                      item.highlightBadge
+                        ? 'bg-nexus-red text-white font-semibold shadow-xs ring-1 ring-white/30'
+                        : 'bg-white/10 text-emerald-100'
+                    )}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+              </NavLink>
+            );
+          })}
+
+          <div className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300/70">
+            {isAr ? 'سجلات وقواعد البيانات' : 'Registres & Données'}
+          </div>
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -187,7 +257,7 @@ export function AppShell() {
         <div className="relative border-t border-white/10 p-4 text-xs text-emerald-200/70 bg-white/[0.02]">
           <div className="flex items-center gap-1.5">
             <p className="font-medium text-white/90">{t('brand.name')}</p>
-            <span className="text-[10px] text-emerald-400 font-mono">v3.0</span>
+            <span className="text-[10px] text-emerald-400 font-mono">V5</span>
           </div>
           <p className="mt-0.5 text-[11px] font-normal leading-relaxed text-emerald-200/60">
             {t('brand.tagline')}
@@ -253,7 +323,7 @@ export function AppShell() {
               </Badge>
             </div>
             <nav className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-              {navItems.map((item) => {
+              {[...portalItems, ...navItems].map((item) => {
                 const Icon = item.icon;
                 return (
                   <NavLink

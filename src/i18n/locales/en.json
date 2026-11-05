@@ -1,17 +1,23 @@
 {
   "brand": {
     "name": "NEXUS DZ",
+    "version": "V5",
     "tagline": "From Community Needs to Measurable, Verifiable Impact.",
+    "subtag": "Platform for Volunteering and Civic Action in Algeria",
     "wilaya": "Constantine Province (Wilaya 25) — People's Democratic Republic of Algeria",
     "category": "National Platform for Civic Coordination and Verifiable Impact Measurement"
   },
   "nav": {
     "home": "Home",
     "about": "About",
-    "initiatives": "Community Initiatives",
-    "organizations": "Association Directory",
-    "login": "Pilot Login",
-    "register": "Join the Pilot",
+    "initiatives": "Initiatives",
+    "organizations": "Associations",
+    "volunteering": "Volunteering",
+    "impact": "Impact",
+    "resources": "Resources",
+    "login": "Sign In",
+    "register": "Join Now",
+    "joinNow": "Join Now",
     "workspace": "Coordination Workspace",
     "dashboard": "Dashboard",
     "volunteers": "Volunteer Roster",
@@ -22,7 +28,27 @@
     "notifications": "Notifications",
     "settings": "Settings & Account",
     "language": "Language",
-    "roleSwitch": "Active Role (Pilot Session)"
+    "roleSwitch": "Active Role (Session)"
+  },
+  "v5hero": {
+    "badge": "NEXUS DZ V5 +",
+    "titlePart1": "A National Platform to Coordinate",
+    "titlePart2": "Volunteering & Civic Action",
+    "subtitle": "Connecting associations, volunteers, and community initiatives for tangible social impact across Algeria, starting from Constantine toward the entire nation.",
+    "ctaVolunteer": "Join as Volunteer",
+    "ctaAssociation": "Register Association",
+    "statOrgs": "Accredited Orgs",
+    "statVolunteers": "Registered Volunteers",
+    "statInitiatives": "Active Initiatives",
+    "statImpact": "Verified Impact",
+    "feature1Title": "Association Support",
+    "feature1Desc": "Digital tools to manage projects and teams",
+    "feature2Title": "Volunteer Management",
+    "feature2Desc": "Organizing roles, missions, and verified hours",
+    "feature3Title": "Community Initiatives",
+    "feature3Desc": "Launching and monitoring projects with local impact",
+    "feature4Title": "Impact Verification",
+    "feature4Desc": "Transparent and audited tracking of field outcomes"
   },
   "roles": {
     "super_admin": "General Coordination & Wilaya Oversight",
@@ -158,11 +184,70 @@
     "gov3": "Impartiality: strict separation between initiative organizers and impact verifiers.",
     "gov4": "Full protection of personal data belonging to volunteers and beneficiaries, with zero commercial monetization."
   },
+  "impact": {
+    "title": "Transparency Portal & Verified Impact",
+    "subtitle": "Public registry presenting audited field outcomes based on the 3-tier impact integrity rule.",
+    "methodologyTitle": "Certified Measurement Methodology",
+    "methodologyDesc": "NEXUS DZ applies the strict rule: Planned Impact ≥ Reported Impact ≥ Audited Impact. Only data verified by an independent auditor appears on this public portal.",
+    "plannedVsVerified": "Target Goals vs Audited Outcomes",
+    "auditRate": "Accredited Initiative Completion Rate",
+    "constantineBreakdown": "Geographic Breakdown across Constantine Communes (Wilaya 25)",
+    "recentAudits": "Latest Certified Impact Reports",
+    "emptyNotice": "No certified impact reports yet. Ongoing field initiatives are currently under audit review."
+  },
+  "resources": {
+    "title": "Resource Center & Civic Action Toolkits",
+    "subtitle": "Legal templates, practical guides, and methodological toolkits for Algerian associations and volunteers.",
+    "law1206Title": "Law 12-06 Association Compliance Guide",
+    "law1206Desc": "Summary of administrative obligations, general assembly procedures, and annual activity reports.",
+    "volunteerCharterTitle": "Volunteer Rights & Responsibilities Charter",
+    "volunteerCharterDesc": "Standardized mutual commitment framework between host associations and field volunteers.",
+    "evidenceGuideTitle": "Impact Evidence Gathering Guide",
+    "evidenceGuideDesc": "Best practices for timestamped photography, signed attendance rosters, and valid geolocation verification.",
+    "downloadTemplate": "Download Template (PDF/Doc)"
+  },
+  "v5portals": {
+    "volunteer": {
+      "title": "Volunteer Space — Missions & Civic Passport",
+      "subtitle": "Browse your assignments, check in on site, and track your official verified hours counter.",
+      "myTasks": "My Missions",
+      "myHours": "Verified Hours",
+      "myApplications": "Active Applications",
+      "passport": "Civic Passport",
+      "checkIn": "Record Attendance",
+      "uploadProof": "Submit Field Proof"
+    },
+    "organization": {
+      "title": "Association Space — Project & Team Coordination",
+      "subtitle": "Publish initiatives, manage volunteer applicants, and submit field reports for independent audit.",
+      "createInitiative": "New Initiative",
+      "activeVolunteers": "Engaged Volunteers",
+      "pendingApplicants": "Incoming Applicants",
+      "attendanceRoster": "Attendance Roster",
+      "submitAudit": "Request Impact Audit"
+    },
+    "verifier": {
+      "title": "Verification Center — Independent Impact Audit",
+      "subtitle": "Review uploaded evidence, verify GPS geolocation and timestamps, and formally certify impact.",
+      "pendingQueue": "Pending Audit Queue",
+      "approvedHistory": "Audit Decision History",
+      "approveDecision": "Approve & Certify Impact",
+      "rejectDecision": "Reject with Reason",
+      "reasonPlaceholder": "Specify rejection reason or missing evidence details..."
+    },
+    "admin": {
+      "title": "Governance & Wilaya Oversight — Platform Administration",
+      "subtitle": "Review association accreditation files, monitor system audit logs, and ensure civic integrity.",
+      "orgVerification": "Accreditation Requests",
+      "auditLogs": "Administrative Audit Logs",
+      "systemMetrics": "System Health & Compliance"
+    }
+  },
   "auth": {
-    "loginTitle": "Pilot Access Portal",
-    "loginSubtitle": "Reserved for accredited association leaders and audit coordinators in Constantine",
-    "registerTitle": "Join the Pilot Deployment",
-    "registerSubtitle": "Expression of interest for associations and civic volunteers in Constantine Province",
+    "loginTitle": "Access Portal — NEXUS DZ",
+    "loginSubtitle": "Unified access for volunteers, accredited associations, and impact verifiers",
+    "registerTitle": "Join NEXUS DZ V5",
+    "registerSubtitle": "Choose your membership profile to participate in structured civic action",
     "loginNotice": "Notice: The platform is currently in restricted pilot testing. Login is reserved for accredited representatives. To onboard your organization, please register below.",
     "emailLabel": "Professional or Academic Email",
     "passwordLabel": "Password",
@@ -174,12 +259,12 @@
     "phoneLabel": "Contact Phone Number",
     "motivationLabel": "Civic Field or Brief Presentation",
     "submitLogin": "Enter Coordination Workspace",
-    "submitRegister": "Submit Pilot Application",
+    "submitRegister": "Submit Application",
     "registerSuccessTitle": "Application Successfully Received",
     "registerSuccessDesc": "Thank you for your interest in the NEXUS DZ Constantine pilot. Our coordination team will review your application and contact you for verification.",
     "backHome": "Back to Home",
-    "haveAccount": "Already accredited for the pilot? Log in",
-    "needAccount": "New association or volunteer? Submit an application"
+    "haveAccount": "Already registered? Sign in",
+    "needAccount": "New profile? Join now"
   },
   "pages": {
     "dashboard": {

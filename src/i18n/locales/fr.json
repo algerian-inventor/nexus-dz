@@ -1,17 +1,23 @@
 {
   "brand": {
     "name": "NEXUS DZ",
+    "version": "V5",
     "tagline": "Des besoins locaux à un impact communautaire mesurable et vérifié.",
+    "subtag": "Plateforme du bénévolat et de l'action associative en Algérie",
     "wilaya": "Wilaya de Constantine (25) — République Algérienne Démocratique et Populaire",
     "category": "Plateforme Civique de Structuration Associative et de Mesure d'Impact"
   },
   "nav": {
     "home": "Accueil",
     "about": "À propos",
-    "initiatives": "Initiatives Citoyennes",
-    "organizations": "Répertoire Associatif",
-    "login": "Connexion Pilote",
-    "register": "Rejoindre le Pilote",
+    "initiatives": "Initiatives",
+    "organizations": "Associations",
+    "volunteering": "Bénévolat",
+    "impact": "Impact",
+    "resources": "Ressources",
+    "login": "Connexion",
+    "register": "Rejoindre",
+    "joinNow": "Rejoindre",
     "workspace": "Espace de Coordination",
     "dashboard": "Tableau de Bord",
     "volunteers": "Registre des Bénévoles",
@@ -22,7 +28,27 @@
     "notifications": "Notifications",
     "settings": "Paramètres & Compte",
     "language": "Langue",
-    "roleSwitch": "Rôle actif (Session Pilote)"
+    "roleSwitch": "Rôle actif (Session)"
+  },
+  "v5hero": {
+    "badge": "NEXUS DZ V5 +",
+    "titlePart1": "Plateforme nationale de coordination",
+    "titlePart2": "du bénévolat et de l'action associative",
+    "subtitle": "Nous connectons associations, bénévoles et initiatives citoyennes pour un impact social tangible en Algérie, depuis Constantine vers toute la nation.",
+    "ctaVolunteer": "Devenir Bénévole",
+    "ctaAssociation": "Inscrire une Association",
+    "statOrgs": "Associations Agréées",
+    "statVolunteers": "Bénévoles Inscrits",
+    "statInitiatives": "Initiatives Actives",
+    "statImpact": "Impact Vérifié",
+    "feature1Title": "Soutien aux Associations",
+    "feature1Desc": "Outils numériques pour piloter projets et équipes",
+    "feature2Title": "Gestion des Bénévoles",
+    "feature2Desc": "Organisation des missions et des heures certifiées",
+    "feature3Title": "Initiatives Citoyennes",
+    "feature3Desc": "Lancement et suivi de projets à fort impact local",
+    "feature4Title": "Validation de l'Impact",
+    "feature4Desc": "Suivi transparent et audité des résultats de terrain"
   },
   "roles": {
     "super_admin": "Coordination Générale & Wilaya",
@@ -158,15 +184,74 @@
     "gov3": "Impartialité absolue : séparation étanche entre porteurs de projets associatifs et auditeurs d'impact.",
     "gov4": "Protection intégrale des données personnelles des bénévoles et des bénéficiaires, sans aucune exploitation commerciale."
   },
+  "impact": {
+    "title": "Portail de Transparence & Impact Vérifié",
+    "subtitle": "Registre public présentant les résultats audités selon la règle stricte des trois niveaux d'impact.",
+    "methodologyTitle": "Méthodologie de Mesure Certifiée",
+    "methodologyDesc": "NEXUS DZ applique la règle : Impact Planifié ≥ Impact Déclaré ≥ Impact Audité. Seules les données validées par un auditeur tiers apparaissent sur ce portail.",
+    "plannedVsVerified": "Objectifs Cibles vs Réalisations Auditées",
+    "auditRate": "Taux de validation des initiatives",
+    "constantineBreakdown": "Ventilation géographique par commune (Wilaya 25)",
+    "recentAudits": "Derniers rapports certifiés",
+    "emptyNotice": "Aucun rapport d'impact audité pour le moment. Les premières vérifications de terrain sont en cours d'instruction."
+  },
+  "resources": {
+    "title": "Centre de Ressources & Guides Pratiques",
+    "subtitle": "Modèles légaux, fiches pratiques et guides méthodologiques pour les associations et bénévoles en Algérie.",
+    "law1206Title": "Guide de Conformité Loi 12-06 sur les Associations",
+    "law1206Desc": "Synthèse des obligations administratives, tenue des assemblées générales et rédaction des bilans d'activité.",
+    "volunteerCharterTitle": "Charte des Droits & Devoirs du Bénévole",
+    "volunteerCharterDesc": "Document type fixant les engagements réciproques entre l'association hôte et le volontaire de terrain.",
+    "evidenceGuideTitle": "Guide de Constitution des Preuves d'Impact",
+    "evidenceGuideDesc": "Bonnes pratiques pour les prises de vues horodatées, feuilles d'émargement et géoréférencement valide.",
+    "downloadTemplate": "Télécharger le modèle (PDF/Doc)"
+  },
+  "v5portals": {
+    "volunteer": {
+      "title": "Espace Bénévole — Missions & Passeport Civique",
+      "subtitle": "Consultez vos affectations, pointez votre présence et suivez votre compteur officiel d'heures certifiées.",
+      "myTasks": "Mes Missions",
+      "myHours": "Heures Certifiées",
+      "myApplications": "Candidatures en cours",
+      "passport": "Passeport Civique",
+      "checkIn": "Pointer Présence",
+      "uploadProof": "Transmettre Preuve"
+    },
+    "organization": {
+      "title": "Espace Association — Gestion des Projets & Équipes",
+      "subtitle": "Publiez vos initiatives, gérez les candidatures de bénévoles et soumettez vos bilans à l'audit.",
+      "createInitiative": "Nouvelle Initiative",
+      "activeVolunteers": "Bénévoles Engagés",
+      "pendingApplicants": "Candidatures Reçues",
+      "attendanceRoster": "Feuille de Présence",
+      "submitAudit": "Demander un Audit"
+    },
+    "verifier": {
+      "title": "Pôle d'Audit — Validation Indépendante d'Impact",
+      "subtitle": "Instruisez les preuves téléversées, contrôlez la géolocalisation et validez formellement l'impact.",
+      "pendingQueue": "File d'attente d'audit",
+      "approvedHistory": "Historique des décisions",
+      "approveDecision": "Approuver et certifier",
+      "rejectDecision": "Rejeter avec motif",
+      "reasonPlaceholder": "Précisez le motif du rejet ou les pièces manquantes..."
+    },
+    "admin": {
+      "title": "Gouvernance Générale & Supervision Wilaya",
+      "subtitle": "Examinez les dossiers d'agrément, contrôlez les journaux d'audit et veillez à l'intégrité de la plateforme.",
+      "orgVerification": "Demandes d'agrément",
+      "auditLogs": "Journaux d'activité",
+      "systemMetrics": "Santé du système & conformité"
+    }
+  },
   "auth": {
-    "loginTitle": "Espace de Connexion — Phase Pilote",
-    "loginSubtitle": "Accès réservé aux coordinateurs associatifs et auditeurs participant au pilote de Constantine",
-    "registerTitle": "Rejoindre la Phase Pilote",
-    "registerSubtitle": "Formulaire d'expression d'intérêt pour les associations et bénévoles de Constantine",
+    "loginTitle": "Portail d'Accès — NEXUS DZ",
+    "loginSubtitle": "Accès unifié pour les bénévoles, associations agréées et auditeurs d'impact",
+    "registerTitle": "Rejoindre NEXUS DZ V5",
+    "registerSubtitle": "Choisissez votre profil d'adhésion pour participer au réseau civique structuré",
     "loginNotice": "Note d'information : La plateforme est actuellement en phase de rodage expérimental. La connexion est restreinte aux représentants d'associations dûment habilités. Pour associer votre organisation, veuillez déposer une demande via le formulaire ci-dessous.",
     "emailLabel": "Adresse email professionnelle ou académique",
     "passwordLabel": "Mot de passe",
-    "fullNameLabel": "Nom et prénom du responsable",
+    "fullNameLabel": "Nom et prénom",
     "roleLabel": "Profil de participation",
     "orgNameLabel": "Nom officiel de l'association (le cas échéant)",
     "regNumberLabel": "Numéro d'agrément wilayal ou national",
@@ -174,12 +259,12 @@
     "phoneLabel": "Numéro de téléphone de contact",
     "motivationLabel": "Domaine d'intervention ou brève présentation",
     "submitLogin": "Accéder à l'espace de gestion",
-    "submitRegister": "Soumettre ma candidature pour la phase pilote",
+    "submitRegister": "Soumettre ma candidature",
     "registerSuccessTitle": "Demande enregistrée avec succès",
     "registerSuccessDesc": "Nous vous remercions pour votre intérêt envers le déploiement pilote de NEXUS DZ à Constantine. Notre équipe de coordination prendra contact avec vous afin de valider vos pièces justificatives.",
     "backHome": "Retour à l'accueil",
-    "haveAccount": "Déjà accrédité pour le pilote ? Se connecter",
-    "needAccount": "Nouvelle association ou bénévole ? Déposer une candidature"
+    "haveAccount": "Déjà inscrit ? Se connecter",
+    "needAccount": "Nouveau profil ? Rejoindre maintenant"
   },
   "pages": {
     "dashboard": {
