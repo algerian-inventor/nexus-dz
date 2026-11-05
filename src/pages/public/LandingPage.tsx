@@ -172,10 +172,12 @@ export function LandingPage() {
 
                 <div className="relative overflow-hidden rounded-3xl border border-emerald-400/35 bg-[#042E1E]/80 p-2 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl">
                   <img
-                    src="/assets/v5-hero-island.jpg"
+                    src="/assets/nexus-dz-youth-hero.png"
                     alt="NEXUS DZ — 3D Floating Volunteering Island in Constantine"
                     className="h-auto w-full rounded-2xl object-cover shadow-inner"
                     loading="eager"
+                    width={565}
+                    height={420}
                   />
 
                   <div className="mt-2 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-emerald-500/20 bg-[#042E1E]/90 px-3.5 py-2 text-[11px] text-emerald-200/90">
