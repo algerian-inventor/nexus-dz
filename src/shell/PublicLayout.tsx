@@ -19,19 +19,21 @@ export function PublicLayout() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#06452D] text-white selection:bg-emerald-500 selection:text-emerald-950">
+    <div className="flex min-h-screen flex-col bg-[#06452D] text-white selection:bg-emerald-500 selection:text-emerald-950 overflow-x-hidden">
       {/* Top Institutional Ribbon - Algerian Forest Green */}
       <div className="border-b border-white/10 bg-[#042E1E] text-white backdrop-blur-md">
         <div className="container flex flex-wrap items-center justify-between gap-2 py-1.5 text-xs">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
             <MapPin className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
-            <span className="font-medium text-emerald-100">{t('brand.wilaya')}</span>
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-nexus-red mx-1" />
+            <span className="truncate max-w-[200px] sm:max-w-none font-medium text-emerald-100">
+              {t('brand.wilaya')}
+            </span>
+            <span className="hidden sm:inline-block h-1.5 w-1.5 rounded-full bg-nexus-red mx-1" />
             <span className="hidden text-emerald-300/80 font-normal sm:inline">
               {t('brand.category')}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-200 border border-amber-400/30">
               {t('prototype.modeBadge')}
             </span>
@@ -47,23 +49,23 @@ export function PublicLayout() {
 
       {/* Main Public Header - Frosted Translucent Deep Emerald Glass */}
       <header className="sticky top-0 z-40 border-b border-emerald-500/20 bg-[#06452D]/90 backdrop-blur-xl shadow-[0_4px_30px_rgba(4,41,27,0.4)]">
-        <div className="container flex h-16 items-center justify-between gap-4">
-          <div className="flex items-center gap-6 lg:gap-8">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-nexus-emerald to-nexus-emerald-deep text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] backdrop-blur-xs transition-transform group-hover:scale-105 border border-emerald-400/30">
+        <div className="container flex h-16 items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center gap-4 lg:gap-8 min-w-0">
+            <Link to="/" className="flex items-center gap-2.5 group min-w-0">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nexus-emerald to-nexus-emerald-deep text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] backdrop-blur-xs transition-transform group-hover:scale-105 border border-emerald-400/30">
                 <Shield className="h-5 w-5" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base font-bold leading-tight tracking-tight text-white">
+                  <span className="text-base font-bold leading-tight tracking-tight text-white whitespace-nowrap">
                     {t('brand.name')}
                   </span>
                   <span className="inline-flex items-center rounded-full bg-emerald-400/20 px-1.5 py-0.2 text-[10px] font-bold text-emerald-300 border border-emerald-400/40">
                     {t('brand.version')}
                   </span>
-                  <span className="h-1.5 w-1.5 rounded-full bg-nexus-red" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-nexus-red shrink-0" />
                 </div>
-                <span className="text-[10px] font-normal text-emerald-200/80">
+                <span className="hidden sm:block truncate text-[10px] font-normal text-emerald-200/80 max-w-[240px] md:max-w-md lg:max-w-none">
                   {t('brand.subtag')}
                 </span>
               </div>
@@ -93,8 +95,14 @@ export function PublicLayout() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
             <LanguageSwitcher variant="dark" />
+            <Link
+              to="/register"
+              className="sm:hidden rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-emerald-950 shadow-[0_0_15px_rgba(16,185,129,0.3)] whitespace-nowrap transition-transform active:scale-95"
+            >
+              {t('nav.joinNow')}
+            </Link>
             <div className="hidden items-center gap-2 sm:flex">
               <Button
                 variant="ghost"
@@ -132,9 +140,12 @@ export function PublicLayout() {
           </div>
         </div>
 
-        {/* Mobile Secondary Nav */}
-        <div className="flex items-center justify-between gap-2 overflow-x-auto border-t border-emerald-500/20 bg-[#06452D]/95 px-4 py-2 backdrop-blur-md lg:hidden">
-          <div className="flex items-center gap-1">
+        {/* Mobile Secondary Nav - Seamless Horizontal Scrolling */}
+        <div className="border-t border-emerald-500/20 bg-[#06452D]/95 px-3 py-2 backdrop-blur-md lg:hidden overflow-x-auto scrollbar-none">
+          <nav
+            className="flex items-center gap-1.5 w-max min-w-full"
+            aria-label="Mobile navigation"
+          >
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -142,9 +153,9 @@ export function PublicLayout() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'whitespace-nowrap rounded-full px-2.5 py-1 text-xs transition-colors',
+                    'whitespace-nowrap rounded-full px-3 py-1 text-xs transition-colors shrink-0',
                     isActive
-                      ? 'bg-emerald-500/30 text-emerald-300 font-medium border border-emerald-400/40'
+                      ? 'bg-emerald-500/30 text-emerald-300 font-semibold border border-emerald-400/40 shadow-inner'
                       : 'text-emerald-100/80 hover:bg-white/10'
                   )
                 }
@@ -152,21 +163,21 @@ export function PublicLayout() {
                 {item.label}
               </NavLink>
             ))}
-          </div>
-          <div className="flex shrink-0 items-center gap-1.5">
-            <Link
-              to="/login"
-              className="whitespace-nowrap rounded-lg border border-emerald-500/30 bg-emerald-950/60 px-2.5 py-1 text-xs font-normal text-emerald-200"
-            >
-              {t('nav.login')}
-            </Link>
-            <Link
-              to="/register"
-              className="whitespace-nowrap rounded-lg bg-emerald-500 px-2.5 py-1 text-xs font-bold text-emerald-950"
-            >
-              {t('nav.joinNow')}
-            </Link>
-          </div>
+            <div className="flex items-center gap-1.5 ms-2 ps-2 border-s border-emerald-500/30 shrink-0">
+              <Link
+                to="/login"
+                className="whitespace-nowrap rounded-full border border-emerald-500/30 bg-emerald-950/60 px-2.5 py-1 text-xs font-normal text-emerald-200"
+              >
+                {t('nav.login')}
+              </Link>
+              <Link
+                to="/app/dashboard"
+                className="whitespace-nowrap rounded-full border border-emerald-500/30 bg-emerald-900/40 px-2.5 py-1 text-xs font-normal text-emerald-300"
+              >
+                {t('nav.workspace')}
+              </Link>
+            </div>
+          </nav>
         </div>
       </header>
 

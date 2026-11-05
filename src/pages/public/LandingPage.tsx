@@ -93,7 +93,7 @@ export function LandingPage() {
                 <span>{t('v5hero.badge')}</span>
               </div>
 
-              <h1 className="text-3xl font-extrabold leading-[1.22] tracking-tight text-white sm:text-4xl lg:text-5xl">
+              <h1 className="text-2xl xs:text-3xl font-extrabold leading-[1.22] tracking-tight text-white sm:text-4xl lg:text-5xl">
                 {t('v5hero.titlePart1')}{' '}
                 <span className="text-emerald-400 drop-shadow-[0_0_25px_rgba(52,211,153,0.35)]">
                   {t('v5hero.titlePart2')}
@@ -105,60 +105,60 @@ export function LandingPage() {
               </p>
 
               {/* Dual Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-1">
+              <div className="flex flex-wrap items-center gap-3 pt-1">
                 <Button
                   size="lg"
-                  className="bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-bold shadow-[0_0_25px_rgba(52,211,153,0.45)] rounded-xl px-6 gap-2 transition-all hover:scale-[1.02]"
+                  className="bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-bold shadow-[0_0_25px_rgba(52,211,153,0.45)] rounded-xl px-5 sm:px-6 gap-2 transition-all hover:scale-[1.02] text-xs sm:text-sm"
                   asChild
                 >
                   <Link to="/app/volunteer">
-                    <UserPlus className="h-4 w-4" />
+                    <UserPlus className="h-4 w-4 shrink-0" />
                     {t('v5hero.ctaVolunteer')}
                   </Link>
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-emerald-400/40 bg-emerald-950/60 hover:bg-emerald-900/70 text-white font-semibold rounded-xl px-6 gap-2 backdrop-blur-md"
+                  className="border-emerald-400/40 bg-emerald-950/60 hover:bg-emerald-900/70 text-white font-semibold rounded-xl px-5 sm:px-6 gap-2 backdrop-blur-md text-xs sm:text-sm"
                   asChild
                 >
                   <Link to="/register">
-                    <Building2 className="h-4 w-4 text-emerald-400" />
+                    <Building2 className="h-4 w-4 shrink-0 text-emerald-400" />
                     {t('v5hero.ctaAssociation')}
                   </Link>
                 </Button>
               </div>
 
               {/* 4 Honest Zero-Baseline Stat Cards (No +0) */}
-              <div className="grid grid-cols-2 gap-3 pt-3 sm:grid-cols-4">
-                <div className="rounded-2xl border border-emerald-400/25 bg-[#042E1E]/75 p-3.5 text-center backdrop-blur-xl shadow-lg">
+              <div className="grid grid-cols-2 gap-2.5 pt-3 sm:grid-cols-4 sm:gap-3">
+                <div className="rounded-2xl border border-emerald-400/25 bg-[#042E1E]/75 p-3 sm:p-3.5 text-center backdrop-blur-xl shadow-lg min-w-0">
                   <Building2 className="mx-auto h-4 w-4 text-emerald-400 mb-1.5" />
                   <p className="text-xl font-extrabold text-white">{verifiedOrganizations}</p>
-                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/80">
+                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/80 truncate">
                     {t('v5hero.statOrgs')}
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-emerald-400/25 bg-[#042E1E]/75 p-3.5 text-center backdrop-blur-xl shadow-lg">
+                <div className="rounded-2xl border border-emerald-400/25 bg-[#042E1E]/75 p-3 sm:p-3.5 text-center backdrop-blur-xl shadow-lg min-w-0">
                   <Users className="mx-auto h-4 w-4 text-emerald-400 mb-1.5" />
                   <p className="text-xl font-extrabold text-white">{totalVolunteers}</p>
-                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/80">
+                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/80 truncate">
                     {t('v5hero.statVolunteers')}
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-emerald-400/25 bg-[#042E1E]/75 p-3.5 text-center backdrop-blur-xl shadow-lg">
+                <div className="rounded-2xl border border-emerald-400/25 bg-[#042E1E]/75 p-3 sm:p-3.5 text-center backdrop-blur-xl shadow-lg min-w-0">
                   <Compass className="mx-auto h-4 w-4 text-emerald-400 mb-1.5" />
                   <p className="text-xl font-extrabold text-white">{activeInitiatives}</p>
-                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/80">
+                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/80 truncate">
                     {t('v5hero.statInitiatives')}
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-emerald-400/35 bg-emerald-900/50 p-3.5 text-center backdrop-blur-xl shadow-lg">
+                <div className="rounded-2xl border border-emerald-400/35 bg-emerald-900/50 p-3 sm:p-3.5 text-center backdrop-blur-xl shadow-lg min-w-0">
                   <BarChart3 className="mx-auto h-4 w-4 text-emerald-300 mb-1.5" />
                   <p className="text-xl font-extrabold text-emerald-300">{verifiedBeneficiaries}</p>
-                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/90">
+                  <p className="mt-0.5 text-[11px] font-medium text-emerald-200/90 truncate">
                     {t('v5hero.statImpact')}
                   </p>
                 </div>
@@ -180,14 +180,14 @@ export function LandingPage() {
                     height={420}
                   />
 
-                  <div className="mt-2 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-emerald-500/20 bg-[#042E1E]/90 px-3.5 py-2 text-[11px] text-emerald-200/90">
+                  <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-2 rounded-xl border border-emerald-500/20 bg-[#042E1E]/90 px-3.5 py-2 text-[11px] text-emerald-200/90">
                     <span className="inline-flex items-center gap-1.5 font-medium">
-                      <MapPin className="h-3.5 w-3.5 text-emerald-400" />
-                      {t('v5hero.bottomNoticeLeft')}
+                      <MapPin className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                      <span>{t('v5hero.bottomNoticeLeft')}</span>
                     </span>
                     <span className="inline-flex items-center gap-1.5 text-emerald-300 font-semibold">
-                      <ShieldCheck className="h-3.5 w-3.5" />
-                      {t('v5hero.bottomNoticeRight')}
+                      <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
+                      <span>{t('v5hero.bottomNoticeRight')}</span>
                     </span>
                   </div>
                 </div>
